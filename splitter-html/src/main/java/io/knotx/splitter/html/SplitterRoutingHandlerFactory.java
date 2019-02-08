@@ -13,14 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.knotx.splitter.html;
 
-rootProject.name = "knotx-server-http"
-include("knotx-server-http-api")
-include("knotx-server-http-core")
-include("knotx-splitter-html")
-include("knotx-assembler")
+import io.knotx.server.api.handler.RoutingHandlerFactory;
+import io.vertx.core.Handler;
+import io.vertx.core.json.JsonObject;
+import io.vertx.reactivex.core.Vertx;
+import io.vertx.reactivex.ext.web.RoutingContext;
 
-project(":knotx-server-http-api").projectDir = file("api")
-project(":knotx-server-http-core").projectDir = file("core")
-project(":knotx-splitter-html").projectDir = file("splitter-html")
-project(":knotx-assembler").projectDir = file("assembler")
+public class SplitterRoutingHandlerFactory implements RoutingHandlerFactory {
+
+  @Override
+  public String getName() {
+    return "splitterHandler";
+  }
+
+  @Override
+  public Handler<RoutingContext> create(Vertx vertx, JsonObject config) {
+    return new SplitterHandler();
+  }
+
+}
+
+

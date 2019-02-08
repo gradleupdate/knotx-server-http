@@ -13,14 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@ModuleGen(name = "knotx-assembler", groupPackage = "io.knotx")
+package io.knotx.assembler;
 
-rootProject.name = "knotx-server-http"
-include("knotx-server-http-api")
-include("knotx-server-http-core")
-include("knotx-splitter-html")
-include("knotx-assembler")
-
-project(":knotx-server-http-api").projectDir = file("api")
-project(":knotx-server-http-core").projectDir = file("core")
-project(":knotx-splitter-html").projectDir = file("splitter-html")
-project(":knotx-assembler").projectDir = file("assembler")
+import io.vertx.codegen.annotations.ModuleGen;

@@ -1,0 +1,44 @@
+
+*****************************************************
+Summary
+-------
+Generated at: 2019-02-08T16:15:42+01:00
+
+Notes: 0
+Binaries: 0
+Archives: 0
+Standards: 18
+
+Apache Licensed: 18
+Generated Documents: 0
+
+JavaDocs are generated, thus a license header is optional.
+Generated files do not require license headers.
+
+0 Unknown Licenses
+
+*****************************************************
+  Files with Apache License headers will be marked AL
+  Binary files (which do not require any license headers) will be marked B
+  Compressed archives will be marked A
+  Notices, licenses etc. will be marked N
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/build.gradle.kts
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/util/AllowedHeadersFilter.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/util/DataObjectsUtil.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/util/MultiMapCollector.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/handler/RequestEventHandlerResult.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/handler/RequestEventHandler.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/handler/DefaultRequestContextEngine.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/handler/RoutingHandlerFactory.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/handler/reactivex/RequestEventHandler.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/handler/RequestContextEngine.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/context/RequestEvent.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/context/ClientRequest.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/context/RequestContext.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/context/MultiMapConverter.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/context/RequestEventLog.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/context/ClientResponse.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/header/CustomHttpHeader.java
+  AL    /Users/maciej.laskowski/Workspace/KNOTX/knotx-server-http/api/src/main/java/io/knotx/server/api/package-info.java
+ 
+*****************************************************

@@ -19,6 +19,7 @@ import io.knotx.server.api.context.ClientResponse;
 import io.knotx.server.api.context.RequestEvent;
 import io.knotx.server.util.DataObjectsUtil;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.MultiMap;
 import java.util.Optional;
 
@@ -90,7 +91,7 @@ public class RequestEventHandlerResult {
   @Override
   public String toString() {
     return "RequestEventHandlerResult{" +
-        "requestEvent=" + requestEvent.toJson() +
+        "requestEvent=" + getRequestEvent().map(RequestEvent::toJson).orElseGet(JsonObject::new) +
         ", errorMessage='" + errorMessage + '\'' +
         ", statusCode=" + statusCode +
         ", headers=" + DataObjectsUtil.toString(headers) +

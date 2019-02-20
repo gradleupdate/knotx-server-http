@@ -171,13 +171,7 @@ public class ClientRequest {
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("path", path)
-        .add("method", method)
-        .add("headers", DataObjectsUtil.toString(headers))
-        .add("params", DataObjectsUtil.toString(params))
-        .add("formAttributes", DataObjectsUtil.toString(formAttributes))
-        .toString();
+    return toJson().encode();
   }
 
   private MultiMap getParams(String uri) {

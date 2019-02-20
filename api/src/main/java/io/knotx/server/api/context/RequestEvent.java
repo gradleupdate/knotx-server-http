@@ -24,6 +24,10 @@ import java.util.stream.Collectors;
 
 public class RequestEvent {
 
+  private static final String CLIENT_REQUEST_KEY = "clientRequest";
+  private static final String FRAGMENTS_KEY = "fragments";
+  private static final String PAYLOAD_KEY = "payload";
+  
   private final ClientRequest clientRequest;
   private final List<Fragment> fragments;
   private final JsonObject payload;
@@ -41,12 +45,12 @@ public class RequestEvent {
   }
 
   public RequestEvent(JsonObject json) {
-    this.clientRequest = new ClientRequest(json.getJsonObject("clientRequest"));
-    this.fragments = json.getJsonArray("fragments").stream()
+    this.clientRequest = new ClientRequest(json.getJsonObject(CLIENT_REQUEST_KEY));
+    this.fragments = json.getJsonArray(FRAGMENTS_KEY).stream()
         .map(JsonObject.class::cast)
         .map(Fragment::new)
         .collect(Collectors.toList());
-    this.payload = json.getJsonObject("payload");
+    this.payload = json.getJsonObject(PAYLOAD_KEY);
   }
 
   public ClientRequest getClientRequest() {
@@ -70,13 +74,17 @@ public class RequestEvent {
     final JsonArray fragmentsArray = new JsonArray();
     fragments.forEach(entry -> fragmentsArray.add(entry.toJson()));
     return new JsonObject()
-        .put("clientRequest", clientRequest)
-        .put("fragments", fragmentsArray)
-        .put("payload", payload);
+        .put(CLIENT_REQUEST_KEY, clientRequest)
+        .put(FRAGMENTS_KEY, fragmentsArray)
+        .put(PAYLOAD_KEY, payload);
   }
 
   @Override
   public String toString() {
-    return toJson().encode();
+    return "RequestEvent{" +
+        "clientRequest=" + clientRequest +
+        ", fragments=" + fragments +
+        ", payload=" + payload +
+        '}';
   }
 }

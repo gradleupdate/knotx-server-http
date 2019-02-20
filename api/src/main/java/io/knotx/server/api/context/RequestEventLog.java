@@ -56,7 +56,15 @@ public class RequestEventLog {
     operations.add(new Entry(handlerId, status, null));
   }
 
+  @Override
+  public String toString() {
+    return "RequestEventLog{" +
+        "operations=" + operations +
+        '}';
+  }
+
   static class Entry {
+
     private String handlerId;
     private Status status;
     private String errorMessage;
@@ -98,6 +106,16 @@ public class RequestEventLog {
 
     public long getTimestamp() {
       return timestamp;
+    }
+
+    @Override
+    public String toString() {
+      return "Entry{" +
+          "handlerId='" + handlerId + '\'' +
+          ", status=" + status +
+          ", errorMessage='" + errorMessage + '\'' +
+          ", timestamp=" + timestamp +
+          '}';
     }
   }
 

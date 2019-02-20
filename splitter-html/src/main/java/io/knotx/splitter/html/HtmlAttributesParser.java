@@ -15,7 +15,7 @@
  */
 package io.knotx.splitter.html;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,10 +26,11 @@ import org.apache.commons.lang3.tuple.Pair;
 class HtmlAttributesParser {
 
   private static final String HTML_ATTRIBUTE_REGEXP = "(?<key>[\\w\\-]+)\\s*=\\s*(?<value>'((?:\\\\'|[^'])*)'|\"((?:\\\\\"|[^\"])*)\")";
-  private static final Pattern ATTRIBUTE_PATTERN = Pattern.compile(HTML_ATTRIBUTE_REGEXP, Pattern.DOTALL);
+  private static final Pattern ATTRIBUTE_PATTERN = Pattern
+      .compile(HTML_ATTRIBUTE_REGEXP, Pattern.DOTALL);
 
   List<Pair<String, String>> get(String attributes) {
-    List<Pair<String, String>> result = Lists.newArrayList();
+    List<Pair<String, String>> result = new ArrayList<>();
     if (StringUtils.isNotBlank(attributes)) {
       Matcher matcher = ATTRIBUTE_PATTERN.matcher(attributes);
       while (matcher.find()) {

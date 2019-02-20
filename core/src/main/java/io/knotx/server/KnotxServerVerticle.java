@@ -15,9 +15,9 @@
  */
 package io.knotx.server;
 
+import io.knotx.server.api.handler.RoutingHandlerFactory;
 import io.knotx.server.configuration.KnotxServerOptions;
 import io.knotx.server.configuration.RoutingOperationOptions;
-import io.knotx.server.api.handler.RoutingHandlerFactory;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.reactivex.SingleSource;
 import io.vertx.core.Context;
@@ -100,7 +100,13 @@ public class KnotxServerVerticle extends AbstractVerticle {
                     .addHandlerByOperationId(options.getOperationId(),
                         handlerFactory.create(vertx, routingHandlerOptions.getConfig()))
             )
-            .orElseThrow(IllegalStateException::new)
+            .orElseThrow(() -> {
+              LOGGER.error(
+                  "Handler factory [{}] not found in registered factories [{}], all options [{}]",
+                  routingHandlerOptions.getName(), handlerFactories, options);
+              return new IllegalStateException(
+                  "Can not find handler factory for [" + routingHandlerOptions.getName() + "]");
+            })
     );
   }
 

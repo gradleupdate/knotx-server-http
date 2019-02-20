@@ -24,16 +24,17 @@ import io.knotx.server.api.context.RequestContext;
 import io.knotx.server.api.context.RequestContext.Status;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.reactivex.core.MultiMap;
 import io.vertx.reactivex.core.http.HttpServerResponse;
 import java.util.Collections;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -82,13 +83,14 @@ class ServerResponseTest {
   void endFailedContextStatusCodeSet() {
     //given
     when(status.isFailed()).thenReturn(true);
-    when(clientResponse.getStatusCode()).thenReturn(HttpResponseStatus.NOT_FOUND.code());
+    final int expectedStatusCode = HttpResponseStatus.NOT_FOUND.code();
+    when(clientResponse.getStatusCode()).thenReturn(expectedStatusCode);
 
     //when
     new ServerResponse(requestContext).end(httpResponse, DEFAULT_ALLOWED_HEADERS);
 
     //then
-    verify(httpResponse).setStatusCode(HttpResponseStatus.NOT_FOUND.code());
+    verify(httpResponse).setStatusCode(expectedStatusCode);
     verify(httpResponse).end();
   }
 
@@ -98,7 +100,8 @@ class ServerResponseTest {
     //given
     when(status.isFailed()).thenReturn(false);
     when(httpResponse.headers()).thenReturn(headersMultiMap);
-    when(clientResponse.getStatusCode()).thenReturn(HttpResponseStatus.NOT_FOUND.code());
+    final int expectedStatusCode = HttpResponseStatus.NOT_FOUND.code();
+    when(clientResponse.getStatusCode()).thenReturn(expectedStatusCode);
     final Buffer body = Buffer.buffer("template not found");
     when(clientResponse.getBody()).thenReturn(body);
     when(clientResponse.getHeaders())
@@ -108,29 +111,68 @@ class ServerResponseTest {
     new ServerResponse(requestContext).end(httpResponse, DEFAULT_ALLOWED_HEADERS);
 
     //then
-    verify(httpResponse).setStatusCode(HttpResponseStatus.NOT_FOUND.code());
+    verify(httpResponse).setStatusCode(expectedStatusCode);
     assertEquals(headersMultiMap.get("test"), "testValue");
     verify(httpResponse).end(io.vertx.reactivex.core.buffer.Buffer.newInstance(body));
   }
 
   @Test
-  @Disabled
   @DisplayName("Expect empty body, status code and headers rewritten when context ok but no body set")
   void rewriteStatusWhenNoBodySet() {
-    //ToDo
+    //given
+    when(status.isFailed()).thenReturn(false);
+    when(httpResponse.headers()).thenReturn(headersMultiMap);
+    final int expectedStatusCode = HttpResponseStatus.OK.code();
+    when(clientResponse.getStatusCode()).thenReturn(expectedStatusCode);
+    when(clientResponse.getHeaders())
+        .thenReturn(MultiMap.caseInsensitiveMultiMap().add("test", "testValue"));
+
+    //when
+    new ServerResponse(requestContext).end(httpResponse, DEFAULT_ALLOWED_HEADERS);
+
+    //then
+    verify(httpResponse).setStatusCode(expectedStatusCode);
+    assertEquals(headersMultiMap.get("test"), "testValue");
+    verify(httpResponse).end();
   }
 
   @Test
-  @Disabled
   @DisplayName("Expect content-length header removed when context ok")
   void checkContentLengthRemoved() {
-    //ToDo
+    //given
+    when(status.isFailed()).thenReturn(false);
+    MultiMap headersMock = Mockito.mock(MultiMap.class);
+    when(httpResponse.headers()).thenReturn(headersMock);
+    final int expectedStatusCode = HttpResponseStatus.OK.code();
+    when(clientResponse.getStatusCode()).thenReturn(expectedStatusCode);
+    when(clientResponse.getHeaders())
+        .thenReturn(MultiMap.caseInsensitiveMultiMap().add("test", "testValue"));
+
+    //when
+    new ServerResponse(requestContext).end(httpResponse, DEFAULT_ALLOWED_HEADERS);
+
+    //then
+    verify(headersMock).remove(HttpHeaders.CONTENT_LENGTH.toString());
   }
 
   @Test
-  @Disabled
   @DisplayName("Expect headers filtered out context ok")
   void checkHeadersFiltered() {
-    //ToDo
+    //given
+    when(status.isFailed()).thenReturn(false);
+    when(httpResponse.headers()).thenReturn(headersMultiMap);
+    when(clientResponse.getStatusCode()).thenReturn(HttpResponseStatus.OK.code());
+    final MultiMap headers = MultiMap.caseInsensitiveMultiMap()
+        .add("test", "testValue")
+        .add("notAllowed", "value")
+        .add("shouldBeFilteredOut", "value");
+    when(clientResponse.getHeaders()).thenReturn(headers);
+
+    //when
+    new ServerResponse(requestContext).end(httpResponse, DEFAULT_ALLOWED_HEADERS);
+
+    //then
+    assertEquals(1, headersMultiMap.size());
+    assertEquals(headersMultiMap.get("test"), "testValue");
   }
 }

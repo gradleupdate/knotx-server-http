@@ -23,6 +23,7 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.reactivex.core.MultiMap;
 import io.vertx.reactivex.core.http.HttpServerResponse;
+import java.util.Optional;
 import java.util.Set;
 
 class ServerResponse {
@@ -40,7 +41,11 @@ class ServerResponse {
     if (ok) {
       httpResponse.headers().addAll(getHeaders(allowedResponseHeaders));
       httpResponse.headers().remove(HttpHeaders.CONTENT_LENGTH.toString());
-      httpResponse.end(getBody());
+      if (getBody().isPresent()) {
+        httpResponse.end(getBody().get());
+      } else {
+        httpResponse.end();
+      }
     } else {
       httpResponse.end();
     }
@@ -72,15 +77,13 @@ class ServerResponse {
     return headers;
   }
 
-  private io.vertx.reactivex.core.buffer.Buffer getBody() {
+  private Optional<io.vertx.reactivex.core.buffer.Buffer> getBody() {
     final Buffer crBody = clientResponse.getBody();
-    io.vertx.reactivex.core.buffer.Buffer result;
+    io.vertx.reactivex.core.buffer.Buffer result = null;
     if (crBody != null) {
       result = io.vertx.reactivex.core.buffer.Buffer.newInstance(crBody);
-    } else {
-      result = io.vertx.reactivex.core.buffer.Buffer.buffer();
     }
-    return result;
+    return Optional.ofNullable(result);
   }
 
   private static boolean isOk(RequestContext requestContext) {

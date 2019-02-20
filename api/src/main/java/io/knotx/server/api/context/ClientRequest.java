@@ -15,7 +15,6 @@
  */
 package io.knotx.server.api.context;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import io.knotx.server.util.DataObjectsUtil;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -171,7 +170,13 @@ public class ClientRequest {
 
   @Override
   public String toString() {
-    return toJson().encode();
+    return "ClientRequest{" +
+        "path='" + path + '\'' +
+        ", method=" + method +
+        ", headers=" + DataObjectsUtil.toString(headers) +
+        ", params=" + DataObjectsUtil.toString(params) +
+        ", formAttributes=" + DataObjectsUtil.toString(formAttributes) +
+        '}';
   }
 
   private MultiMap getParams(String uri) {

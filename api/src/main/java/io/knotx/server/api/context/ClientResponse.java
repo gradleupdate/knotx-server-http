@@ -15,7 +15,6 @@
  */
 package io.knotx.server.api.context;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import io.knotx.server.util.DataObjectsUtil;
 import io.vertx.codegen.annotations.DataObject;
@@ -118,10 +117,10 @@ public class ClientResponse {
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("statusCode", statusCode)
-        .add("headers", DataObjectsUtil.toString(headers))
-        .add("body", body)
-        .toString();
+    return "ClientResponse{" +
+        "statusCode=" + statusCode +
+        ", headers=" + DataObjectsUtil.toString(headers) +
+        ", body=" + body +
+        '}';
   }
 }

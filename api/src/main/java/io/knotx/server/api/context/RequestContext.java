@@ -103,6 +103,15 @@ public class RequestContext {
         .put("log", log.toJson());
   }
 
+  @Override
+  public String toString() {
+    return "RequestContext{" +
+        "requestEvent=" + requestEvent +
+        ", clientResponse=" + clientResponse +
+        ", log=" + log +
+        '}';
+  }
+
   public static class Status {
 
     private final boolean failed;
@@ -128,6 +137,14 @@ public class RequestContext {
 
     public Optional<JsonObject> getCause() {
       return Optional.ofNullable(cause).map(Entry::toJson);
+    }
+
+    @Override
+    public String toString() {
+      return "Status{" +
+          "failed=" + failed +
+          ", cause=" + cause +
+          '}';
     }
   }
 

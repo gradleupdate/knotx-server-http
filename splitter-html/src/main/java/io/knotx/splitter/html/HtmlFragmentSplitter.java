@@ -15,9 +15,9 @@
  */
 package io.knotx.splitter.html;
 
-import com.google.common.collect.Lists;
 import io.knotx.fragment.Fragment;
 import io.vertx.core.json.JsonObject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
@@ -40,7 +40,7 @@ class HtmlFragmentSplitter {
    * @return list of fragments (see {@link Fragment}).
    */
   List<Fragment> split(String html) {
-    List<Fragment> fragments = Lists.newArrayList();
+    List<Fragment> fragments = new ArrayList<>();
     if (StringUtils.isNotBlank(html)) {
       Matcher matcher = DYNAMIC_FRAGMENT_PATTERN.matcher(html);
       int idx = 0;

@@ -90,7 +90,7 @@ public class RequestEventHandlerResult {
   @Override
   public String toString() {
     return "RequestEventHandlerResult{" +
-        "requestEvent=" + requestEvent.toJson() +
+        "requestEvent=" + requestEvent +
         ", errorMessage='" + errorMessage + '\'' +
         ", statusCode=" + statusCode +
         ", headers=" + DataObjectsUtil.toString(headers) +

@@ -70,8 +70,13 @@ public class RequestEvent {
     final JsonArray fragmentsArray = new JsonArray();
     fragments.forEach(entry -> fragmentsArray.add(entry.toJson()));
     return new JsonObject()
-        .put("clientRequest", clientRequest.toJson())
+        .put("clientRequest", clientRequest)
         .put("fragments", fragmentsArray)
         .put("payload", payload);
+  }
+
+  @Override
+  public String toString() {
+    return toJson().encode();
   }
 }

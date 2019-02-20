@@ -40,7 +40,7 @@ class ServerResponse {
     httpResponse.setStatusCode(getStatusCode());
     if (ok) {
       httpResponse.headers().addAll(getHeaders(allowedResponseHeaders));
-      httpResponse.headers().remove(HttpHeaders.CONTENT_LENGTH.toString());
+      clearContentLengthHeader(httpResponse);
       if (getBody().isPresent()) {
         httpResponse.end(getBody().get());
       } else {
@@ -49,6 +49,16 @@ class ServerResponse {
     } else {
       httpResponse.end();
     }
+  }
+
+  /*
+   * Removes content-length from the final response after writing headers from the client response.
+   * The length that was in client response might come from the repository and is almost always
+   * different than the actual body length after full processing. The content-length header should
+   * be automatically calculated by the httpResponse.
+   */
+  private void clearContentLengthHeader(HttpServerResponse httpResponse) {
+    httpResponse.headers().remove(HttpHeaders.CONTENT_LENGTH.toString());
   }
 
   private int getStatusCode() {

@@ -22,6 +22,7 @@ import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.MultiMap;
+import java.util.Optional;
 
 @DataObject(generateConverter = true)
 public class ClientResponse {
@@ -73,7 +74,7 @@ public class ClientResponse {
   }
 
   public ClientResponse setBody(Buffer body) {
-    this.body = body.copy();
+    this.body = Optional.ofNullable(body).map(Buffer::copy).orElse(null);
     return this;
   }
 

@@ -74,7 +74,7 @@ public class RequestEvent {
     final JsonArray fragmentsArray = new JsonArray();
     fragments.forEach(entry -> fragmentsArray.add(entry.toJson()));
     return new JsonObject()
-        .put(CLIENT_REQUEST_KEY, clientRequest)
+        .put(CLIENT_REQUEST_KEY, clientRequest.toJson())
         .put(FRAGMENTS_KEY, fragmentsArray)
         .put(PAYLOAD_KEY, payload);
   }

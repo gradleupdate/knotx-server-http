@@ -26,7 +26,6 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.ext.web.RoutingContext;
 
-//ToDo unit tests
 public class RequestContextRoutingHandlerFactory implements RoutingHandlerFactory {
 
   @Override

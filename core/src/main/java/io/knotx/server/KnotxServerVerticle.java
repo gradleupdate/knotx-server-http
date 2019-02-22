@@ -58,9 +58,10 @@ public class KnotxServerVerticle extends AbstractVerticle {
     LOGGER.info("Starting <{}>", this.getClass().getSimpleName());
     LOGGER.info("Open API specification location [{}]",
         options.getRoutingSpecificationLocation());
+    validateRoutingOperations();
 
     OpenAPI3RouterFactory.rxCreate(vertx, options.getRoutingSpecificationLocation())
-        .doOnSuccess(this::registerHandlers)
+        .doOnSuccess(this::configure)
         .map(OpenAPI3RouterFactory::getRouter)
         .doOnSuccess(this::logRouterRoutes)
         .flatMap(this::configureHttpServer)
@@ -77,19 +78,32 @@ public class KnotxServerVerticle extends AbstractVerticle {
         );
   }
 
-  private void registerHandlers(OpenAPI3RouterFactory routerFactory) {
+  private void configure(OpenAPI3RouterFactory routerFactory) {
     List<RoutingHandlerFactory> handlerFactories = loadRoutingHandlerFactories();
-    options.getRoutingOperations().forEach(operations -> {
-      registerHandlersPerOperation(routerFactory, handlerFactories, operations);
-      registerFailureHandlersPerOperation(routerFactory, handlerFactories, operations);
-      LOGGER.info("Registered handlers [{}]", options);
+    options.getRoutingOperations().forEach(operation -> {
+      registerRoutingHandlersPerOperation(routerFactory, handlerFactories, operation);
+      registerFailureHandlersPerOperation(routerFactory, handlerFactories, operation);
+      LOGGER.info("Initialized all handlers for operation [{}]", operation.getOperationId());
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("Operation initialization details [{}]", operation.toJson().encodePrettily());
+      }
     });
   }
 
-  private void registerHandlersPerOperation(OpenAPI3RouterFactory routerFactory,
+  private void validateRoutingOperations() {
+    if (options.getRoutingOperations() == null || options.getRoutingOperations().isEmpty()) {
+      LOGGER.error(
+          "The server configuration does not contain any operation defined. Please check your "
+              + "configuration [config.server.options.config.routingOperations]");
+      throw new IllegalStateException(
+          "No routing operations defined, can not initialize Open API correctly!");
+    }
+  }
+
+  private void registerRoutingHandlersPerOperation(OpenAPI3RouterFactory routerFactory,
       List<RoutingHandlerFactory> handlerFactories,
-      RoutingOperationOptions options) {
-    options.getHandlers().forEach(routingHandlerOptions ->
+      RoutingOperationOptions operation) {
+    operation.getHandlers().forEach(routingHandlerOptions ->
         handlerFactories.stream()
             .filter(
                 handlerFactory -> handlerFactory.getName()
@@ -97,13 +111,13 @@ public class KnotxServerVerticle extends AbstractVerticle {
             .findAny()
             .map(handlerFactory ->
                 routerFactory
-                    .addHandlerByOperationId(options.getOperationId(),
+                    .addHandlerByOperationId(operation.getOperationId(),
                         handlerFactory.create(vertx, routingHandlerOptions.getConfig()))
             )
             .orElseThrow(() -> {
               LOGGER.error(
                   "Handler factory [{}] not found in registered factories [{}], all options [{}]",
-                  routingHandlerOptions.getName(), handlerFactories, options);
+                  routingHandlerOptions.getName(), handlerFactories, operation);
               return new IllegalStateException(
                   "Can not find handler factory for [" + routingHandlerOptions.getName() + "]");
             })

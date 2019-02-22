@@ -39,15 +39,17 @@ public class RoutingHandlerOptions {
    * @param json the JSON
    */
   public RoutingHandlerOptions(JsonObject json) {
-    init();
+    this.config = new JsonObject();
     RoutingHandlerOptionsConverter.fromJson(json, this);
     if (StringUtils.isBlank(name)) {
       throw new IllegalStateException("Handler name in routing configuration can not be null!");
     }
   }
 
-  private void init() {
-    this.config = new JsonObject();
+  public JsonObject toJson() {
+    JsonObject json = new JsonObject();
+    RoutingHandlerOptionsConverter.toJson(this, json);
+    return json;
   }
 
   /**

@@ -67,6 +67,12 @@ public class RoutingOperationOptions {
     this.failureHandlers = Collections.emptyList();
   }
 
+  public JsonObject toJson() {
+    JsonObject json = new JsonObject();
+    RoutingOperationOptionsConverter.toJson(this, json);
+    return json;
+  }
+
   /**
    * @return operationId name
    */
@@ -97,7 +103,7 @@ public class RoutingOperationOptions {
   /**
    * Sets list of handlers definitions for particular operationId.
    *
-   * @param  handlers request handlers
+   * @param handlers request handlers
    * @return reference to this, so the API can be used fluently
    * @see io.vertx.reactivex.ext.web.api.contract.openapi3.OpenAPI3RouterFactory#addHandlerByOperationId(String,
    * Handler)

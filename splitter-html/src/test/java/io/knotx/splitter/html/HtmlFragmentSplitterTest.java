@@ -81,7 +81,7 @@ public class HtmlFragmentSplitterTest {
     Assert.assertEquals("valueOne", fragment.getConfiguration().getString("attributeOne"));
     Assert.assertEquals("valueTwo", fragment.getConfiguration().getString("attributeTwo"));
     Assert.assertEquals("", fragment.getConfiguration().getString("attributeEmpty"));
-    Assert.assertEquals("\n  fragment body\n", fragment.getBody());
+    Assert.assertEquals(from("dynamic-fragment-result.txt"), fragment.getBody());
   }
 
   @Test

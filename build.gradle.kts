@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 /*
  * Copyright (C) 2019 Knot.x Project
  *
@@ -16,12 +19,39 @@
 
 subprojects {
 
-   repositories {
-     mavenLocal()
-     maven { url = uri("https://plugins.gradle.org/m2/") }
-     maven { url = uri("http://repo1.maven.org/maven2") }
-     maven { url = uri("https://oss.sonatype.org/content/groups/staging/") }
-     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
-   }
+    group = "io.knotx"
 
- }
+    repositories {
+        mavenLocal()
+        maven { url = uri("https://plugins.gradle.org/m2/") }
+        maven { url = uri("http://repo1.maven.org/maven2") }
+        maven { url = uri("https://oss.sonatype.org/content/groups/staging/") }
+        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+    }
+
+    plugins.withId("java-library") {
+        tasks.withType<JavaCompile>().configureEach {
+            with(options) {
+                sourceCompatibility = "1.8"
+                targetCompatibility = "1.8"
+                encoding = "UTF-8"
+            }
+        }
+
+        tasks.withType<Test>().configureEach {
+            environment("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory")
+
+            failFast = true
+            useJUnitPlatform()
+            testLogging {
+                events = setOf(TestLogEvent.FAILED)
+                exceptionFormat = TestExceptionFormat.SHORT
+            }
+
+            dependencies {
+                "testImplementation"("org.junit.jupiter:junit-jupiter-api")
+                "testRuntimeOnly"("org.junit.jupiter:junit-jupiter-engine")
+            }
+        }
+    }
+}

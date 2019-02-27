@@ -19,6 +19,7 @@ plugins {
     id("java-library")
     id("maven-publish")
     id("signing")
+    id("jacoco")
     id("org.nosphere.apache.rat") version "0.4.0"
 }
 

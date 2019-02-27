@@ -83,9 +83,17 @@ public class RequestContext {
     return this;
   }
 
+  public RequestContext addHeaders(MultiMap headers) {
+    if (headers != null) {
+      MultiMap newHeaders = clientResponse.getHeaders().addAll(headers);
+      this.setHeaders(newHeaders);
+    }
+    return this;
+  }
+
   public RequestContext setHeaders(MultiMap headers) {
     if (headers != null) {
-      clientResponse.getHeaders().addAll(headers);
+      clientResponse.setHeaders(headers);
     }
     return this;
   }

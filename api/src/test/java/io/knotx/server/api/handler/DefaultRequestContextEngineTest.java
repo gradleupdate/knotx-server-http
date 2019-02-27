@@ -78,7 +78,7 @@ class DefaultRequestContextEngineTest {
 
     //then
     verify(requestContext).setBody(expectedBody);
-    verify(requestContext).setHeaders(expectedHeaders);
+    verify(requestContext).addHeaders(expectedHeaders);
     verify(requestContext).setStatusCode(expectedStatusCode);
     verify(routingContext).put(RequestContext.KEY, requestContext);
   }
@@ -101,7 +101,7 @@ class DefaultRequestContextEngineTest {
 
     //then
     verify(requestContext).setBody(expectedBody);
-    verify(requestContext).setHeaders(expectedHeaders);
+    verify(requestContext).addHeaders(expectedHeaders);
     verify(requestContext).setStatusCode(expectedStatusCode);
     verify(routingContext).put(RequestContext.KEY, requestContext);
   }
@@ -177,7 +177,7 @@ class DefaultRequestContextEngineTest {
 
   private void setUpRequestContextUpdate() {
     when(requestContext.setBody(any())).thenReturn(requestContext);
-    when(requestContext.setHeaders(any())).thenReturn(requestContext);
+    when(requestContext.addHeaders(any())).thenReturn(requestContext);
     when(requestContext.setStatusCode(any())).thenReturn(requestContext);
   }
 }

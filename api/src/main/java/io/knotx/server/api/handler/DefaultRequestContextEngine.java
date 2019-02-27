@@ -80,7 +80,7 @@ public class DefaultRequestContextEngine implements RequestContextEngine {
   protected void updateRequestContextClientResponse(RequestContext requestContext,
       RequestEventHandlerResult result) {
     requestContext.setBody(result.getBody())
-        .setHeaders(result.getHeaders())
+        .addHeaders(result.getHeaders())
         .setStatusCode(result.getStatusCode());
   }
 

@@ -15,13 +15,10 @@
  */
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 
 plugins {
     jacoco
 }
-
-val jacocoTestResultTaskName = "jacocoJunit5TestReport"
 
 subprojects {
     println("Configuring now: $name")
@@ -62,14 +59,7 @@ subprojects {
     }
 
     plugins.withId("jacoco") {
-        tasks.getByName<Test>("test") {
-            extensions.configure(JacocoTaskExtension::class) {
-                isEnabled = true
-            }
-        }
-
         tasks.getByName<JacocoReport>("jacocoTestReport") {
-
             reports {
                 sourceDirectories.from(fileTree("src/main/java"))
                 classDirectories.from(fileTree("build/classes") {
@@ -83,24 +73,3 @@ subprojects {
         }
     }
 }
-
-//task<JacocoReport>("jacocoRootReport") {
-//    val jacocoReportTasks =
-//            subprojects.map { it.tasks[jacocoTestResultTaskName] as JacocoReport }
-//    dependsOn(jacocoReportTasks)
-//
-//    val executionData = jacocoReportTasks.map { it.executionData }
-//    executionData(*executionData.toTypedArray())
-//
-//    subprojects.forEach { testedProject ->
-//        //        this@task.additionalSourceDirs.from(files("src/main/java"))
-//        this@task.sourceDirectories.from(files("src/main/java"))
-//        this@task.classDirectories.from(files("build/classes/java/main"))
-//    }
-//
-//    reports {
-//        html.isEnabled = true
-//        xml.isEnabled = true
-//        csv.isEnabled = false
-//    }
-//}

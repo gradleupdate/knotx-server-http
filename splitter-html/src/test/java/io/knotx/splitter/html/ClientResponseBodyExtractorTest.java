@@ -28,6 +28,7 @@ import io.knotx.server.api.context.RequestEvent;
 import io.knotx.server.api.handler.RequestEventHandlerResult;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -96,7 +97,7 @@ class ClientResponseBodyExtractorTest {
     JsonObject payload = new JsonObject().put("secret", "12345");
     when(requestEvent.getPayload()).thenReturn(payload);
 
-    List<Fragment> fragments = Mockito.mock(List.class);
+    List<Fragment> fragments = Collections.emptyList();
     when(splitter.split("body content")).thenReturn(fragments);
 
     // when

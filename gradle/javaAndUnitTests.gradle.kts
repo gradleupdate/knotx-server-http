@@ -22,6 +22,7 @@ subprojects {
             with(options) {
                 sourceCompatibility = "1.8"
                 targetCompatibility = "1.8"
+                compilerArgs = listOf("-parameters")
                 encoding = "UTF-8"
             }
         }

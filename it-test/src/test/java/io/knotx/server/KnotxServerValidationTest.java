@@ -35,19 +35,6 @@ class KnotxServerValidationTest {
 
   private static final String SERVER_URL = "/test/any";
 
-  @Test
-  @DisplayName("Example test")
-  void callServer(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // @formatter:off
-    given().
-        port(globalServerPort).
-    when().
-      get(SERVER_URL).
-    then().assertThat().
-        statusCode(200);
-    // @formatter:on
-  }
-
   @Disabled
   @Test
   @DisplayName("Expect OK when request parameters validation passes.")
@@ -74,12 +61,6 @@ class KnotxServerValidationTest {
   @DisplayName("Expect SERVER ERROR when response schema is invalid.")
   void automaticResponseSchemaValidationFailure(Vertx vertx, @RandomPort Integer globalServerPort) {
     // see example here: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore-expanded.yaml
-  }
-
-  @Disabled
-  @Test
-  @DisplayName("Expect NOT IMPLEMENTED when requested URL is not configured.")
-  void notConfiguredURLNotFound(Vertx vertx, @RandomPort Integer globalServerPort) {
   }
 
 }

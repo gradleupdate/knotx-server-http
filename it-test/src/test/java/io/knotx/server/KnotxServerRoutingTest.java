@@ -29,122 +29,38 @@ import org.junit.jupiter.api.extension.ExtendWith;
 /**
  * Tests are created according to Open API 3.0 Spec: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md
  */
-@Disabled
 @ExtendWith(KnotxExtension.class)
 @KnotxApplyConfiguration("server.conf")
-class KnotxServerSecurityTest {
+class KnotxServerRoutingTest {
 
-  private static final String BASIC_AUTH_ENDPOINT_URL = "/test/securedBasic";
-  private static final String API_KEY_ENDPOINT_URL = "/test/securedApiKey";
-  private static final String JWT_ENDPOINT_URL = "/test/securedJwt";
-  private static final String OAUTH_ENDPOINT_URL = "/test/securedOAuth";
+  private static final String EXISTING_ENDPOINT_URL = "/test/any";
+  private static final String FAILING_HANDLER_ENDPOINT_URL = "/test/failingHandlerOperation";
+  private static final String FAILING_HANDLER_WITH_FALLBACK_ENDPOINT_URL = "/test/failingHandlerOperation";
 
   @Test
-  @DisplayName("Expect Ok when basic authentication passes.")
-  void basicAuthenticationSuccess(Vertx vertx, @RandomPort Integer globalServerPort) {
+  @DisplayName("Expect Ok when requesting defined and configured URL")
+  void callServer(Vertx vertx, @RandomPort Integer globalServerPort) {
     // @formatter:off
     given().
         port(globalServerPort).
-    //  header(BASIC_AUTH)
     when().
-      get(BASIC_AUTH_ENDPOINT_URL).
+      get(EXISTING_ENDPOINT_URL).
     then().assertThat().
         statusCode(200);
     // @formatter:on
   }
 
+  @Disabled
   @Test
-  @DisplayName("Expect Unauthorized when basic authentication fails.")
-  void basicAuthenticationFailure(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // @formatter:off
-    given().
-        port(globalServerPort).
-    when().
-      get(BASIC_AUTH_ENDPOINT_URL).
-    then().assertThat().
-        statusCode(401);
-    // @formatter:on
+  @DisplayName("Expect NOT FOUND when requested URL is defined in Open API spec.")
+  void notConfiguredURLNotFound(Vertx vertx, @RandomPort Integer globalServerPort) {
   }
 
+  @Disabled
   @Test
-  @DisplayName("Expect Ok when API key authentication passes.")
-  void apiKeyAuthenticationSuccess(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // @formatter:off
-    given().
-        port(globalServerPort).
-    //  header(API_KEY)
-    when().
-      get(API_KEY_ENDPOINT_URL).
-    then().assertThat().
-        statusCode(200);
-    // @formatter:on
+  @DisplayName("Expect NOT IMPLEMENTED when defined in Open API spec but no routing handlers defined.")
+  void notImplementedRoutingLogic(Vertx vertx, @RandomPort Integer globalServerPort) {
   }
 
-  @Test
-  @DisplayName("Expect Unauthorized when API key authentication fails.")
-  void apiKeyAuthenticationFailure(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // @formatter:off
-    given().
-        port(globalServerPort).
-    when().
-      get(API_KEY_ENDPOINT_URL).
-    then().assertThat().
-        statusCode(401);
-    // @formatter:on
-  }
-
-  @Test
-  @DisplayName("Expect Ok when JWT authentication passes.")
-  void jwtAuthenticationSuccess(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // @formatter:off
-    given().
-        port(globalServerPort).
-    //  header(JWT Bearer)
-    when().
-      get(JWT_ENDPOINT_URL).
-    then().assertThat().
-        statusCode(200);
-    // @formatter:on
-  }
-
-  @Test
-  @DisplayName("Expect Unauthorized when JWT authentication fails.")
-  void jwtAuthenticationFailure(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // @formatter:off
-    given().
-        port(globalServerPort).
-    when().
-      get(JWT_ENDPOINT_URL).
-    then().assertThat().
-        statusCode(401);
-    // @formatter:on
-  }
-
-  @Test
-  @DisplayName("Expect Ok when OAuth 2.0 authentication passes.")
-  void oAuthAuthenticationSuccess(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // @formatter:off
-    given().
-        port(globalServerPort).
-    //  header(OAuth)
-    when().
-      get(OAUTH_ENDPOINT_URL).
-    then().assertThat().
-        statusCode(200);
-    // @formatter:on
-  }
-
-  @Test
-  @DisplayName("Expect Unauthorized when OAuth 2.0 authentication fails.")
-  void oAuthAuthenticationFailure(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // @formatter:off
-    given().
-        port(globalServerPort).
-    when().
-      get(OAUTH_ENDPOINT_URL).
-    then().assertThat().
-        statusCode(401);
-    // @formatter:on
-  }
 
 }

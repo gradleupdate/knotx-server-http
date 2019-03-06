@@ -28,8 +28,9 @@ plugins {
 // -----------------------------------------------------------------------------
 dependencies {
     api(project(":knotx-server-http-api"))
-    implementation(group = "io.vertx", name = "vertx-web")
     implementation(group = "io.vertx", name = "vertx-web-api-contract")
+    implementation(group = "io.vertx", name = "vertx-web-api-service")
+    implementation(group = "io.vertx", name = "vertx-web")
     implementation(group = "io.vertx", name = "vertx-web-client")
 }
 
@@ -125,5 +126,6 @@ signing {
     sign(publishing.publications["mavenJava"])
 }
 
+apply(from = "../gradle/javaAndUnitTests.gradle.kts")
 apply(from = "../gradle/common.deps.gradle.kts")
 apply(from = "../gradle/codegen.deps.gradle.kts")

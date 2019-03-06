@@ -27,14 +27,10 @@ dependencies {
     implementation(project(":knotx-server-http-core"))
     implementation(project(":knotx-assembler"))
     implementation(project(":knotx-splitter-html"))
-
-    testImplementation(platform("io.knotx:knotx-dependencies:${project.version}"))
-    testImplementation("io.knotx:knotx-junit5")
+    implementation(group = "io.vertx", name = "vertx-web-api-service")
+    
     testImplementation("io.knotx:knotx-launcher")
     testImplementation(group = "io.knotx", name = "knotx-launcher", classifier = "tests")
-
-    testImplementation(group = "io.vertx", name = "vertx-junit5")
-    testImplementation(group = "io.vertx", name = "vertx-unit")
     testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")
 }
 
@@ -43,11 +39,18 @@ dependencies {
 // -----------------------------------------------------------------------------
 tasks {
     named<RatTask>("rat") {
-        excludes.addAll("**/build/*", "**/out/*")
+        excludes.addAll("**/build/*", "**/out/*", ".vertx/*")
     }
     getByName("build").dependsOn("rat")
 }
 
+sourceSets.named("main") {
+    java.srcDir("src/main/generated")
+}
 sourceSets.named("test") {
     resources.srcDir("../conf")
 }
+
+apply(from = "../gradle/javaAndUnitTests.gradle.kts")
+apply(from = "../gradle/common.deps.gradle.kts")
+apply(from = "../gradle/codegen.deps.gradle.kts")

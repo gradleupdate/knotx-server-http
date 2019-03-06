@@ -22,3 +22,10 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 paths:
+  /api/someMethod*:
+    get:
+      operationId: someMethod
+      x-vertx-event-bus: "service.webApiTestService"
+      responses:
+        default:
+          description: Web API Service test endpoint

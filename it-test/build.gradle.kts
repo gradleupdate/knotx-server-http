@@ -51,6 +51,5 @@ sourceSets.named("test") {
     resources.srcDir("../conf")
 }
 
-apply(from = "../gradle/javaAndUnitTests.gradle.kts")
 apply(from = "../gradle/common.deps.gradle.kts")
 apply(from = "../gradle/codegen.deps.gradle.kts")

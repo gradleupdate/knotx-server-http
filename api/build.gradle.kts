@@ -124,6 +124,5 @@ signing {
     sign(publishing.publications["mavenJava"])
 }
 
-apply(from = "../gradle/javaAndUnitTests.gradle.kts")
 apply(from = "../gradle/common.deps.gradle.kts")
 apply(from = "../gradle/codegen.deps.gradle.kts")

@@ -29,7 +29,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @KnotxApplyConfiguration({"server.conf", "service/server-with-service.conf"})
 class KnotxServerEventBusServiceTest {
 
-  private static final String EVENT_BUS_SERVICE_ENDPOINT_URL = "/api/someMethod";
+  private static final String EXISTING_SERVICE_METHOD_ENDPOINT = "/api/transactions";
 
   @Test
   @DisplayName("Expect Ok when call endpoint exposed with event bus.")
@@ -38,9 +38,22 @@ class KnotxServerEventBusServiceTest {
     given().
         port(globalServerPort).
     when().
-      get(EVENT_BUS_SERVICE_ENDPOINT_URL).
+      get(EXISTING_SERVICE_METHOD_ENDPOINT).
     then().assertThat().
         statusCode(200);
+    // @formatter:on
+  }
+
+  @Test
+  @DisplayName("Expect 500 when call endpoint not exposed with event bus.")
+  void callServiceWithUndefinedMethod(Vertx vertx, @RandomPort Integer globalServerPort) {
+    // @formatter:off
+    given().
+        port(globalServerPort).
+    when().
+      put(EXISTING_SERVICE_METHOD_ENDPOINT). // createTransaction
+    then().assertThat().
+        statusCode(500);
     // @formatter:on
   }
 

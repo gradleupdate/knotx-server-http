@@ -16,11 +16,8 @@
 package io.knotx.server;
 
 import io.knotx.server.api.handler.RoutingHandlerFactory;
-import io.knotx.server.api.security.AuthHandlerFactory;
-import io.knotx.server.configuration.AuthHandlerOptions;
 import io.knotx.server.configuration.KnotxServerOptions;
 import io.knotx.server.configuration.RoutingOperationOptions;
-import io.knotx.server.exceptions.ConfigurationException;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.reactivex.SingleSource;
 import io.vertx.core.Context;
@@ -36,9 +33,7 @@ import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.api.contract.openapi3.OpenAPI3RouterFactory;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.ServiceLoader;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class KnotxServerVerticle extends AbstractVerticle {
@@ -65,8 +60,11 @@ public class KnotxServerVerticle extends AbstractVerticle {
         options.getRoutingSpecificationLocation());
     validateRoutingOperations();
 
+    final SecurityProvider securityProvider = new SecurityProvider(vertx,
+        options.getSecurityHandlers());
+
     OpenAPI3RouterFactory.rxCreate(vertx, options.getRoutingSpecificationLocation())
-        .doOnSuccess(this::configureSecurity)
+        .doOnSuccess(securityProvider::configureSecurity)
         .doOnSuccess(this::configureRouting)
         .doOnSuccess(OpenAPI3RouterFactory::mountServicesFromExtensions)
         .map(OpenAPI3RouterFactory::getRouter)
@@ -83,42 +81,6 @@ public class KnotxServerVerticle extends AbstractVerticle {
               fut.fail(error);
             }
         );
-  }
-
-  private void configureSecurity(OpenAPI3RouterFactory routerFactory) {
-    final Map<String, AuthHandlerFactory> authHandlerFactoriesByName = loadAuthHandlerFactories();
-    options.getSecurityHandlers().forEach(options -> {
-      registerAuthHandler(routerFactory,
-          authHandlerFactoriesByName.get(options.getFactory()), options);
-      LOGGER.info("Security handler [{}] initialized", options.getSchema());
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("Auth handler initialization details [{}]", options.toJson().encodePrettily());
-      }
-    });
-  }
-
-  private Map<String, AuthHandlerFactory> loadAuthHandlerFactories() {
-    List<AuthHandlerFactory> routingFactories = new ArrayList<>();
-    ServiceLoader.load(AuthHandlerFactory.class)
-        .iterator()
-        .forEachRemaining(routingFactories::add);
-
-    LOGGER.info("Auth handler factory types registered: " +
-        routingFactories.stream().map(AuthHandlerFactory::getName).collect(Collectors
-            .joining(",")));
-
-    return routingFactories.stream()
-        .collect(Collectors.toMap(AuthHandlerFactory::getName, Function.identity()));
-  }
-
-  private void registerAuthHandler(OpenAPI3RouterFactory routerFactory,
-      AuthHandlerFactory authHandlerFactory, AuthHandlerOptions options) {
-    if (routerFactory != null) {
-      routerFactory.addSecurityHandler(options.getSchema(),
-          authHandlerFactory.create(vertx, options.getConfig()));
-    } else {
-      throw new ConfigurationException("Factory for " + options + " is not registered!");
-    }
   }
 
   private void configureRouting(OpenAPI3RouterFactory routerFactory) {

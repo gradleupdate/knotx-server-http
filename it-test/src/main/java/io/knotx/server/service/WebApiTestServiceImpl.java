@@ -25,7 +25,7 @@ import io.vertx.ext.web.api.OperationResponse;
 public class WebApiTestServiceImpl implements WebApiTestService {
 
   @Override
-  public void someMethod(OperationRequest context,
+  public void getTransactions(OperationRequest context,
       Handler<AsyncResult<OperationResponse>> resultHandler) {
     resultHandler.handle(Future.succeededFuture(OperationResponse.completedWithPlainText(
         Buffer.buffer("Test service response"))));

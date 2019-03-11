@@ -28,6 +28,6 @@ public interface WebApiTestService {
     return new WebApiTestServiceImpl();
   }
 
-  void someMethod(OperationRequest context, Handler<AsyncResult<OperationResponse>> resultHandler);
+  void getTransactions(OperationRequest context, Handler<AsyncResult<OperationResponse>> resultHandler);
 
 }

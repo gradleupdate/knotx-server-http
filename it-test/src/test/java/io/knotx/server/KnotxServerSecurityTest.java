@@ -20,7 +20,12 @@ import static io.restassured.RestAssured.given;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.KeyStoreOptions;
+import io.vertx.ext.auth.jwt.JWTAuthOptions;
+import io.vertx.ext.jwt.JWTOptions;
 import io.vertx.reactivex.core.Vertx;
+import io.vertx.reactivex.ext.auth.jwt.JWTAuth;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,15 +34,27 @@ import org.junit.jupiter.api.extension.ExtendWith;
 /**
  * Tests are created according to Open API 3.0 Spec: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md
  */
-@Disabled
 @ExtendWith(KnotxExtension.class)
-@KnotxApplyConfiguration("server.conf")
+@KnotxApplyConfiguration({"server.conf", "security/security.conf"})
 class KnotxServerSecurityTest {
 
-  private static final String BASIC_AUTH_ENDPOINT_URL = "/test/securedBasic";
-  private static final String API_KEY_ENDPOINT_URL = "/test/securedApiKey";
-  private static final String JWT_ENDPOINT_URL = "/test/securedJwt";
-  private static final String OAUTH_ENDPOINT_URL = "/test/securedOAuth";
+  private static final String BASIC_AUTH_ENDPOINT_URL = "/protected/basic";
+  private static final String API_KEY_ENDPOINT_URL = "/protected/apiKey";
+  private static final String JWT_ENDPOINT_URL = "/protected/jwt";
+  private static final String OAUTH_ENDPOINT_URL = "/protected/oAuth";
+
+  @Test
+  @DisplayName("Expect Ok - call public endpoint")
+  void callPublicEndpoint(Vertx vertx, @RandomPort Integer globalServerPort) {
+    // @formatter:off
+    given().
+        port(globalServerPort).
+    when().
+        get("/public").
+    then().assertThat().
+        statusCode(200);
+    // @formatter:on
+  }
 
   @Test
   @DisplayName("Expect Ok when basic authentication passes.")
@@ -45,7 +62,7 @@ class KnotxServerSecurityTest {
     // @formatter:off
     given().
         port(globalServerPort).
-    //  header(BASIC_AUTH)
+        header("Authorization", "Basic am9objpzM2NyM3Q=").
     when().
       get(BASIC_AUTH_ENDPOINT_URL).
     then().assertThat().
@@ -68,6 +85,7 @@ class KnotxServerSecurityTest {
 
   @Test
   @DisplayName("Expect Ok when API key authentication passes.")
+  @Disabled("To Do")
   void apiKeyAuthenticationSuccess(Vertx vertx, @RandomPort Integer globalServerPort) {
     // @formatter:off
     given().
@@ -82,6 +100,7 @@ class KnotxServerSecurityTest {
 
   @Test
   @DisplayName("Expect Unauthorized when API key authentication fails.")
+  @Disabled("To Do")
   void apiKeyAuthenticationFailure(Vertx vertx, @RandomPort Integer globalServerPort) {
     // @formatter:off
     given().
@@ -99,7 +118,7 @@ class KnotxServerSecurityTest {
     // @formatter:off
     given().
         port(globalServerPort).
-    //  header(JWT Bearer)
+        header("Authorization", generateJWTHeader(vertx)).
     when().
       get(JWT_ENDPOINT_URL).
     then().assertThat().
@@ -122,6 +141,7 @@ class KnotxServerSecurityTest {
 
   @Test
   @DisplayName("Expect Ok when OAuth 2.0 authentication passes.")
+  @Disabled("To Do")
   void oAuthAuthenticationSuccess(Vertx vertx, @RandomPort Integer globalServerPort) {
     // @formatter:off
     given().
@@ -136,6 +156,7 @@ class KnotxServerSecurityTest {
 
   @Test
   @DisplayName("Expect Unauthorized when OAuth 2.0 authentication fails.")
+  @Disabled("To Do")
   void oAuthAuthenticationFailure(Vertx vertx, @RandomPort Integer globalServerPort) {
     // @formatter:off
     given().
@@ -147,4 +168,16 @@ class KnotxServerSecurityTest {
     // @formatter:on
   }
 
+  private String generateJWTHeader(Vertx vertx) {
+    final KeyStoreOptions keyStore = new KeyStoreOptions()
+        .setType("jceks")
+        .setPath("security/keystore.jceks")
+        .setPassword("secret");
+    final JWTAuthOptions config = new JWTAuthOptions().setKeyStore(keyStore);
+
+    final JWTAuth jwtAuth = JWTAuth.create(vertx, config);
+    final String token = jwtAuth
+        .generateToken(new JsonObject().put("name", "john"), new JWTOptions().setExpiresInSeconds(60));
+    return "Bearer " + token;
+  }
 }

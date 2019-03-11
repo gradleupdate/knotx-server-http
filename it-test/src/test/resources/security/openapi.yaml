@@ -28,7 +28,7 @@ paths:
       responses:
         default:
           description: Public endpoint that lists books
-  /protected/ba:
+  /protected/basic:
     get:
       operationId: listBooksWithBasicAuth
       security:

@@ -45,7 +45,7 @@ class KnotxServerSecurityTest {
 
   @Test
   @DisplayName("Expect Ok - call public endpoint")
-  void getBooks(Vertx vertx, @RandomPort Integer globalServerPort) {
+  void callPublicEndpoint(Vertx vertx, @RandomPort Integer globalServerPort) {
     // @formatter:off
     given().
         port(globalServerPort).
@@ -171,7 +171,7 @@ class KnotxServerSecurityTest {
   private String generateJWTHeader(Vertx vertx) {
     final KeyStoreOptions keyStore = new KeyStoreOptions()
         .setType("jceks")
-        .setPath("keystore.jceks")
+        .setPath("security/keystore.jceks")
         .setPassword("secret");
     final JWTAuthOptions config = new JWTAuthOptions().setKeyStore(keyStore);
 

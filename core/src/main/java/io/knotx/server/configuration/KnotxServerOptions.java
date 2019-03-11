@@ -69,6 +69,7 @@ public class KnotxServerOptions {
   private HttpServerOptions serverOptions;
   private DeliveryOptions deliveryOptions;
   private String routingSpecificationLocation;
+  private List<AuthHandlerOptions> securityHandlers;
   private List<RoutingOperationOptions> routingOperations;
   private Set<String> allowedResponseHeaders;
   private CustomHttpHeader customResponseHeader;
@@ -97,6 +98,7 @@ public class KnotxServerOptions {
     this.serverOptions = new HttpServerOptions(other.serverOptions);
     this.deliveryOptions = new DeliveryOptions(other.deliveryOptions);
     this.routingSpecificationLocation = other.routingSpecificationLocation;
+    this.securityHandlers = new ArrayList<>(other.securityHandlers);
     this.routingOperations = new ArrayList<>(other.routingOperations);
     this.customResponseHeader = new CustomHttpHeader(other.customResponseHeader);
     this.accessLog = new AccessLogOptions(other.accessLog);
@@ -135,6 +137,7 @@ public class KnotxServerOptions {
 
   private void init() {
     displayExceptionDetails = DEFAULT_DISPLAY_EXCEPTIONS;
+    securityHandlers = new ArrayList<>();
     allowedResponseHeaders = new HashSet<>();
     allowedResponseHeaders = allowedResponseHeaders.stream().map(String::toLowerCase)
         .collect(Collectors.toSet());
@@ -221,6 +224,28 @@ public class KnotxServerOptions {
   public KnotxServerOptions setRoutingSpecificationLocation(
       String routingSpecificationLocation) {
     this.routingSpecificationLocation = routingSpecificationLocation;
+    return this;
+  }
+
+  /**
+   * List of {@link AuthHandlerOptions} containing auth handlers configurations which are initiated
+   * (loaded from classpath via {@link java.util.ServiceLoader}) during server setup and joined with
+   * Open API security schemas based on {@link AuthHandlerOptions} schema name.
+   *
+   * @return list of auth handlers options
+   */
+  public List<AuthHandlerOptions> getSecurityHandlers() {
+    return securityHandlers;
+  }
+
+  /**
+   * Set list of {@link AuthHandlerOptions}.
+   *
+   * @param securityHandlers auth handlers options
+   * @return reference to this, so the API can be used fluently
+   */
+  public KnotxServerOptions setSecurityHandlers(List<AuthHandlerOptions> securityHandlers) {
+    this.securityHandlers = securityHandlers;
     return this;
   }
 

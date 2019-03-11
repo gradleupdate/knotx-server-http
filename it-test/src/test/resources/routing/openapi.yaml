@@ -22,3 +22,9 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 paths:
+  /test*:
+    get:
+      operationId: test-get
+      responses:
+        default:
+          description: test endpoint

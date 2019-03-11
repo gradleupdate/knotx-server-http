@@ -28,8 +28,9 @@ plugins {
 // -----------------------------------------------------------------------------
 dependencies {
     api(project(":knotx-server-http-api"))
-    implementation(group = "io.vertx", name = "vertx-web")
     implementation(group = "io.vertx", name = "vertx-web-api-contract")
+    implementation(group = "io.vertx", name = "vertx-web-api-service")
+    implementation(group = "io.vertx", name = "vertx-web")
     implementation(group = "io.vertx", name = "vertx-web-client")
 }
 

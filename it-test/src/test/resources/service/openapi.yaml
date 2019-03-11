@@ -22,3 +22,16 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 paths:
+  /api/transactions*:
+    get:
+      operationId: getTransactions
+      x-vertx-event-bus: "service.webApiTestService"
+      responses:
+        default:
+          description: Web API Service test endpoint
+    put:
+      operationId: createTransaction
+      x-vertx-event-bus: "service.webApiTestService"
+      responses:
+        default:
+          description: Web API Service test endpoint

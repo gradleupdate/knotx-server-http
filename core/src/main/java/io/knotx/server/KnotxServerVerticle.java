@@ -62,6 +62,7 @@ public class KnotxServerVerticle extends AbstractVerticle {
 
     OpenAPI3RouterFactory.rxCreate(vertx, options.getRoutingSpecificationLocation())
         .doOnSuccess(this::configure)
+        .doOnSuccess(OpenAPI3RouterFactory::mountServicesFromExtensions)
         .map(OpenAPI3RouterFactory::getRouter)
         .doOnSuccess(this::logRouterRoutes)
         .flatMap(this::configureHttpServer)
@@ -92,11 +93,9 @@ public class KnotxServerVerticle extends AbstractVerticle {
 
   private void validateRoutingOperations() {
     if (options.getRoutingOperations() == null || options.getRoutingOperations().isEmpty()) {
-      LOGGER.error(
+      LOGGER.warn(
           "The server configuration does not contain any operation defined. Please check your "
               + "configuration [config.server.options.config.routingOperations]");
-      throw new IllegalStateException(
-          "No routing operations defined, can not initialize Open API correctly!");
     }
   }
 

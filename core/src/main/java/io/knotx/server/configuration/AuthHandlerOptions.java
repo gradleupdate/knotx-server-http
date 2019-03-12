@@ -15,22 +15,23 @@
  */
 package io.knotx.server.configuration;
 
-import io.knotx.server.api.handler.RoutingHandlerFactory;
+import io.knotx.server.api.security.AuthHandlerFactory;
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Handler definition that contains {@link RoutingHandlerFactory} name and JSON configuration.
- * During {@link io.knotx.server.KnotxServerVerticle} deployment all implementations of {@link
- * RoutingHandlerFactory} are loaded from the classpath and based on {@link
- * RoutingHandlerFactory#getName()} are initiated.
+ * Handler definition that contains {@link AuthHandlerFactory} name and JSON configuration. During
+ * {@link io.knotx.server.KnotxServerVerticle} deployment all implementations of {@link
+ * AuthHandlerFactory} are loaded from the classpath and based on {@link
+ * AuthHandlerFactory#getName()} are initiated.
  */
 @DataObject(generateConverter = true, publicConverter = false)
-public class RoutingHandlerOptions {
+public class AuthHandlerOptions {
 
-  private String name;
+  private String schema;
+  private String factory;
   private JsonObject config;
 
   /**
@@ -38,40 +39,58 @@ public class RoutingHandlerOptions {
    *
    * @param json the JSON
    */
-  public RoutingHandlerOptions(JsonObject json) {
+  public AuthHandlerOptions(JsonObject json) {
     this.config = new JsonObject();
-    RoutingHandlerOptionsConverter.fromJson(json, this);
-    if (StringUtils.isBlank(name)) {
-      throw new IllegalArgumentException("Handler name in routing configuration can not be null!");
+    AuthHandlerOptionsConverter.fromJson(json, this);
+    if (StringUtils.isAnyBlank(schema, factory)) {
+      throw new IllegalArgumentException("Auth Handler schema and factory names must be set!");
     }
   }
 
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
-    RoutingHandlerOptionsConverter.toJson(this, json);
+    AuthHandlerOptionsConverter.toJson(this, json);
     return json;
   }
 
   /**
-   * @return {@link RoutingHandlerFactory} name
+   * @return security schema name
    */
-  public String getName() {
-    return name;
+  public String getSchema() {
+    return schema;
   }
 
   /**
-   * Sets {@link RoutingHandlerFactory} name
+   * Sets security schema name
    *
-   * @param name handler factory name
+   * @param schema security schema name
    * @return reference to this, so the API can be used fluently
    */
-  public RoutingHandlerOptions setName(String name) {
-    this.name = name;
+  public AuthHandlerOptions setSchema(String schema) {
+    this.schema = schema;
     return this;
   }
 
   /**
-   * @return JSON configuration used during {@link RoutingHandlerFactory#create(Vertx, JsonObject)}
+   * @return {@link AuthHandlerFactory} name
+   */
+  public String getFactory() {
+    return factory;
+  }
+
+  /**
+   * Sets {@link AuthHandlerFactory} name
+   *
+   * @param factory handler factory name
+   * @return reference to this, so the API can be used fluently
+   */
+  public AuthHandlerOptions setFactory(String factory) {
+    this.factory = factory;
+    return this;
+  }
+
+  /**
+   * @return JSON configuration used during {@link AuthHandlerFactory#create(Vertx, JsonObject)}
    * initialization
    */
   public JsonObject getConfig() {
@@ -84,15 +103,16 @@ public class RoutingHandlerOptions {
    * @param config handler JSON configuration
    * @return reference to this, so the API can be used fluently
    */
-  public RoutingHandlerOptions setConfig(JsonObject config) {
+  public AuthHandlerOptions setConfig(JsonObject config) {
     this.config = config;
     return this;
   }
 
   @Override
   public String toString() {
-    return "RoutingHandlerOptions{" +
-        "name='" + name + '\'' +
+    return "AuthHandlerOptions{" +
+        "schema='" + schema + '\'' +
+        ", factory='" + factory + '\'' +
         ", config=" + config +
         '}';
   }

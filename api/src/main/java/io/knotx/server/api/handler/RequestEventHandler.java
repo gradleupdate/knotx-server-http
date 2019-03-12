@@ -49,11 +49,9 @@ public abstract class RequestEventHandler implements Handler<RoutingContext> {
   /**
    * Handle RequestEvent processing
    *
-   * @param requestEvent - knot.x fragment context from the previous handler
+   * @param requestEvent - request event with context from the previous handler
    * @return RequestEventHandlerResult that contains handling result
    */
   protected abstract RequestEventHandlerResult handle(RequestEvent requestEvent);
-
-
 
 }

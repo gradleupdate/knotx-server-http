@@ -30,7 +30,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * Tests are created according to Open API 3.0 Spec: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md
  */
 @ExtendWith(KnotxExtension.class)
-@KnotxApplyConfiguration({"server.conf", "routing/routing.conf"})
+@KnotxApplyConfiguration({"server.conf", "server-random-port.conf", "routing/routing.conf"})
 class KnotxServerRoutingTest {
 
   private static final String EXISTING_ENDPOINT_URL = "/test/any";

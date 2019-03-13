@@ -31,7 +31,7 @@ public class KnotxServerVerticle extends AbstractVerticle {
   public static final String KNOTX_FILE_UPLOAD_DIR_PROPERTY = "knotx.fileUploadDir";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(KnotxServerVerticle.class);
-  
+
   private KnotxServerOptions options;
 
   @Override

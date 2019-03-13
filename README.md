@@ -19,7 +19,7 @@ Aside of the [Server API](https://github.com/Knotx/knotx-server-http/tree/master
 core handlers implementations:
 - [HTML Splitter](https://github.com/Knotx/knotx-server-http/tree/master/splitter-html) responsible for
 extracting [`Fragments`](https://github.com/Knotx/knotx-fragment-api) from the template
-- [Assembler](https://github.com/Knotx/knotx-server-http/tree/master/assembler) that combines all
+- [Assembler](https://github.com/Knotx/knotx-server-http/tree/master/assembler) combines all
 processed [`Fragments`](https://github.com/Knotx/knotx-fragment-api) into the response body.
 
 ## How does it work
@@ -40,6 +40,13 @@ are triggered.
 is returned.
 
 ## How to configure
+To run Knot.x HTTP Server, simply add entry the [`modules` configuration](https://github.com/Knotx/knotx-launcher#modules-configuration):
+
+```hocon
+modules = {
+  server = "io.knotx.server.KnotxServerVerticle"
+}
+```
 
 ### Server options
 

@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(KnotxExtension.class)
-@KnotxApplyConfiguration({"server.conf", "service/server-with-service.conf"})
+@KnotxApplyConfiguration({"server.conf", "server-random-port.conf", "service/server-with-service.conf"})
 class KnotxServerEventBusServiceTest {
 
   private static final String EXISTING_SERVICE_METHOD_ENDPOINT = "/api/transactions";

@@ -44,7 +44,7 @@ sourceSets.named("main") {
 // -----------------------------------------------------------------------------
 tasks {
     named<RatTask>("rat") {
-        excludes.addAll("*.md", "**/*.md", "**/build/*", "**/out/*", "**/generated/*")
+        excludes.addAll("*.md", "**/*.md", "**/build/*", "**/out/*", "**/generated/*", "**/*.adoc")
     }
     getByName("build").dependsOn("rat")
 }

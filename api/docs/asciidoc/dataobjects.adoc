@@ -1,0 +1,50 @@
+= Cheatsheets
+
+[[ClientRequest]]
+== ClientRequest
+
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[jsonFormAttributes]]`@jsonFormAttributes`|`Json object`|-
+|[[jsonHeaders]]`@jsonHeaders`|`Json object`|-
+|[[jsonParams]]`@jsonParams`|`Json object`|-
+|[[method]]`@method`|`link:enums.html#HttpMethod[HttpMethod]`|-
+|[[path]]`@path`|`String`|-
+|===
+
+[[ClientResponse]]
+== ClientResponse
+
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[body]]`@body`|`Buffer`|-
+|[[jsonHeaders]]`@jsonHeaders`|`Json object`|-
+|[[statusCode]]`@statusCode`|`Number (int)`|-
+|===
+
+[[CustomHttpHeader]]
+== CustomHttpHeader
+
+++++
+ Describes a custom header
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[name]]`@name`|`String`|+++
+Set the name of the request header.
++++
+|[[value]]`@value`|`String`|+++
+Set the value of the request header.
++++
+|===
+

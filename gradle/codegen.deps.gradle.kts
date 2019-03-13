@@ -23,6 +23,10 @@ dependencies {
 
 tasks.named<JavaCompile>("compileJava") {
   options.annotationProcessorGeneratedSourcesDirectory = file("src/main/generated")
+  options.compilerArgs = listOf(
+          "-processor", "io.vertx.codegen.CodeGenProcessor",
+          "-Acodegen.output=${project.projectDir}/docs" 
+  )
 }
 
 tasks.named<Delete>("clean") {

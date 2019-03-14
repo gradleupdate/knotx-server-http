@@ -40,7 +40,7 @@ are triggered.
 is returned.
 
 ## How to configure
-To run Knot.x HTTP Server, simply add entry the [`modules` configuration](https://github.com/Knotx/knotx-launcher#modules-configuration):
+To run Knot.x HTTP Server, simply add an entry in the [`modules` configuration](https://github.com/Knotx/knotx-launcher#modules-configuration):
 
 ```hocon
 modules = {

@@ -48,7 +48,8 @@ public class KnotxServerVerticle extends AbstractVerticle {
 
     RoutesProvider routesProvider = new RoutesProvider(vertx, options.getRoutingOperations());
     SecurityProvider securityProvider = new SecurityProvider(vertx, options.getSecurityHandlers());
-    HttpServerProvider httpServerProvider = new HttpServerProvider(vertx, options);
+    HttpServerProvider httpServerProvider = new HttpServerProvider(vertx,
+        options.getServerOptions(), options.getDropRequestOptions());
 
     OpenAPI3RouterFactory.rxCreate(vertx, options.getRoutingSpecificationLocation())
         .doOnSuccess(securityProvider::configureSecurity)

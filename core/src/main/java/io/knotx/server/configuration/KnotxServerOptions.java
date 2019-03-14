@@ -19,8 +19,6 @@ import static io.knotx.server.KnotxServerVerticle.KNOTX_PORT_PROP_NAME;
 
 import io.knotx.server.api.header.CustomHttpHeader;
 import io.knotx.server.handler.logger.AccessLogOptions;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.reactivex.BackpressureOverflowStrategy;
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.http.HttpServerOptions;
@@ -44,27 +42,6 @@ public class KnotxServerOptions {
    */
   private static final boolean DEFAULT_DISPLAY_EXCEPTIONS = false;
 
-  /**
-   * Default flag whether a request dropping on heavy load (backpressure) is enabled or not = false
-   */
-  private static final boolean DEFAULT_DROP_REQUESTS = false;
-
-  /**
-   * Default response status code send for dropped requests = 429 (Too Many Requests)
-   */
-  private static final int DEFAULT_DROP_REQUESTS_RESPONSE_CODE = HttpResponseStatus.TOO_MANY_REQUESTS
-      .code();
-
-  /**
-   * Defaukt backpressure buffer size = 1000
-   */
-  private static final long DEFAULT_BACKPRESSURE_BUFFER_SIZE = 1000L;
-
-  /**
-   * Default backpressure strategy = DROP_LATEST
-   */
-  private static final BackpressureOverflowStrategy DEFAULT_BACKPRESSURE_STRATEGY = BackpressureOverflowStrategy.DROP_LATEST;
-
   private boolean displayExceptionDetails;
   private HttpServerOptions serverOptions;
   private DeliveryOptions deliveryOptions;
@@ -74,10 +51,7 @@ public class KnotxServerOptions {
   private Set<String> allowedResponseHeaders;
   private CustomHttpHeader customResponseHeader;
   private AccessLogOptions accessLog;
-  private boolean dropRequests;
-  private int dropRequestResponseCode;
-  private long backpressureBufferCapacity;
-  private BackpressureOverflowStrategy backpressureStrategy;
+  private DropRequestOptions dropRequestOptions;
 
   /**
    * Default constructor
@@ -102,10 +76,7 @@ public class KnotxServerOptions {
     this.routingOperations = new ArrayList<>(other.routingOperations);
     this.customResponseHeader = new CustomHttpHeader(other.customResponseHeader);
     this.accessLog = new AccessLogOptions(other.accessLog);
-    this.dropRequests = other.dropRequests;
-    this.dropRequestResponseCode = other.dropRequestResponseCode;
-    this.backpressureBufferCapacity = other.backpressureBufferCapacity;
-    this.backpressureStrategy = other.backpressureStrategy;
+    this.dropRequestOptions = other.dropRequestOptions;
   }
 
   /**
@@ -145,10 +116,7 @@ public class KnotxServerOptions {
     serverOptions = new HttpServerOptions();
     customResponseHeader = null;
     accessLog = new AccessLogOptions();
-    dropRequests = DEFAULT_DROP_REQUESTS;
-    dropRequestResponseCode = DEFAULT_DROP_REQUESTS_RESPONSE_CODE;
-    backpressureBufferCapacity = DEFAULT_BACKPRESSURE_BUFFER_SIZE;
-    backpressureStrategy = DEFAULT_BACKPRESSURE_STRATEGY;
+    dropRequestOptions = new DropRequestOptions();
   }
 
   /**
@@ -330,83 +298,20 @@ public class KnotxServerOptions {
   }
 
   /**
-   * @return if request dropping (backpressure) is enabled
+   * @return a {@link DropRequestOptions} configuration
    */
-  public boolean isDropRequests() {
-    return dropRequests;
+  public DropRequestOptions getDropRequestOptions() {
+    return dropRequestOptions;
   }
 
   /**
-   * Enabled/disables request dropping (backpressure) on heavy load. Default is false - disabled.
+   * Set the drop request options
    *
-   * @param dropRequests true - request drop enabled, false if disabled
+   * @param dropRequestOptions a {@link DropRequestOptions} configuration
    * @return reference to this, so the API can be used fluently
    */
-  public KnotxServerOptions setDropRequests(boolean dropRequests) {
-    this.dropRequests = dropRequests;
-    return this;
-  }
-
-  /**
-   * @return HTTP response code used when request dropped
-   */
-  public int getDropRequestResponseCode() {
-    return dropRequestResponseCode;
-  }
-
-  /**
-   * Sets the HTTP response code returned wheb request is dropped. Default is
-   * TOO_MANY_REQUESTS(429)
-   *
-   * @param dropRequestResponseCode status code integer
-   * @return reference to this, so the API can be used fluently
-   */
-  public KnotxServerOptions setDropRequestResponseCode(int dropRequestResponseCode) {
-    this.dropRequestResponseCode = dropRequestResponseCode;
-    return this;
-  }
-
-  /**
-   * @return Capacity of the backpressure buffer
-   */
-  public long getBackpressureBufferCapacity() {
-    return backpressureBufferCapacity;
-  }
-
-  /**
-   * Sets the backpressure buffer capacity. Default value = 1000
-   *
-   * @param backpressureBufferCapacity long - capacity of the buffer
-   * @return reference to this, so the API can be used fluently
-   */
-  public KnotxServerOptions setBackpressureBufferCapacity(long backpressureBufferCapacity) {
-    this.backpressureBufferCapacity = backpressureBufferCapacity;
-    return this;
-  }
-
-  /**
-   * @return a backpressure overflow strategy.
-   */
-  public BackpressureOverflowStrategy getBackpressureStrategy() {
-    return backpressureStrategy;
-  }
-
-  /**
-   * Sets the strategy how to deal with backpressure buffer overflow. Default is DROP_LATEST.
-   *
-   * Available values:
-   * <ul>
-   * <li>ERROR - terminates the whole sequence</li>
-   * <li>DROP_OLDEST - drops the oldest value from the buffer</li>
-   * <li>DROP_LATEST - drops the latest value from the buffer</li>
-   * </ul>
-   *
-   * @param backpressureStrategy a BackpressureOverflowStrategy value
-   * @return reference to this, so the API can be used fluently
-   */
-  public KnotxServerOptions setBackpressureStrategy(
-      BackpressureOverflowStrategy backpressureStrategy) {
-    this.backpressureStrategy = backpressureStrategy;
+  public KnotxServerOptions setDropRequestOptions(DropRequestOptions dropRequestOptions) {
+    this.dropRequestOptions = dropRequestOptions;
     return this;
   }
 }

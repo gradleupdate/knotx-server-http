@@ -17,7 +17,6 @@ package io.knotx.server.configuration;
 
 import static io.knotx.server.KnotxServerVerticle.KNOTX_PORT_PROP_NAME;
 
-import io.knotx.server.api.header.CustomHttpHeader;
 import io.knotx.server.handler.logger.AccessLogOptions;
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.http.HttpServerOptions;
@@ -47,7 +46,6 @@ public class KnotxServerOptions {
   private List<AuthHandlerOptions> securityHandlers;
   private List<RoutingOperationOptions> routingOperations;
   private Set<String> allowedResponseHeaders;
-  private CustomHttpHeader customResponseHeader;
   private AccessLogOptions accessLog;
   private DropRequestOptions dropRequestOptions;
 
@@ -57,7 +55,6 @@ public class KnotxServerOptions {
   public KnotxServerOptions() {
     init();
   }
-
 
   /**
    * Copy constructor
@@ -71,7 +68,6 @@ public class KnotxServerOptions {
     this.routingSpecificationLocation = other.routingSpecificationLocation;
     this.securityHandlers = new ArrayList<>(other.securityHandlers);
     this.routingOperations = new ArrayList<>(other.routingOperations);
-    this.customResponseHeader = new CustomHttpHeader(other.customResponseHeader);
     this.accessLog = new AccessLogOptions(other.accessLog);
     this.dropRequestOptions = other.dropRequestOptions;
   }
@@ -110,7 +106,6 @@ public class KnotxServerOptions {
     allowedResponseHeaders = allowedResponseHeaders.stream().map(String::toLowerCase)
         .collect(Collectors.toSet());
     serverOptions = new HttpServerOptions();
-    customResponseHeader = null;
     accessLog = new AccessLogOptions();
     dropRequestOptions = new DropRequestOptions();
   }
@@ -235,25 +230,6 @@ public class KnotxServerOptions {
       Set<String> allowedResponseHeaders) {
     this.allowedResponseHeaders = allowedResponseHeaders.stream().map(String::toLowerCase)
         .collect(Collectors.toSet());
-    return this;
-  }
-
-  /**
-   * @return a configuration of custom response header returned by the Knot.x server
-   */
-  public CustomHttpHeader getCustomResponseHeader() {
-    return customResponseHeader;
-  }
-
-  /**
-   * Set the custom response header returned by the Knot.x
-   *
-   * @param customResponseHeader a {@link KnotxServerOptions} object
-   * @return reference to this, so the API can be used fluently
-   */
-  public KnotxServerOptions setCustomResponseHeader(
-      CustomHttpHeader customResponseHeader) {
-    this.customResponseHeader = customResponseHeader;
     return this;
   }
 

@@ -48,9 +48,45 @@ modules = {
 }
 ```
 
-### Server options
+Details of the Knot.x HTTP Server can be configured with [`KnotxServerOptions`](/core/docs/asciidoc/dataobjects.adoc#knotxserveroptions):
+in the configuration file:
+```hocon
+config.server.options.config {
+  serverOptions {
+    port = 8080
+  }
+}
+```
 
-#### Dropping the requests
+### Http Server Options
+HTTP Options can be configured with [Vert.x `HttpServerOptions`](http://vertx.io/docs/vertx-core/dataobjects.html#HttpServerOptions).
+E.g. following configuration defines the port Server is listening at:
+```hocon
+config.server.options.config {
+  serverOptions {
+    port = 8080
+  }
+}
+```
+#### Server Port Configuration 
+A HTTP server port can be also specified through system property `knotx.port` that takes 
+precedence over the value in the configuration file.
+```
+java -Dknotx.port=9999 ...
+```
+
+### Dropping the requests
+Knot.x Server implements a backpressure mechanism. It allows to drop requests after exceeding a 
+certain amount of requests at a time.
+If the the Server can't process incoming requests fast enough (requests buffer limit is reached), 
+Server drops requests and respond with configurable response code (by default `429, "Too Many Requests"`).
+
+Dropping requests can be configured with [`DropRequestOptions`](core/docs/asciidoc/dataobjects.adoc#droprequestoptions)
+
+After the buffer slots will be released the new requests will start to be accepted and finally processed.
+
+> That solution prevent `OutOfMemoryError` errors when there are too many requests (e.g. during the peak hours). 
+Additionally response times should be more stable when system is under high stress.
 
 ### Routing Specification
 
@@ -58,9 +94,7 @@ modules = {
 
 #### Handling failures
 
-####
-
-####
+### Routing Security
 
 ## Handlers
 

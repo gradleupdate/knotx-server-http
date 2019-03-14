@@ -149,9 +149,6 @@ Enabled/disables request dropping (backpressure) on heavy load. Default is false
 |[[accessLog]]`@accessLog`|`link:dataobjects.html#AccessLogOptions[AccessLogOptions]`|+++
 Set the access log options
 +++
-|[[allowedResponseHeaders]]`@allowedResponseHeaders`|`Array of String`|+++
-Set the set of response headers that can be returned by the Knot.x server
-+++
 |[[displayExceptionDetails]]`@displayExceptionDetails`|`Boolean`|+++
 Set whether to display or not the exception on error pages
 +++

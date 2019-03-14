@@ -24,10 +24,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.ext.web.api.contract.openapi3.OpenAPI3RouterFactory;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Describes a Knot.x HTTP Server configuration
@@ -45,7 +42,6 @@ public class KnotxServerOptions {
   private String routingSpecificationLocation;
   private List<AuthHandlerOptions> securityHandlers;
   private List<RoutingOperationOptions> routingOperations;
-  private Set<String> allowedResponseHeaders;
   private AccessLogOptions accessLog;
   private DropRequestOptions dropRequestOptions;
 
@@ -63,7 +59,6 @@ public class KnotxServerOptions {
    */
   public KnotxServerOptions(KnotxServerOptions other) {
     this.displayExceptionDetails = other.displayExceptionDetails;
-    this.allowedResponseHeaders = new HashSet<>(other.allowedResponseHeaders);
     this.serverOptions = new HttpServerOptions(other.serverOptions);
     this.routingSpecificationLocation = other.routingSpecificationLocation;
     this.securityHandlers = new ArrayList<>(other.securityHandlers);
@@ -80,9 +75,6 @@ public class KnotxServerOptions {
   public KnotxServerOptions(JsonObject json) {
     init();
     KnotxServerOptionsConverter.fromJson(json, this);
-
-    allowedResponseHeaders = allowedResponseHeaders.stream().map(String::toLowerCase)
-        .collect(Collectors.toSet());
 
     //port was specified in config, try to overwrite with system props if defined
     serverOptions.setPort(Integer.getInteger(KNOTX_PORT_PROP_NAME, serverOptions.getPort()));
@@ -102,9 +94,6 @@ public class KnotxServerOptions {
   private void init() {
     displayExceptionDetails = DEFAULT_DISPLAY_EXCEPTIONS;
     securityHandlers = new ArrayList<>();
-    allowedResponseHeaders = new HashSet<>();
-    allowedResponseHeaders = allowedResponseHeaders.stream().map(String::toLowerCase)
-        .collect(Collectors.toSet());
     serverOptions = new HttpServerOptions();
     accessLog = new AccessLogOptions();
     dropRequestOptions = new DropRequestOptions();
@@ -210,26 +199,6 @@ public class KnotxServerOptions {
   public KnotxServerOptions setRoutingOperations(
       List<RoutingOperationOptions> routingOperations) {
     this.routingOperations = routingOperations;
-    return this;
-  }
-
-  /**
-   * @return Set of response headers that Knot.x can return
-   */
-  public Set<String> getAllowedResponseHeaders() {
-    return allowedResponseHeaders;
-  }
-
-  /**
-   * Set the set of response headers that can be returned by the Knot.x server
-   *
-   * @param allowedResponseHeaders a set of response headers
-   * @return reference to this, so the API can be used fluently
-   */
-  public KnotxServerOptions setAllowedResponseHeaders(
-      Set<String> allowedResponseHeaders) {
-    this.allowedResponseHeaders = allowedResponseHeaders.stream().map(String::toLowerCase)
-        .collect(Collectors.toSet());
     return this;
   }
 

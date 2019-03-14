@@ -155,9 +155,6 @@ Set the set of response headers that can be returned by the Knot.x server
 |[[customResponseHeader]]`@customResponseHeader`|`link:dataobjects.html#CustomHttpHeader[CustomHttpHeader]`|+++
 Set the custom response header returned by the Knot.x
 +++
-|[[deliveryOptions]]`@deliveryOptions`|`link:dataobjects.html#DeliveryOptions[DeliveryOptions]`|+++
-Set the Event Bus Delivery options used to communicate with Knot's
-+++
 |[[displayExceptionDetails]]`@displayExceptionDetails`|`Boolean`|+++
 Set whether to display or not the exception on error pages
 +++

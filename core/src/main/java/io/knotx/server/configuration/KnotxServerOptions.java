@@ -20,7 +20,6 @@ import static io.knotx.server.KnotxServerVerticle.KNOTX_PORT_PROP_NAME;
 import io.knotx.server.api.header.CustomHttpHeader;
 import io.knotx.server.handler.logger.AccessLogOptions;
 import io.vertx.codegen.annotations.DataObject;
-import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;
@@ -44,7 +43,6 @@ public class KnotxServerOptions {
 
   private boolean displayExceptionDetails;
   private HttpServerOptions serverOptions;
-  private DeliveryOptions deliveryOptions;
   private String routingSpecificationLocation;
   private List<AuthHandlerOptions> securityHandlers;
   private List<RoutingOperationOptions> routingOperations;
@@ -70,7 +68,6 @@ public class KnotxServerOptions {
     this.displayExceptionDetails = other.displayExceptionDetails;
     this.allowedResponseHeaders = new HashSet<>(other.allowedResponseHeaders);
     this.serverOptions = new HttpServerOptions(other.serverOptions);
-    this.deliveryOptions = new DeliveryOptions(other.deliveryOptions);
     this.routingSpecificationLocation = other.routingSpecificationLocation;
     this.securityHandlers = new ArrayList<>(other.securityHandlers);
     this.routingOperations = new ArrayList<>(other.routingOperations);
@@ -112,7 +109,6 @@ public class KnotxServerOptions {
     allowedResponseHeaders = new HashSet<>();
     allowedResponseHeaders = allowedResponseHeaders.stream().map(String::toLowerCase)
         .collect(Collectors.toSet());
-    deliveryOptions = new DeliveryOptions();
     serverOptions = new HttpServerOptions();
     customResponseHeader = null;
     accessLog = new AccessLogOptions();
@@ -152,24 +148,6 @@ public class KnotxServerOptions {
    */
   public KnotxServerOptions setServerOptions(HttpServerOptions serverOptions) {
     this.serverOptions = serverOptions;
-    return this;
-  }
-
-  /**
-   * @return a {@link io.vertx.core.eventbus.DeliveryOptions}
-   */
-  public DeliveryOptions getDeliveryOptions() {
-    return deliveryOptions;
-  }
-
-  /**
-   * Set the Event Bus Delivery options used to communicate with Knot's
-   *
-   * @param deliveryOptions {@link io.vertx.core.eventbus.DeliveryOptions} object
-   * @return reference to this, so the API can be used fluently
-   */
-  public KnotxServerOptions setDeliveryOptions(DeliveryOptions deliveryOptions) {
-    this.deliveryOptions = deliveryOptions;
     return this;
   }
 

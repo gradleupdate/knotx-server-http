@@ -131,8 +131,49 @@ config.server.options.configroutingOperations = ${routingOperations} [
 ```
 
 ### Routing Security
+Security for each operation defined in [operation security requirement](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#security-requirement-object)
+is implemented in a form of [`AuthHandlers`](https://vertx.io/docs/apidocs/io/vertx/ext/web/handler/AuthHandler.html).
+In order to introduce security to operation you need to implement [`AuthHandlerFactory`](https://github.com/Knotx/knotx-server-http/blob/master/api/src/main/java/io/knotx/server/api/security/AuthHandlerFactory.java)
+that provides `AuthHandler` of a proper type.
 
+#### Example security setup
+> Open Api YAML config:
+```yaml
+...
+paths:
+  /example*:
+    get:
+      operationId: my-example-operation
+      security:
+          - myExampleBasicAuth: []
+...
+components:
+  securitySchemes:
+    myExampleBasicAuth:
+      type: http
+      scheme: basic
+```
 
+> Routing Operations entry in Knot.x conf
+```hocon
+config.server.options.config.securityHandlers = [
+  {
+    schema = myExampleBasicAuth
+    factory = myBasicAuthHandlerFactory
+    config = {
+      # any config passed to the AuthHandler
+    }
+  }
+]
+```
+
+Needs implementation of [`AuthHandlerFactory`](https://github.com/Knotx/knotx-server-http/blob/master/api/src/main/java/io/knotx/server/api/security/AuthHandlerFactory.java)
+that:
+ - `name` is `myBasicAuthHandlerFactory`
+ - is registered for the Service Loader in `META-INF/services/io.knotx.server.api.security.AuthHandlerFactory`
+ - creates [`AuthHandler`](https://vertx.io/docs/apidocs/io/vertx/ext/web/handler/AuthHandler.html) instance corresponding
+ to the type defined in the [Open API security scheme](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#securitySchemeObject)
+ 
 ## Handlers
 
 ### Creating custom handler

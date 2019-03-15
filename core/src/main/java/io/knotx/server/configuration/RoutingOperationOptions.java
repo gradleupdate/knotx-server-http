@@ -115,7 +115,7 @@ public class RoutingOperationOptions {
   }
 
   /**
-   * @return list of handlers definitions used during HTTP request processing
+   * @return list of failure handlers definitions used during HTTP request processing
    * @see io.vertx.reactivex.ext.web.api.contract.openapi3.OpenAPI3RouterFactory#addFailureHandlerByOperationId(String,
    * Handler)
    */

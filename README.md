@@ -89,12 +89,49 @@ After the buffer slots will be released the new requests will start to be accept
 Additionally response times should be more stable when system is under high stress.
 
 ### Routing Specification
+Knot.x Routing is defined with [Open API 3](https://github.com/OAI/OpenAPI-Specification) standard. 
+`routingSpecificationLocation` is a path to the Open API YAML specification.
+It can be an absolute path, a local path or remote url (with HTTP protocol).
+
+```hocon
+config.server.options.config {
+  routingSpecificationLocation = /openapi.yaml
+}
+```
 
 ### Routing Operations
+A [`Routing Operation`](core/docs/asciidoc/dataobjects.adoc#routingoperationoptions) 
+define handlers and failure handlers taking part in HTTP request processing of a particular 
+[operation](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#operationObject)
+defined in the [Routing Specification](#routing-specification) (linking is done
+by `operationId`):
 
-#### Handling failures
+> Open Api YAML config:
+```yaml
+...
+paths:
+  /example*:
+    get:
+      operationId: my-example-operation
+...
+```
+> Routing Operations entry in Knot.x conf
+```hocon
+config.server.options.configroutingOperations = ${routingOperations} [
+  {
+    operationId = my-example-operation
+    handlers = [
+      # list of handlers that handles the request in chain
+    ]
+    failureHandlers = [
+      # list of failure handlers
+    ]
+  }
+]
+```
 
 ### Routing Security
+
 
 ## Handlers
 

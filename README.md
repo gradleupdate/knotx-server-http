@@ -14,12 +14,13 @@ that reacts on the request and are able to shape the response.
 ![server flow](misc/server-flow.png)
 
 ## Modules
-Aside of the [Server API](https://github.com/Knotx/knotx-server-http/tree/master/api) and 
-[Server core](https://github.com/Knotx/knotx-server-http/tree/master/core) this repository contains
-core handlers implementations:
-- [HTML Splitter](https://github.com/Knotx/knotx-server-http/tree/master/splitter-html) responsible for
-extracting [`Fragments`](https://github.com/Knotx/knotx-fragment-api) from the template
-- [Assembler](https://github.com/Knotx/knotx-server-http/tree/master/assembler) combines all
+You will find docs in the `README.md` files inside each of following modules:
+- [Server API](https://github.com/Knotx/knotx-server-http/tree/master/api) that defines contracts. 
+- [Server core](https://github.com/Knotx/knotx-server-http/tree/master/core) that contains some smaller 
+handlers and HTTP Server implementation.
+- [HTML Splitter](https://github.com/Knotx/knotx-server-http/tree/master/splitter-html) handler 
+responsible for extracting [`Fragments`](https://github.com/Knotx/knotx-fragment-api) from the template
+- [Assembler](https://github.com/Knotx/knotx-server-http/tree/master/assembler) handler combines all
 processed [`Fragments`](https://github.com/Knotx/knotx-fragment-api) into the response body.
 
 ## How does it work
@@ -173,7 +174,3 @@ that:
  - is registered for the Service Loader in `META-INF/services/io.knotx.server.api.security.AuthHandlerFactory`
  - creates [`AuthHandler`](https://vertx.io/docs/apidocs/io/vertx/ext/web/handler/AuthHandler.html) instance corresponding
  to the type defined in the [Open API security scheme](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#securitySchemeObject)
- 
-## Handlers
-
-### Creating custom handler

@@ -99,6 +99,26 @@ Set the timeout of the CSRF token
 +++
 |===
 
+[[CustomHttpHeaderOptions]]
+== CustomHttpHeaderOptions
+
+++++
+ Describes a custom header that is send with every HTTP response from the server
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[name]]`@name`|`String`|+++
+Name of the request header.
++++
+|[[value]]`@value`|`String`|+++
+Value of the request header.
++++
+|===
+
 [[DropRequestOptions]]
 == DropRequestOptions
 

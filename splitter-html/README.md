@@ -22,7 +22,7 @@ into [`RequestEvent`](https://github.com/Knotx/knotx-server-http/blob/master/api
 ### How Template is splitted?
 Lets explain the process of the Template splitting using an example.
 
-Let's assume, that following markup is [`ClientRequest`](https://github.com/Knotx/knotx-server-http/blob/master/api/docs/asciidoc/dataobjects.adoc#clientresponse)
+Let's assume, that following markup is [`ClientRequest`](https://github.com/Knotx/knotx-server-http/blob/master/api/docs/asciidoc/dataobjects.adoc#clientrequest)
 body:
 ```html
 <html>
@@ -51,7 +51,7 @@ That template will be splitted into 3 fragments:
 <h1>test</h1>
 ```
 
-- fragment of type `fragmentType` fragment with `body`:
+- fragment of type `fragmentType` with `body`:
 ```html
   <h2>this is webservice no. 1</h2>
   <div>message - a</div>

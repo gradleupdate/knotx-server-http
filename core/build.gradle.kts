@@ -40,13 +40,6 @@ dependencies {
     testImplementation("io.knotx:knotx-launcher")
     testImplementation(group = "io.knotx", name = "knotx-launcher", classifier = "tests")
     testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")
-
-    testAnnotationProcessor(platform("io.knotx:knotx-dependencies:${project.version}"))
-    testAnnotationProcessor(group = "io.vertx", name = "vertx-codegen", classifier = "processor")
-    testAnnotationProcessor(group = "io.vertx", name = "vertx-service-proxy", classifier = "processor")
-    testAnnotationProcessor(group = "io.vertx", name = "vertx-rx-java2-gen")
-    testAnnotationProcessor(group = "io.vertx", name = "vertx-web-api-service")
-
 }
 
 // -----------------------------------------------------------------------------
@@ -148,13 +141,7 @@ signing {
     sign(publishing.publications["mavenJava"])
 }
 
-tasks.named<JavaCompile>("compileTestJava") {
-    options.annotationProcessorGeneratedSourcesDirectory = file("src/test/generated")
-}
-
-tasks.named<Delete>("clean") {
-    delete.add("src/test/generated")
-}
-
 apply(from = "../gradle/common.deps.gradle.kts")
 apply(from = "../gradle/codegen.deps.gradle.kts")
+
+apply(from = "../gradle/codegen.test-deps.gradle.kts")

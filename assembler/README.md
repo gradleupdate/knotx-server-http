@@ -1,7 +1,7 @@
 # Knot.x Assembler Handler
 This module contains [Handler](https://vertx.io/docs/apidocs/io/vertx/core/Handler.html)
 that joins all [`Fragments`](https://github.com/Knotx/knotx-fragment-api) and
-saves the result into the [`ClientResponse`](api/docs/asciidoc/dataobjects.adoc#clientresponse) body.
+saves the result into the [`ClientResponse`](https://github.com/Knotx/knotx-server-http/blob/master/api/docs/asciidoc/dataobjects.adoc#clientresponse) body.
 
 ## How does it work?
 Fragment Assembler reads Fragments from the [`RequestEvent`](https://github.com/Knotx/knotx-server-http/blob/master/api/src/main/java/io/knotx/server/api/context/RequestEvent.java)
@@ -10,7 +10,7 @@ and joins them all into one string.
 ### How Fragments are being joined?
 Lets explain the process of fragments joining fragments using an example.
 
-Fragment Assembler reads [`ClientRequest`](api/docs/asciidoc/dataobjects.adoc#clientresponse)
+Fragment Assembler reads [`ClientRequest`](https://github.com/Knotx/knotx-server-http/blob/master/api/docs/asciidoc/dataobjects.adoc#clientrequest)
 that contains three Fragments:
 ```html
 <html>

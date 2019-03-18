@@ -1,12 +1,12 @@
 # Knot.x HTTP Server
 Server is essentially a "heart" of Knot.x. It's scalable (vertically and horizontally), 
-plugable (easy to extend), resilient to errors 
+plugable (easy to extend), fault-tolerant 
 and highly efficient reactive server based on [Vert.x](https://vertx.io/).
 
-As every HTTP server, Knot.x HTTP Server enables defining routes it supports. Defining routes 
+Like any HTTP server, Knot.x HTTP Server allows you to define supported routes. Defining routes 
 and security is done with [Open API 3](https://github.com/OAI/OpenAPI-Specification) standard.
 
-What Knot.x Server enables is plugging in custom behaviour for each supported route.
+Knot.x Server enables plugging in custom behaviour for each supported route.
 Each defined [`path`](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#pathItemObject)\
 is processed by the chain of [Handlers](https://vertx.io/docs/apidocs/io/vertx/core/Handler.html)
 that reacts on the request and are able to shape the response.
@@ -16,11 +16,11 @@ that reacts on the request and are able to shape the response.
 ## Modules
 You will find docs in the `README.md` files inside each of following modules:
 - [Server API](https://github.com/Knotx/knotx-server-http/tree/master/api) that defines contracts. 
-- [Server core](https://github.com/Knotx/knotx-server-http/tree/master/core) that contains some smaller 
+- [Server core](https://github.com/Knotx/knotx-server-http/tree/master/core) that contains basic  
 handlers and HTTP Server implementation.
 - [HTML Splitter](https://github.com/Knotx/knotx-server-http/tree/master/splitter-html) handler 
 responsible for extracting [`Fragments`](https://github.com/Knotx/knotx-fragment-api) from the template
-- [Assembler](https://github.com/Knotx/knotx-server-http/tree/master/assembler) handler combines all
+- [Assembler](https://github.com/Knotx/knotx-server-http/tree/master/assembler) handler that combines all
 processed [`Fragments`](https://github.com/Knotx/knotx-fragment-api) into the response body.
 
 ## How does it work
@@ -28,17 +28,17 @@ Knot.x HTTP Server is a [verticle](http://vertx.io/docs/apidocs/io/vertx/core/Ve
 that listens for HTTP requests. It is responsible for handling the whole HTTP traffic that goes to 
 the Knot.x instance.
 
-Once the HTTP request from comes to the Server following actions are happening:
-- Server checks if there isn't too many concurrent requests. If the system is overloaded, 
-[incoming request is dropped](#dropping-the-requests).
-- Server checks if there is [routing path](#routing-specification) defined for incoming request path
-and method. If no path supports this request, `404 Not Found` is returned in response.
-- Server checks if there is [routing operation](#routing-operations) defined for incoming request.
-If there are no handlers defined in the operations for this route, `501 Not Implemented` is returned in response.
+Once the HTTP request comes to the Server following actions are happening:
+- Server checks if there are not too many concurrent requests. If the system is overloaded, 
+the [incoming request is dropped](#dropping-the-requests).
+- Server checks if there is a [routing path](#routing-specification) defined for the incoming request path
+and method. If no path supports this request, `404 Not Found` is returned in the response.
+- Server checks whether a [routing operation](#routing-operations) has been defined for the incoming request.
+If no handlers are defined in the operations for this route, `501 Not Implemented` is returned in the response.
 - Handlers processing starts. In case of operation handler failure, [failure handlers](#handling-failures)
 are triggered.
-- Handling is continued until any Handler end the response. If none does, `500 Internal Server Error`
-is returned.
+- Handling is continued until any Handler ends (completes) the response. If none does, 
+`500 Internal Server Error` is returned.
 
 ## How to configure
 To run Knot.x HTTP Server, simply add an entry in the [`modules` configuration](https://github.com/Knotx/knotx-launcher#modules-configuration):
@@ -49,19 +49,20 @@ modules = {
 }
 ```
 
-Details of the Knot.x HTTP Server can be configured with [`KnotxServerOptions`](/core/docs/asciidoc/dataobjects.adoc#knotxserveroptions):
+Details of the Knot.x HTTP Server can be configured with [`KnotxServerOptions`](/core/docs/asciidoc/dataobjects.adoc#knotxserveroptions)
 in the configuration file:
 ```hocon
 config.server.options.config {
-  serverOptions {
-    port = 8080
-  }
+  # options defined here
 }
 ```
+More details about the module configuration can be found in [Knot.x Launcher](https://github.com/Knotx/knotx-launcher#modules-configuration).
 
 ### Http Server Options
-HTTP Options can be configured with [Vert.x `HttpServerOptions`](http://vertx.io/docs/vertx-core/dataobjects.html#HttpServerOptions).
-E.g. following configuration defines the port Server is listening at:
+HTTP options such as port, connection windows size, default version of ALPN (HTTP/2, HTTP/1) etc. 
+can be configured with Vert.x [`HttpServerOptions`](http://vertx.io/docs/vertx-core/dataobjects.html#HttpServerOptions).
+
+E.g. following configuration specifies the port Server is listening at:
 ```hocon
 config.server.options.config {
   serverOptions {
@@ -70,29 +71,29 @@ config.server.options.config {
 }
 ```
 #### Server Port Configuration 
-A HTTP server port can be also specified through system property `knotx.port` that takes 
+Knot.x HTTP Server port can also be specified by the system property `knotx.port` that takes 
 precedence over the value in the configuration file.
 ```
 java -Dknotx.port=9999 ...
 ```
 
 ### Dropping the requests
-Knot.x Server implements a backpressure mechanism. It allows to drop requests after exceeding a 
-certain amount of requests at a time.
-If the the Server can't process incoming requests fast enough (requests buffer limit is reached), 
-Server drops requests and respond with configurable response code (by default `429, "Too Many Requests"`).
+Knot.x Server implements the backpressure mechanism. It drops / rejects requests after exceeding a 
+certain number of requests at a time.
+If Knot.x Server can NOT process incoming requests fast enough (the requests buffer limit has been reached), 
+Server drops requests and responds with a configurable response code (by default `429, "Too Many Requests"`).
 
 Dropping requests can be configured with [`DropRequestOptions`](core/docs/asciidoc/dataobjects.adoc#droprequestoptions)
 
-After the buffer slots will be released the new requests will start to be accepted and finally processed.
+After the buffer slots are released, new requests will be accepted and finally processed.
 
 > That solution prevent `OutOfMemoryError` errors when there are too many requests (e.g. during the peak hours). 
 Additionally response times should be more stable when system is under high stress.
 
 ### Routing Specification
 Knot.x Routing is defined with [Open API 3](https://github.com/OAI/OpenAPI-Specification) standard. 
-`routingSpecificationLocation` is a path to the Open API YAML specification.
-It can be an absolute path, a local path or remote url (with HTTP protocol).
+`routingSpecificationLocation` is the path to the YAML Open API specification.
+It can be an absolute path, a local path or remote url (with `HTTP`).
 
 ```hocon
 config.server.options.config {
@@ -101,8 +102,8 @@ config.server.options.config {
 ```
 
 ### Routing Operations
-A [`Routing Operation`](core/docs/asciidoc/dataobjects.adoc#routingoperationoptions) 
-define handlers and failure handlers taking part in HTTP request processing of a particular 
+[`Routing Operation`](core/docs/asciidoc/dataobjects.adoc#routingoperationoptions) 
+defines handlers and failure handlers involved in the processing of HTTP request for a specific
 [operation](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#operationObject)
 defined in the [Routing Specification](#routing-specification) (linking is done
 by `operationId`):
@@ -132,9 +133,9 @@ config.server.options.configroutingOperations = ${routingOperations} [
 ```
 
 ### Routing Security
-Security for each operation defined in [operation security requirement](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#security-requirement-object)
+Security for each operation defined in the [Open API specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#security-requirement-object)
 is implemented in a form of [`AuthHandlers`](https://vertx.io/docs/apidocs/io/vertx/ext/web/handler/AuthHandler.html).
-In order to introduce security to operation you need to implement [`AuthHandlerFactory`](https://github.com/Knotx/knotx-server-http/blob/master/api/src/main/java/io/knotx/server/api/security/AuthHandlerFactory.java)
+In order to add security for the operation, you need to implement [`AuthHandlerFactory`](https://github.com/Knotx/knotx-server-http/blob/master/api/src/main/java/io/knotx/server/api/security/AuthHandlerFactory.java)
 that provides `AuthHandler` of a proper type.
 
 #### Example security setup
@@ -168,9 +169,6 @@ config.server.options.config.securityHandlers = [
 ]
 ```
 
-Needs implementation of [`AuthHandlerFactory`](https://github.com/Knotx/knotx-server-http/blob/master/api/src/main/java/io/knotx/server/api/security/AuthHandlerFactory.java)
-that:
- - `name` is `myBasicAuthHandlerFactory`
- - is registered for the Service Loader in `META-INF/services/io.knotx.server.api.security.AuthHandlerFactory`
- - creates [`AuthHandler`](https://vertx.io/docs/apidocs/io/vertx/ext/web/handler/AuthHandler.html) instance corresponding
- to the type defined in the [Open API security scheme](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#securitySchemeObject)
+Also, you need to implement [`AuthHandlerFactory`](api#creating-auth-handler).
+For the example above:
+ - `name` would be `myBasicAuthHandlerFactory`

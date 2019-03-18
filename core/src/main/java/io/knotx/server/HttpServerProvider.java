@@ -68,7 +68,7 @@ class HttpServerProvider {
 
   private void routeSafe(HttpServerRequest req, Router router) {
     try {
-      router.accept(req);
+      router.handle(req);
     } catch (IllegalArgumentException ex) {
       LOGGER.warn("Problem decoding Query String ", ex);
 

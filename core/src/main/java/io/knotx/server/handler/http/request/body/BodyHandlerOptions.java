@@ -106,6 +106,7 @@ public class BodyHandlerOptions {
     try {
       value = System.getProperty(propertyName);
     } catch (IllegalArgumentException | NullPointerException e) {
+      //ignore and return defaultValue
     }
     if (StringUtils.isNotBlank(value)) {
       return value;

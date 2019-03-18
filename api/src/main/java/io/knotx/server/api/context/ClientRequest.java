@@ -63,7 +63,7 @@ public class ClientRequest {
     this.path = serverRequest.path();
     this.method = serverRequest.method();
     this.headers = MultiMap.caseInsensitiveMultiMap().setAll(serverRequest.headers());
-    this.params = getParams(serverRequest.uri());
+    this.params = paramsFromUri(serverRequest.uri());
     this.formAttributes = MultiMap.caseInsensitiveMultiMap().setAll(serverRequest.formAttributes());
   }
 
@@ -204,7 +204,7 @@ public class ClientRequest {
         '}';
   }
 
-  private MultiMap getParams(String uri) {
+  private MultiMap paramsFromUri(String uri) {
     QueryStringDecoder queryStringDecoder = new QueryStringDecoder(uri);
     Map<String, List<String>> queryParams = queryStringDecoder.parameters();
 

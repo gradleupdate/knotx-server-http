@@ -16,11 +16,9 @@
 package io.knotx.server.handler.http.request.context;
 
 import io.knotx.server.api.context.ClientRequest;
-import io.knotx.server.api.context.ClientResponse;
 import io.knotx.server.api.context.RequestContext;
 import io.knotx.server.api.context.RequestEvent;
 import io.knotx.server.api.handler.RoutingHandlerFactory;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;

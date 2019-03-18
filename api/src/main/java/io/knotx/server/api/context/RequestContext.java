@@ -17,11 +17,17 @@ package io.knotx.server.api.context;
 
 import io.knotx.server.api.context.RequestEventLog.Entry;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.vertx.codegen.annotations.DataObject;
+import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.MultiMap;
 import java.util.Optional;
 
+/**
+ * Describes context of currently processed request.
+ */
+@DataObject
 public class RequestContext {
 
   public static final String KEY = "requestContext";
@@ -42,15 +48,31 @@ public class RequestContext {
     this.clientResponse = new ClientResponse(json.getJsonObject("clientResponse"));
   }
 
+  /**
+   * `io.knotx.server.api.context.RequestEvent` with detailed event info from this context.
+   *
+   * @return {@link RequestEvent} from the current context.
+   */
   public RequestEvent getRequestEvent() {
     return requestEvent;
   }
 
+  /**
+   * Final `io.knotx.server.api.context.ClientResponse` object for this request context.
+   *
+   * @return final {@link ClientResponse} for the current context.
+   */
   public ClientResponse getClientResponse() {
     return clientResponse;
   }
 
-  public Status status() {
+  /**
+   * Current `io.knotx.server.api.context.RequestContext.Status` that says if current context has
+   * failed or not. Optionally it delivers cause of the failure.
+   *
+   * @return current {@link Status}.
+   */
+  public Status getStatus() {
     final Optional<Entry> failedOperation = log.getOperations().stream()
         .filter(e -> RequestEventLog.Status.SUCCESS != e.getStatus())
         .findAny();
@@ -75,7 +97,7 @@ public class RequestContext {
     this.clientResponse.setStatusCode(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
   }
 
-
+  @GenIgnore
   public RequestContext setStatusCode(Integer statusCode) {
     if (statusCode != null) {
       clientResponse.setStatusCode(statusCode);
@@ -83,6 +105,7 @@ public class RequestContext {
     return this;
   }
 
+  @GenIgnore(GenIgnore.PERMITTED_TYPE)
   public RequestContext addHeaders(MultiMap headers) {
     if (headers != null) {
       MultiMap newHeaders = clientResponse.getHeaders().addAll(headers);
@@ -91,6 +114,7 @@ public class RequestContext {
     return this;
   }
 
+  @GenIgnore
   public RequestContext setHeaders(MultiMap headers) {
     if (headers != null) {
       clientResponse.setHeaders(headers);
@@ -98,6 +122,7 @@ public class RequestContext {
     return this;
   }
 
+  @GenIgnore
   public RequestContext setBody(Buffer body) {
     if (body != null) {
       clientResponse.setBody(body);

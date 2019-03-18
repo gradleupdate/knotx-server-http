@@ -35,7 +35,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * Tests are created according to Open API 3.0 Spec: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md
  */
 @ExtendWith(KnotxExtension.class)
-@KnotxApplyConfiguration({"server.conf", "security/security.conf"})
+@KnotxApplyConfiguration({"server.conf", "server-random-port.conf", "security/security.conf"})
 class KnotxServerSecurityTest {
 
   private static final String BASIC_AUTH_ENDPOINT_URL = "/protected/basic";

@@ -24,6 +24,9 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.MultiMap;
 import java.util.Optional;
 
+/**
+ * Describes HTTP client response.
+ */
 @DataObject(generateConverter = true)
 public class ClientResponse {
 
@@ -59,11 +62,16 @@ public class ClientResponse {
     return json;
   }
 
-
   public int getStatusCode() {
     return statusCode;
   }
 
+  /**
+   * An HTTP status code for the HTTP response.
+   *
+   * @param statusCode for the response
+   * @return a reference to this, so the API can be used fluently
+   */
   public ClientResponse setStatusCode(int statusCode) {
     this.statusCode = statusCode;
     return this;
@@ -73,6 +81,12 @@ public class ClientResponse {
     return body;
   }
 
+  /**
+   * A body in a form of a `io.vertx.core.buffer.Buffer` for the HTTP response.
+   *
+   * @param body of the response
+   * @return a reference to this, so the API can be used fluently
+   */
   public ClientResponse setBody(Buffer body) {
     this.body = Optional.ofNullable(body).map(Buffer::copy).orElse(null);
     return this;
@@ -93,6 +107,11 @@ public class ClientResponse {
     return MultiMapConverter.toJsonObject(headers);
   }
 
+  /**
+   * Headers for the HTTP response.
+   *
+   * @param headers in a form of {@link JsonObject}
+   */
   public void setJsonHeaders(JsonObject headers) {
     this.headers = MultiMapConverter.fromJsonObject(headers);
   }

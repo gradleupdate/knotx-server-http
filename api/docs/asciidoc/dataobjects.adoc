@@ -1,0 +1,118 @@
+= Cheatsheets
+
+[[ClientRequest]]
+== ClientRequest
+
+++++
+ Contains details of currently processed Client Request
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[jsonFormAttributes]]`@jsonFormAttributes`|`Json object`|+++
+Form Attributes of the HTTP request.
++++
+|[[jsonHeaders]]`@jsonHeaders`|`Json object`|+++
+Headers of the HTTP request.
++++
+|[[jsonParams]]`@jsonParams`|`Json object`|+++
+Params of the HTTP request.
++++
+|[[method]]`@method`|`link:enums.html#HttpMethod[HttpMethod]`|+++
+Method of the HTTP request.
++++
+|[[path]]`@path`|`String`|+++
+Path of the HTTP request.
++++
+|===
+
+[[ClientResponse]]
+== ClientResponse
+
+++++
+ Describes HTTP client response.
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[body]]`@body`|`Buffer`|+++
+A body in a form of a `io.vertx.core.buffer.Buffer` for the HTTP response.
++++
+|[[jsonHeaders]]`@jsonHeaders`|`Json object`|+++
+Headers for the HTTP response.
++++
+|[[statusCode]]`@statusCode`|`Number (int)`|+++
+An HTTP status code for the HTTP response.
++++
+|===
+
+[[CustomHttpHeader]]
+== CustomHttpHeader
+
+++++
+ Describes a custom header
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[name]]`@name`|`String`|+++
+Name of the request header.
++++
+|[[value]]`@value`|`String`|+++
+Value of the request header.
++++
+|===
+
+[[RequestContext]]
+== RequestContext
+
+++++
+ Describes context of currently processed request.
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[clientResponse]]`@clientResponse`|`link:dataobjects.html#ClientResponse[ClientResponse]`|+++
+Final `io.knotx.server.api.context.ClientResponse` object for this request context.
++++
+|[[requestEvent]]`@requestEvent`|`link:dataobjects.html#RequestEvent[RequestEvent]`|+++
+`io.knotx.server.api.context.RequestEvent` with detailed event info from this context.
++++
+|===
+
+[[RequestEvent]]
+== RequestEvent
+
+++++
+ Contains information about currently processed request event.
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[clientRequest]]`@clientRequest`|`link:dataobjects.html#ClientRequest[ClientRequest]`|+++
+Currently processed `io.knotx.server.api.context.ClientRequest` details.
++++
+|[[fragments]]`@fragments`|`Array of link:dataobjects.html#Fragment[Fragment]`|+++
+List of `io.knotx.fragment.Fragment` that are processed in the scope of the current request.
++++
+|[[payload]]`@payload`|`Json object`|+++
+A `JsonObject` that contains payload of currently processed request. It may contain any
+ additional data that is added during processing of the Request.
++++
+|===
+

@@ -97,7 +97,7 @@ class ServerResponse {
   }
 
   private static boolean isOk(RequestContext requestContext) {
-    return !requestContext.status().isFailed();
+    return !requestContext.getStatus().isFailed();
   }
 
   private Boolean headerFilter(Set<String> allowedResponseHeaders, String name) {

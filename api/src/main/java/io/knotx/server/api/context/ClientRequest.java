@@ -27,6 +27,9 @@ import io.vertx.reactivex.core.http.HttpServerRequest;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Contains details of currently processed Client Request
+ */
 @DataObject(generateConverter = true)
 public class ClientRequest {
 
@@ -74,6 +77,11 @@ public class ClientRequest {
     return path;
   }
 
+  /**
+   * Path of the HTTP request.
+   * @param path of the request
+   * @return a reference to this, so the API can be used fluently
+   */
   public ClientRequest setPath(String path) {
     this.path = path;
     return this;
@@ -83,6 +91,11 @@ public class ClientRequest {
     return method;
   }
 
+  /**
+   * Method of the HTTP request.
+   * @param method of the request
+   * @return a reference to this, so the API can be used fluently
+   */
   public ClientRequest setMethod(HttpMethod method) {
     this.method = method;
     return this;
@@ -125,6 +138,10 @@ public class ClientRequest {
     return MultiMapConverter.toJsonObject(headers);
   }
 
+  /**
+   * Headers of the HTTP request.
+   * @param headers in form of {@link JsonObject}
+   */
   public void setJsonHeaders(JsonObject headers) {
     this.headers = MultiMapConverter.fromJsonObject(headers);
   }
@@ -133,6 +150,10 @@ public class ClientRequest {
     return MultiMapConverter.toJsonObject(params);
   }
 
+  /**
+   * Params of the HTTP request.
+   * @param params in form of {@link JsonObject}
+   */
   public void setJsonParams(JsonObject params) {
     this.params = MultiMapConverter.fromJsonObject(params);
   }
@@ -141,6 +162,10 @@ public class ClientRequest {
     return MultiMapConverter.toJsonObject(formAttributes);
   }
 
+  /**
+   * Form Attributes of the HTTP request.
+   * @param formAttributes in form of {@link JsonObject}
+   */
   public void setJsonFormAttributes(JsonObject formAttributes) {
     this.formAttributes = MultiMapConverter.fromJsonObject(formAttributes);
   }

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * Tests are created according to Open API 3.0 Spec: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md
  */
 @ExtendWith(KnotxExtension.class)
-@KnotxApplyConfiguration({"server.conf", "routing/routing.conf"})
+@KnotxApplyConfiguration({"server.conf", "server-random-port.conf", "routing/routing.conf"})
 class KnotxServerRoutingTest {
 
   private static final String EXISTING_ENDPOINT_URL = "/test/any";
@@ -52,14 +52,23 @@ class KnotxServerRoutingTest {
 
   @Disabled
   @Test
-  @DisplayName("Expect NOT FOUND when requested URL is defined in Open API spec.")
+  @DisplayName("Expect NOT FOUND when requested URL is not defined in Open API spec.")
   void notConfiguredURLNotFound(Vertx vertx, @RandomPort Integer globalServerPort) {
+    //ToDo
   }
 
   @Disabled
   @Test
   @DisplayName("Expect NOT IMPLEMENTED when defined in Open API spec but no routing handlers defined.")
   void notImplementedRoutingLogic(Vertx vertx, @RandomPort Integer globalServerPort) {
+    //ToDo
+  }
+
+  @Disabled
+  @Test
+  @DisplayName("Expect INTERNAL SERVER ERROR no handler on the route ends the response.")
+  void noHandlerEndsResponse(Vertx vertx, @RandomPort Integer globalServerPort) {
+    //ToDo
   }
 
 

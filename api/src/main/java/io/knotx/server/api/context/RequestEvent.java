@@ -16,18 +16,23 @@
 package io.knotx.server.api.context;
 
 import io.knotx.fragment.Fragment;
+import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Contains information about currently processed request event.
+ */
+@DataObject
 public class RequestEvent {
 
   private static final String CLIENT_REQUEST_KEY = "clientRequest";
   private static final String FRAGMENTS_KEY = "fragments";
   private static final String PAYLOAD_KEY = "payload";
-  
+
   private final ClientRequest clientRequest;
   private final List<Fragment> fragments;
   private final JsonObject payload;
@@ -53,14 +58,29 @@ public class RequestEvent {
     this.payload = json.getJsonObject(PAYLOAD_KEY);
   }
 
+  /**
+   * Currently processed `io.knotx.server.api.context.ClientRequest` details.
+   * @return {@link ClientRequest} details.
+   */
   public ClientRequest getClientRequest() {
     return clientRequest;
   }
 
+  /**
+   * List of `io.knotx.fragment.Fragment` that are processed in the scope of the current request.
+   *
+   * @return list of {@link Fragment} that are processed in the scope of the current request.
+   */
   public List<Fragment> getFragments() {
     return fragments;
   }
 
+  /**
+   * A `JsonObject` that contains payload of currently processed request. It may contain any
+   * additional data that is added during processing of the Request.
+   *
+   * @return copy of the payload
+   */
   public JsonObject getPayload() {
     return payload.copy();
   }

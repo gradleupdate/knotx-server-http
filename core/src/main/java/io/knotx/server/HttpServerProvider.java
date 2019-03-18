@@ -15,9 +15,10 @@
  */
 package io.knotx.server;
 
-import io.knotx.server.configuration.KnotxServerOptions;
+import io.knotx.server.configuration.DropRequestOptions;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.reactivex.SingleSource;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.reactivex.RxHelper;
@@ -30,24 +31,28 @@ class HttpServerProvider {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerProvider.class);
   private final Vertx vertx;
-  private final KnotxServerOptions options;
+  private final HttpServerOptions serverOptions;
+  private final DropRequestOptions dropRequestOptions;
 
-  HttpServerProvider(Vertx vertx, KnotxServerOptions options) {
+  HttpServerProvider(Vertx vertx, HttpServerOptions serverOptions,
+      DropRequestOptions dropRequestOptions) {
     this.vertx = vertx;
-    this.options = options;
+    this.serverOptions = serverOptions;
+    this.dropRequestOptions = dropRequestOptions;
   }
 
   SingleSource<? extends HttpServer> configureHttpServer(Router router) {
-    HttpServer httpServer = vertx.createHttpServer(options.getServerOptions());
+    HttpServer httpServer = vertx.createHttpServer(serverOptions);
 
-    if (options.isDropRequests()) {
+    if (dropRequestOptions.isEnabled()) {
       httpServer.requestStream().toFlowable()
           .map(HttpServerRequest::pause)
-          .onBackpressureBuffer(options.getBackpressureBufferCapacity(),
+          .onBackpressureBuffer(dropRequestOptions.getBackpressureBufferCapacity(),
               () -> LOGGER.warn("Backpressure buffer is overflown. Dropping request"),
-              options.getBackpressureStrategy())
+              dropRequestOptions.getBackpressureStrategy())
           .onBackpressureDrop(
-              req -> req.response().setStatusCode(options.getDropRequestResponseCode()).end())
+              req -> req.response().setStatusCode(dropRequestOptions.getDropRequestResponseCode())
+                  .end())
           .observeOn(RxHelper.scheduler(vertx.getDelegate()))
           .subscribe(req -> {
             req.resume();
@@ -63,7 +68,7 @@ class HttpServerProvider {
 
   private void routeSafe(HttpServerRequest req, Router router) {
     try {
-      router.accept(req);
+      router.handle(req);
     } catch (IllegalArgumentException ex) {
       LOGGER.warn("Problem decoding Query String ", ex);
 

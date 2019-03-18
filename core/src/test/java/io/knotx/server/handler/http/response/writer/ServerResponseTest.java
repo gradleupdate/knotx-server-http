@@ -59,7 +59,7 @@ class ServerResponseTest {
   @BeforeEach
   void setUp() {
     when(requestContext.getClientResponse()).thenReturn(clientResponse);
-    when(requestContext.status()).thenReturn(status);
+    when(requestContext.getStatus()).thenReturn(status);
     headersMultiMap = MultiMap.caseInsensitiveMultiMap();
   }
 

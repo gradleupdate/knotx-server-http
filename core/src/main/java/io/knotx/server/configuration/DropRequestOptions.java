@@ -29,7 +29,7 @@ public class DropRequestOptions {
   /**
    * Default flag whether a request dropping on heavy load (backpressure) is enabled or not = false
    */
-  private static final boolean DEFAULT_DROP_REQUESTS = false;
+  private static final boolean DEFAULT_DROP_REQUESTS = true;
 
   /**
    * Default response status code send for dropped requests = 429 (Too Many Requests)
@@ -38,7 +38,7 @@ public class DropRequestOptions {
       .code();
 
   /**
-   * Defaukt backpressure buffer size = 1000
+   * Default backpressure buffer size = 1000
    */
   private static final long DEFAULT_BACKPRESSURE_BUFFER_SIZE = 1000L;
 
@@ -108,7 +108,7 @@ public class DropRequestOptions {
   }
 
   /**
-   * Enabled/disables request dropping (backpressure) on heavy load. Default is false - disabled.
+   * Enabled/disables request dropping (backpressure) on heavy load. Default is true - enabled.
    *
    * @param enabled true - request drop enabled, false if disabled
    * @return reference to this, so the API can be used fluently
@@ -145,7 +145,7 @@ public class DropRequestOptions {
   }
 
   /**
-   * Sets the backpressure buffer capacity, the number of request that single Server insance can
+   * Sets the backpressure buffer capacity, the number of request that single Server instance can
    * support concurrently. Default value is 1000.
    *
    * @param backpressureBufferCapacity long - capacity of the buffer

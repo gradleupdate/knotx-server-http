@@ -112,7 +112,7 @@ Set the timeout of the CSRF token
 |===
 ^|Name | Type ^| Description
 |[[backpressureBufferCapacity]]`@backpressureBufferCapacity`|`Number (long)`|+++
-Sets the backpressure buffer capacity, the number of request that single Server insance can
+Sets the backpressure buffer capacity, the number of request that single Server instance can
  support concurrently. Default value is 1000.
 +++
 |[[backpressureStrategy]]`@backpressureStrategy`|`link:enums.html#BackpressureOverflowStrategy[BackpressureOverflowStrategy]`|+++
@@ -130,7 +130,7 @@ Sets the HTTP response code returned wheb request is dropped. Default is
  TOO_MANY_REQUESTS(429)
 +++
 |[[enabled]]`@enabled`|`Boolean`|+++
-Enabled/disables request dropping (backpressure) on heavy load. Default is false - disabled.
+Enabled/disables request dropping (backpressure) on heavy load. Default is true - enabled.
 +++
 |===
 

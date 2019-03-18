@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.knotx.server.api.header;
+package io.knotx.server.handler.http.response.header;
 
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Describes a custom header
+ * Describes a custom header that is send with every HTTP response from the server
  */
 @DataObject(generateConverter = true)
-public class CustomHttpHeader {
+public class CustomHttpHeaderOptions {
 
   private String name;
   private String value;
@@ -30,7 +30,7 @@ public class CustomHttpHeader {
   /**
    * Default Constructor
    */
-  public CustomHttpHeader() {
+  public CustomHttpHeaderOptions() {
     //Nothing to do
   }
 
@@ -39,7 +39,7 @@ public class CustomHttpHeader {
    *
    * @param other the customHeader configuration to copy
    */
-  public CustomHttpHeader(CustomHttpHeader other) {
+  public CustomHttpHeaderOptions(CustomHttpHeaderOptions other) {
     this.name = other.name;
     this.value = other.value;
   }
@@ -49,8 +49,8 @@ public class CustomHttpHeader {
    *
    * @param json the JSON
    */
-  public CustomHttpHeader(JsonObject json) {
-    CustomHttpHeaderConverter.fromJson(json, this);
+  public CustomHttpHeaderOptions(JsonObject json) {
+    CustomHttpHeaderOptionsConverter.fromJson(json, this);
   }
 
   /**
@@ -60,7 +60,7 @@ public class CustomHttpHeader {
    */
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
-    CustomHttpHeaderConverter.toJson(this, json);
+    CustomHttpHeaderOptionsConverter.toJson(this, json);
     return json;
   }
 
@@ -71,7 +71,7 @@ public class CustomHttpHeader {
    * @param name name of the custom header
    * @return a reference to this, so the API can be used fluently
    */
-  public CustomHttpHeader setName(String name) {
+  public CustomHttpHeaderOptions setName(String name) {
     this.name = name;
     return this;
   }
@@ -82,7 +82,7 @@ public class CustomHttpHeader {
    * @param value value of the custom header
    * @return a reference to this, so the API can be used fluently
    */
-  public CustomHttpHeader setValue(String value) {
+  public CustomHttpHeaderOptions setValue(String value) {
     this.value = value;
     return this;
   }

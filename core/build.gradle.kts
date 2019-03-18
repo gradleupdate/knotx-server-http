@@ -33,7 +33,6 @@ dependencies {
     implementation(group = "io.vertx", name = "vertx-web")
     implementation(group = "io.vertx", name = "vertx-web-client")
 
-//    testImplementation(group = "io.vertx", name = "vertx-web-api-service")
     testImplementation(group = "io.vertx", name = "vertx-auth-jwt")
     testImplementation(group = "io.vertx", name = "vertx-auth-shiro")
 

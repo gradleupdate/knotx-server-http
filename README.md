@@ -9,7 +9,7 @@ and security is done with [Open API 3](https://github.com/OAI/OpenAPI-Specificat
 Knot.x Server enables plugging in custom behaviour for each supported route.
 Each defined [`path`](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#pathItemObject)\
 is processed by the chain of [Handlers](https://vertx.io/docs/apidocs/io/vertx/core/Handler.html)
-that reacts on the request and are able to shape the response.
+that reacts on the request and is able to shape the response.
 
 ![server flow](misc/server-flow.png)
 

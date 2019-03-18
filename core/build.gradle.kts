@@ -32,6 +32,13 @@ dependencies {
     implementation(group = "io.vertx", name = "vertx-web-api-service")
     implementation(group = "io.vertx", name = "vertx-web")
     implementation(group = "io.vertx", name = "vertx-web-client")
+
+    testImplementation(group = "io.vertx", name = "vertx-auth-jwt")
+    testImplementation(group = "io.vertx", name = "vertx-auth-shiro")
+
+    testImplementation("io.knotx:knotx-launcher")
+    testImplementation(group = "io.knotx", name = "knotx-launcher", classifier = "tests")
+    testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")
 }
 
 // -----------------------------------------------------------------------------
@@ -41,6 +48,13 @@ sourceSets.named("main") {
     java.srcDir("src/main/generated")
 }
 
+sourceSets.named("test") {
+    java.srcDir("src/test/generated")
+}
+
+sourceSets.named("test") {
+    resources.srcDir("../conf")
+}
 // -----------------------------------------------------------------------------
 // Tasks
 // -----------------------------------------------------------------------------
@@ -128,3 +142,5 @@ signing {
 
 apply(from = "../gradle/common.deps.gradle.kts")
 apply(from = "../gradle/codegen.deps.gradle.kts")
+
+apply(from = "../gradle/codegen.test-deps.gradle.kts")

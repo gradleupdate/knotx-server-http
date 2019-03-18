@@ -15,8 +15,6 @@
  */
 package io.knotx.server;
 
-import static io.restassured.RestAssured.given;
-
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;

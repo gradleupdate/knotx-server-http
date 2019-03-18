@@ -32,6 +32,21 @@ dependencies {
     implementation(group = "io.vertx", name = "vertx-web-api-service")
     implementation(group = "io.vertx", name = "vertx-web")
     implementation(group = "io.vertx", name = "vertx-web-client")
+
+//    testImplementation(group = "io.vertx", name = "vertx-web-api-service")
+    testImplementation(group = "io.vertx", name = "vertx-auth-jwt")
+    testImplementation(group = "io.vertx", name = "vertx-auth-shiro")
+
+    testImplementation("io.knotx:knotx-launcher")
+    testImplementation(group = "io.knotx", name = "knotx-launcher", classifier = "tests")
+    testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")
+
+    testAnnotationProcessor(platform("io.knotx:knotx-dependencies:${project.version}"))
+    testAnnotationProcessor(group = "io.vertx", name = "vertx-codegen", classifier = "processor")
+    testAnnotationProcessor(group = "io.vertx", name = "vertx-service-proxy", classifier = "processor")
+    testAnnotationProcessor(group = "io.vertx", name = "vertx-rx-java2-gen")
+    testAnnotationProcessor(group = "io.vertx", name = "vertx-web-api-service")
+
 }
 
 // -----------------------------------------------------------------------------
@@ -41,6 +56,13 @@ sourceSets.named("main") {
     java.srcDir("src/main/generated")
 }
 
+sourceSets.named("test") {
+    java.srcDir("src/test/generated")
+}
+
+sourceSets.named("test") {
+    resources.srcDir("../conf")
+}
 // -----------------------------------------------------------------------------
 // Tasks
 // -----------------------------------------------------------------------------
@@ -124,6 +146,14 @@ publishing {
 }
 signing {
     sign(publishing.publications["mavenJava"])
+}
+
+tasks.named<JavaCompile>("compileTestJava") {
+    options.annotationProcessorGeneratedSourcesDirectory = file("src/test/generated")
+}
+
+tasks.named<Delete>("clean") {
+    delete.add("src/test/generated")
 }
 
 apply(from = "../gradle/common.deps.gradle.kts")

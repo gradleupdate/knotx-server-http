@@ -28,8 +28,6 @@ dependencies {
     implementation(project(":knotx-assembler"))
     implementation(project(":knotx-splitter-html"))
     implementation(group = "io.vertx", name = "vertx-web-api-service")
-    implementation(group = "io.vertx", name = "vertx-auth-jwt")
-    implementation(group = "io.vertx", name = "vertx-auth-shiro")
     
     testImplementation("io.knotx:knotx-launcher")
     testImplementation(group = "io.knotx", name = "knotx-launcher", classifier = "tests")

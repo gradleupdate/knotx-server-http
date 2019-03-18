@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@ModuleGen(name = "knotx-web-api-service-test", groupPackage = "io.knotx")
-package io.knotx.server.service;
+@ModuleGen(name = "knotx-core-server-test", groupPackage = "io.knotx")
+package io.knotx.server;
 
 import io.vertx.codegen.annotations.ModuleGen;

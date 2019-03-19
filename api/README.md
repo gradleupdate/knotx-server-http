@@ -3,7 +3,7 @@ This module defines contracts and factories interfaces for creating [Handlers](h
 used during the server route processing.
 
 ## Contracts
-Please refer to the [Data Objects docs](https://github.com/Knotx/knotx-server-http/docs/asciidoc/dataobjects.adoc)
+Please refer to the [Data Objects docs](https://github.com/Knotx/knotx-server-http/blob/master/api/docs/asciidoc/dataobjects.adoc)
 for the detailed information about API contracts.
 
 ## Routing Handlers

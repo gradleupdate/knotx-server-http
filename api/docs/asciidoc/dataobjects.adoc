@@ -52,26 +52,6 @@ An HTTP status code for the HTTP response.
 +++
 |===
 
-[[CustomHttpHeader]]
-== CustomHttpHeader
-
-++++
- Describes a custom header
-++++
-'''
-
-[cols=">25%,25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[name]]`@name`|`String`|+++
-Name of the request header.
-+++
-|[[value]]`@value`|`String`|+++
-Value of the request header.
-+++
-|===
-
 [[RequestContext]]
 == RequestContext
 

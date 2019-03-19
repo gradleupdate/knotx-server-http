@@ -15,7 +15,6 @@
  */
 package io.knotx.server.handler.http.response.header;
 
-import io.knotx.server.api.header.CustomHttpHeader;
 import io.knotx.server.api.handler.RoutingHandlerFactory;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
@@ -37,10 +36,10 @@ public class CustomHeaderRoutingHandlerFactory implements RoutingHandlerFactory 
 
   static class CustomHeaderRoutingHandler implements Handler<RoutingContext> {
 
-    private CustomHttpHeader customHeader;
+    private CustomHttpHeaderOptions customHeader;
 
     CustomHeaderRoutingHandler(JsonObject configuration) {
-      this.customHeader = new CustomHttpHeader(configuration);
+      this.customHeader = new CustomHttpHeaderOptions(configuration);
     }
 
     @Override

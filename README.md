@@ -7,11 +7,23 @@ Like any HTTP server, Knot.x HTTP Server allows you to define supported routes. 
 and security is done with [Open API 3](https://github.com/OAI/OpenAPI-Specification) standard.
 
 Knot.x Server enables plugging in custom behaviour for each supported route.
-Each defined [`path`](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#pathItemObject)\
+Each defined [`path`](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#pathItemObject)
 is processed by the chain of [Handlers](https://vertx.io/docs/apidocs/io/vertx/core/Handler.html)
 that reacts on the request and is able to shape the response.
 
 ![server flow](misc/server-flow.png)
+
+**Tree of content**  
+* [Modules](#modules)
+* [How does it work](#how-does-it-work)
+* [How to configure](#how-to-configure)
+  + [Http Server Options](#http-server-options)
+    - [Server Port Configuration](#server-port-configuration)
+  + [Dropping the requests](#dropping-the-requests)
+  + [Routing Specification](#routing-specification)
+  + [Routing Operations](#routing-operations)
+  + [Routing Security](#routing-security)
+    - [Example security setup](#example-security-setup)
 
 ## Modules
 You will find docs in the `README.md` files inside each of following modules:

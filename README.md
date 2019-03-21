@@ -223,3 +223,6 @@ config.server.options.config.globalHandlers = [
   }
 ]
 ```
+
+Of course you may also use `loggerHandler` factory to log access to only specific routes via 
+[`routing operation`](core/docs/asciidoc/dataobjects.adoc#routingoperationoptions).

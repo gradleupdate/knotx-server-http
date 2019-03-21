@@ -60,7 +60,7 @@ public class RoutingHandlerOptions {
   }
 
   /**
-   * Sets {@link RoutingHandlerFactory} name
+   * Name of the {@code RoutingHandlerFactory} registered via {@code java.util.ServiceLoader}.
    *
    * @param name handler factory name
    * @return reference to this, so the API can be used fluently
@@ -79,7 +79,7 @@ public class RoutingHandlerOptions {
   }
 
   /**
-   * Sets {@link io.vertx.core.Handler} configuration.
+   * Configuration for the {@code Handler} created by associated {@code RoutingHandlerFactory}.
    *
    * @param config handler JSON configuration
    * @return reference to this, so the API can be used fluently

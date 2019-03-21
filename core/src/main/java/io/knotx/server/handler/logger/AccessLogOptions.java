@@ -25,7 +25,6 @@ public class AccessLogOptions {
   private static final boolean DEFAULT_LOGGER_IMMEDIATE = false;
   private static final LoggerFormat DEFAULT_LOGGER_FORMAT = LoggerFormat.DEFAULT;
 
-  private boolean enabled;
   private boolean immediate;
   private LoggerFormat format;
 
@@ -42,7 +41,6 @@ public class AccessLogOptions {
    * @param other the instance to copy
    */
   public AccessLogOptions(AccessLogOptions other) {
-    this.enabled = other.enabled;
     this.immediate = other.immediate;
     this.format = other.format;
   }
@@ -69,28 +67,8 @@ public class AccessLogOptions {
   }
 
   private void init() {
-    enabled = false;
     immediate = DEFAULT_LOGGER_IMMEDIATE;
     format = DEFAULT_LOGGER_FORMAT;
-  }
-
-  /**
-   * @return is access log is enabled
-   */
-  public boolean isEnabled() {
-    return enabled;
-  }
-
-  /**
-   * Sets if logging access to the Knot.x HTTP server is enabled or not. Default is enabled
-   * ('true')
-   *
-   * @param enabled true if logging access log is enabled
-   * @return reference to this, so the API can be used fluently
-   */
-  public AccessLogOptions setEnabled(boolean enabled) {
-    this.enabled = enabled;
-    return this;
   }
 
   /**
@@ -124,15 +102,17 @@ public class AccessLogOptions {
    * Set format of access log. Default is <strong>LoggerFormat.DEFAULT</strong>. Available values
    * are:
    * <ul>
-   *   <li>DEFAULT
-   *      <i>remote-client</i> - - [<i>timestamp</i>] "<i>method</i> <i>uri</i> <i>version</i>" <i>status</i> <i>content-length</i> "<i>referrer</i>" "<i>user-agent</i>
-   *   </li>
-   *   <li>SHORT
-   *      <i>remote-client</i> - <i>method</i> <i>uri</i> <i>version</i> <i>status</i> <i>content-length</i> <i>duration</i> ms
-   *   </li>
-   *   <li>TINY
-   *      <i>method</i> <i>uri</i> <i>status</i> - <i>content-length</i> <i>duration</i>
-   *   </li>
+   * <li>DEFAULT
+   * <i>remote-client</i> - - [<i>timestamp</i>] "<i>method</i> <i>uri</i> <i>version</i>"
+   * <i>status</i> <i>content-length</i> "<i>referrer</i>" "<i>user-agent</i>
+   * </li>
+   * <li>SHORT
+   * <i>remote-client</i> - <i>method</i> <i>uri</i> <i>version</i> <i>status</i>
+   * <i>content-length</i> <i>duration</i> ms
+   * </li>
+   * <li>TINY
+   * <i>method</i> <i>uri</i> <i>status</i> - <i>content-length</i> <i>duration</i>
+   * </li>
    * </ul>
    *
    * @param format format of the access log

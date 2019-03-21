@@ -17,7 +17,6 @@ package io.knotx.server.configuration;
 
 import static io.knotx.server.KnotxServerVerticle.KNOTX_PORT_PROP_NAME;
 
-import io.knotx.server.handler.logger.AccessLogOptions;
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
@@ -40,9 +39,9 @@ public class KnotxServerOptions {
   private boolean displayExceptionDetails;
   private HttpServerOptions serverOptions;
   private String routingSpecificationLocation;
+  private List<RoutingHandlerOptions> globalHandlers;
   private List<AuthHandlerOptions> securityHandlers;
   private List<RoutingOperationOptions> routingOperations;
-  private AccessLogOptions accessLog;
   private DropRequestOptions dropRequestOptions;
 
   /**
@@ -61,9 +60,9 @@ public class KnotxServerOptions {
     this.displayExceptionDetails = other.displayExceptionDetails;
     this.serverOptions = new HttpServerOptions(other.serverOptions);
     this.routingSpecificationLocation = other.routingSpecificationLocation;
+    this.globalHandlers = new ArrayList<>(other.globalHandlers);
     this.securityHandlers = new ArrayList<>(other.securityHandlers);
     this.routingOperations = new ArrayList<>(other.routingOperations);
-    this.accessLog = new AccessLogOptions(other.accessLog);
     this.dropRequestOptions = other.dropRequestOptions;
   }
 
@@ -93,9 +92,9 @@ public class KnotxServerOptions {
 
   private void init() {
     displayExceptionDetails = DEFAULT_DISPLAY_EXCEPTIONS;
+    globalHandlers = new ArrayList<>();
     securityHandlers = new ArrayList<>();
     serverOptions = new HttpServerOptions();
-    accessLog = new AccessLogOptions();
     dropRequestOptions = new DropRequestOptions();
   }
 
@@ -118,7 +117,7 @@ public class KnotxServerOptions {
   }
 
   /**
-   * @return {@link io.vertx.core.http.HttpServerOptions}
+   * @return {@code io.vertx.core.http.HttpServerOptions}
    */
   public HttpServerOptions getServerOptions() {
     return serverOptions;
@@ -127,7 +126,7 @@ public class KnotxServerOptions {
   /**
    * Set the HTTP Server options
    *
-   * @param serverOptions {@link io.vertx.core.http.HttpServerOptions} object
+   * @param serverOptions {@code io.vertx.core.http.HttpServerOptions} object
    * @return reference to this, so the API can be used fluently
    */
   public KnotxServerOptions setServerOptions(HttpServerOptions serverOptions) {
@@ -158,9 +157,29 @@ public class KnotxServerOptions {
   }
 
   /**
-   * List of {@link AuthHandlerOptions} containing auth handlers configurations which are initiated
-   * (loaded from classpath via {@link java.util.ServiceLoader}) during server setup and joined with
-   * Open API security schemas based on {@link AuthHandlerOptions} schema name.
+   * @return list of global routing operations options
+   */
+  public List<RoutingHandlerOptions> getGlobalHandlers() {
+    return globalHandlers;
+  }
+
+  /**
+   * List of {@code RoutingHandlerOptions} containing handlers configurations which are initiated
+   * (loaded from classpath via {@code java.util.ServiceLoader}) during server setup and applied to
+   * each route.
+   *
+   * @param globalHandlers global routing operations
+   * @return reference to this, so the API can be used fluently
+   */
+  public KnotxServerOptions setGlobalHandlers(List<RoutingHandlerOptions> globalHandlers) {
+    this.globalHandlers = globalHandlers;
+    return this;
+  }
+
+  /**
+   * List of {@code AuthHandlerOptions} containing auth handlers configurations which are initiated
+   * (loaded from classpath via {@code java.util.ServiceLoader}) during server setup and joined with
+   * Open API security schemas based on {@code AuthHandlerOptions} schema name.
    *
    * @return list of auth handlers options
    */
@@ -169,7 +188,7 @@ public class KnotxServerOptions {
   }
 
   /**
-   * Set list of {@link AuthHandlerOptions}.
+   * Set list of {@code AuthHandlerOptions}.
    *
    * @param securityHandlers auth handlers options
    * @return reference to this, so the API can be used fluently
@@ -180,8 +199,8 @@ public class KnotxServerOptions {
   }
 
   /**
-   * List of {@link RoutingOperationOptions} containing handlers configurations which are initiated
-   * (loaded from classpath via {@link java.util.ServiceLoader}) during server setup and joined with
+   * List of {@code RoutingOperationOptions} containing handlers configurations which are initiated
+   * (loaded from classpath via {@code java.util.ServiceLoader}) during server setup and joined with
    * Open API operations based on operationId.
    *
    * @return list of routing operations options
@@ -191,7 +210,7 @@ public class KnotxServerOptions {
   }
 
   /**
-   * Set list of {@link RoutingOperationOptions}.
+   * Set list of {@code RoutingOperationOptions}.
    *
    * @param routingOperations routing operations options
    * @return reference to this, so the API can be used fluently
@@ -203,25 +222,7 @@ public class KnotxServerOptions {
   }
 
   /**
-   * @return access log configuration options
-   */
-  public AccessLogOptions getAccessLog() {
-    return accessLog;
-  }
-
-  /**
-   * Set the access log options
-   *
-   * @param accessLog a {@link AccessLogOptions} object
-   * @return reference to this, so the API can be used fluently
-   */
-  public KnotxServerOptions setAccessLog(AccessLogOptions accessLog) {
-    this.accessLog = accessLog;
-    return this;
-  }
-
-  /**
-   * @return a {@link DropRequestOptions} configuration
+   * @return a {@code DropRequestOptions} configuration
    */
   public DropRequestOptions getDropRequestOptions() {
     return dropRequestOptions;
@@ -230,11 +231,12 @@ public class KnotxServerOptions {
   /**
    * Set the drop request options
    *
-   * @param dropRequestOptions a {@link DropRequestOptions} configuration
+   * @param dropRequestOptions a {@code DropRequestOptions} configuration
    * @return reference to this, so the API can be used fluently
    */
   public KnotxServerOptions setDropRequestOptions(DropRequestOptions dropRequestOptions) {
     this.dropRequestOptions = dropRequestOptions;
     return this;
   }
+
 }

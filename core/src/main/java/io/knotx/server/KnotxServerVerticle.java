@@ -46,12 +46,14 @@ public class KnotxServerVerticle extends AbstractVerticle {
     LOGGER.info("Open API specification location [{}]",
         options.getRoutingSpecificationLocation());
 
+    GlobalHandlersProvider globalHandlersProvider = new GlobalHandlersProvider(vertx, options.getGlobalHandlers());
     RoutesProvider routesProvider = new RoutesProvider(vertx, options.getRoutingOperations());
     SecurityProvider securityProvider = new SecurityProvider(vertx, options.getSecurityHandlers());
     HttpServerProvider httpServerProvider = new HttpServerProvider(vertx,
         options.getServerOptions(), options.getDropRequestOptions());
 
     OpenAPI3RouterFactory.rxCreate(vertx, options.getRoutingSpecificationLocation())
+        .doOnSuccess(globalHandlersProvider::configureGlobalHandlers)
         .doOnSuccess(securityProvider::configureSecurity)
         .doOnSuccess(routesProvider::configureRouting)
         .doOnSuccess(OpenAPI3RouterFactory::mountServicesFromExtensions)

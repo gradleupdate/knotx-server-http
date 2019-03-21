@@ -59,7 +59,7 @@ public class RequestEvent {
   }
 
   /**
-   * Currently processed `io.knotx.server.api.context.ClientRequest` details.
+   * Currently processed {@code ClientRequest} details.
    * @return {@link ClientRequest} details.
    */
   public ClientRequest getClientRequest() {
@@ -67,7 +67,7 @@ public class RequestEvent {
   }
 
   /**
-   * List of `io.knotx.fragment.Fragment` that are processed in the scope of the current request.
+   * List of {@code io.knotx.fragment.Fragment} that are processed in the scope of the current request.
    *
    * @return list of {@link Fragment} that are processed in the scope of the current request.
    */
@@ -76,7 +76,7 @@ public class RequestEvent {
   }
 
   /**
-   * A `JsonObject` that contains payload of currently processed request. It may contain any
+   * A {@code JsonObject} that contains payload of currently processed request. It may contain any
    * additional data that is added during processing of the Request.
    *
    * @return copy of the payload

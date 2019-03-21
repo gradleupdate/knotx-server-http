@@ -49,7 +49,7 @@ public class RequestContext {
   }
 
   /**
-   * `io.knotx.server.api.context.RequestEvent` with detailed event info from this context.
+   * {@code RequestEvent} with detailed event info from this context.
    *
    * @return {@link RequestEvent} from the current context.
    */
@@ -58,7 +58,7 @@ public class RequestContext {
   }
 
   /**
-   * Final `io.knotx.server.api.context.ClientResponse` object for this request context.
+   * Final {@code ClientResponse} object for this request context.
    *
    * @return final {@link ClientResponse} for the current context.
    */
@@ -67,7 +67,7 @@ public class RequestContext {
   }
 
   /**
-   * Current `io.knotx.server.api.context.RequestContext.Status` that says if current context has
+   * Current {@code RequestContext.Status} that says if current context has
    * failed or not. Optionally it delivers cause of the failure.
    *
    * @return current {@link Status}.

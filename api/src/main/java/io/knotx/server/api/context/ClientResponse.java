@@ -82,7 +82,7 @@ public class ClientResponse {
   }
 
   /**
-   * A body in a form of a `io.vertx.core.buffer.Buffer` for the HTTP response.
+   * A body in a form of a {@code io.vertx.core.buffer.Buffer} for the HTTP response.
    *
    * @param body of the response
    * @return a reference to this, so the API can be used fluently

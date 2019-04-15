@@ -131,7 +131,7 @@ paths:
 ```
 > Routing Operations entry in Knot.x conf
 ```hocon
-config.server.options.configroutingOperations = ${routingOperations} [
+config.server.options.config.routingOperations = ${routingOperations} [
   {
     operationId = my-example-operation
     handlers = [
@@ -143,6 +143,8 @@ config.server.options.configroutingOperations = ${routingOperations} [
   }
 ]
 ```
+
+Each `handler` is specified with [Routing Handler Options](/core/docs/asciidoc/dataobjects.adoc#routinghandleroptions).
 
 ### Routing Security
 Security for each operation defined in the [Open API specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#security-requirement-object)
@@ -184,3 +186,43 @@ config.server.options.config.securityHandlers = [
 Also, you need to implement [`AuthHandlerFactory`](api#creating-auth-handler).
 For the example above:
  - `name` would be `myBasicAuthHandlerFactory`
+
+### Global Handlers
+[`Global Handlers`](core/docs/asciidoc/dataobjects.adoc#globalhandlers) 
+defines handlers that will be applied before any [`routing operation`](core/docs/asciidoc/dataobjects.adoc#routingoperationoptions).
+
+Please note that you should not add a body handler inside that list. If you want to modify the 
+body use [`routing operation`](core/docs/asciidoc/dataobjects.adoc#routingoperationoptions) handlers.
+
+```hocon
+config.server.options.config.globalHandlers = [
+  {
+    name = myGlobalHandler
+    config {
+      // some configuration passed via factory to the handler
+    }
+  }
+]
+```
+
+Each `handler` is specified with [Routing Handler Options](/core/docs/asciidoc/dataobjects.adoc#routinghandleroptions).
+
+#### Access Logs
+To log every request incoming to the Knot.x HTTP Server setup [`LoggerHandler`]()
+as a [`globalHandler`](#global-handlers). Use `loggerHandler` factory and [`Access Log Options`]()
+structure in order to configure it to your needs.
+
+```hocon
+config.server.options.config.globalHandlers = [
+  {
+    name = loggerHandler
+    config {
+      immediate = true
+      format = DEFAULT
+    }
+  }
+]
+```
+
+Of course you may also use `loggerHandler` factory to log access to only specific routes via 
+[`routing operation`](core/docs/asciidoc/dataobjects.adoc#routingoperationoptions).

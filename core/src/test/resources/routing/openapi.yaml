@@ -28,3 +28,15 @@ paths:
       responses:
         default:
           description: test endpoint
+  /not/ready*:
+    get:
+      operationId: not-ready
+      responses:
+        default:
+          description: not ready yet
+  /misconfigured*:
+    get:
+      operationId: misconfigured-get
+      responses:
+        default:
+          description: endpoint without handler that ends the response

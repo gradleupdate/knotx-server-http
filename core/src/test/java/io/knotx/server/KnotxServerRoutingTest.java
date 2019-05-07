@@ -20,6 +20,7 @@ import static io.restassured.RestAssured.given;
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -33,10 +34,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @KnotxApplyConfiguration({"server.conf", "server-random-port.conf", "routing/routing.conf"})
 class KnotxServerRoutingTest {
 
-  private static final String EXISTING_ENDPOINT_URL = "/test/any";
-  private static final String FAILING_HANDLER_ENDPOINT_URL = "/test/failingHandlerOperation";
-  private static final String FAILING_HANDLER_WITH_FALLBACK_ENDPOINT_URL = "/test/failingHandlerOperation";
-
   @Test
   @DisplayName("Expect Ok when requesting defined and configured URL")
   void callServer(Vertx vertx, @RandomPort Integer globalServerPort) {
@@ -44,31 +41,46 @@ class KnotxServerRoutingTest {
     given().
         port(globalServerPort).
     when().
-      get(EXISTING_ENDPOINT_URL).
+        get("/test/any").
     then().assertThat().
-        statusCode(200);
+        statusCode(HttpResponseStatus.OK.code());
     // @formatter:on
   }
 
-  @Disabled
   @Test
+  @Disabled
   @DisplayName("Expect NOT FOUND when requested URL is not defined in Open API spec.")
   void notConfiguredURLNotFound(Vertx vertx, @RandomPort Integer globalServerPort) {
-    //ToDo
+    given().
+        port(globalServerPort).
+    when().
+        get("/not/defined").
+    then().assertThat().
+        statusCode(HttpResponseStatus.NOT_FOUND.code());
   }
 
-  @Disabled
   @Test
+  @Disabled
   @DisplayName("Expect NOT IMPLEMENTED when defined in Open API spec but no routing handlers defined.")
   void notImplementedRoutingLogic(Vertx vertx, @RandomPort Integer globalServerPort) {
-    //ToDo
+    given().
+        port(globalServerPort).
+    when().
+        get("/not/ready/endpoint").
+    then().assertThat().
+        statusCode(HttpResponseStatus.NOT_IMPLEMENTED.code());
   }
 
-  @Disabled
   @Test
+  @Disabled
   @DisplayName("Expect INTERNAL SERVER ERROR no handler on the route ends the response.")
   void noHandlerEndsResponse(Vertx vertx, @RandomPort Integer globalServerPort) {
-    //ToDo
+    given().
+        port(globalServerPort).
+    when().
+        get("/misconfigured/endpoint").
+    then().assertThat().
+        statusCode(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
   }
 
 

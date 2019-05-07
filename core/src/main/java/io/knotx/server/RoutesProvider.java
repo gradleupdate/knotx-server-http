@@ -32,8 +32,7 @@ class RoutesProvider {
   private final Vertx vertx;
   private final List<RoutingOperationOptions> routingOperations;
 
-  RoutesProvider(Vertx vertx,
-      List<RoutingOperationOptions> routingOperations) {
+  RoutesProvider(Vertx vertx, List<RoutingOperationOptions> routingOperations) {
     this.vertx = vertx;
     this.routingOperations = routingOperations;
     validateRoutingOperations();

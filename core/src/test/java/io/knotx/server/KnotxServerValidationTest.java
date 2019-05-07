@@ -49,6 +49,20 @@ class KnotxServerValidationTest {
 
   @Disabled
   @Test
+  @DisplayName("Expect OK when path parameters validation passes.")
+  void automaticPathParamsValidationSuccess(Vertx vertx, @RandomPort Integer globalServerPort) {
+    // see example here: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore-expanded.yaml
+  }
+
+  @Disabled
+  @Test
+  @DisplayName("Expect BAD REQUEST when path parameters validation fails.")
+  void automaticPathParamsValidationFailure(Vertx vertx, @RandomPort Integer globalServerPort) {
+    // see example here: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore-expanded.yaml
+  }
+
+  @Disabled
+  @Test
   @DisplayName("Expect OK when response schema is valid.")
   void automaticResponseSchemaValidationSuccess(Vertx vertx, @RandomPort Integer globalServerPort) {
     // see example here: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore-expanded.yaml

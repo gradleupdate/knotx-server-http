@@ -15,9 +15,13 @@
  */
 package io.knotx.server;
 
+import static io.restassured.RestAssured.given;
+
 import io.knotx.junit5.KnotxApplyConfiguration;
 import io.knotx.junit5.KnotxExtension;
 import io.knotx.junit5.RandomPort;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.vertx.core.json.JsonArray;
 import io.vertx.reactivex.core.Vertx;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -28,51 +32,53 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * Tests are created according to Open API 3.0 Spec: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md
  */
 @ExtendWith(KnotxExtension.class)
-@KnotxApplyConfiguration({"server.conf", "server-random-port.conf"})
-class KnotxServerValidationTest {
+@KnotxApplyConfiguration({"server.conf", "server-random-port.conf", "params-validation/parameters.conf"})
+class KnotxServerParamsValidationTest {
 
-  private static final String SERVER_URL = "/test/any";
-
-  @Disabled
   @Test
   @DisplayName("Expect OK when request parameters validation passes.")
   void automaticRequestParamsValidationSuccess(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // see example here: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore-expanded.yaml
+    given().
+        port(globalServerPort).
+    when().
+        get("/query-params?q=knotx&limit=5").
+    then().assertThat().
+        statusCode(HttpResponseStatus.OK.code());
   }
 
-  @Disabled
   @Test
   @DisplayName("Expect BAD REQUEST when request parameters validation fails.")
   void automaticRequestParamsValidationFailure(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // see example here: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore-expanded.yaml
+    given().
+        port(globalServerPort).
+    when().
+        get("/query-params?q=knotx&limit=five").
+    then().assertThat().
+        statusCode(HttpResponseStatus.BAD_REQUEST.code());
   }
 
   @Disabled
   @Test
   @DisplayName("Expect OK when path parameters validation passes.")
   void automaticPathParamsValidationSuccess(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // see example here: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore-expanded.yaml
+    given().
+        port(globalServerPort).
+    when().
+        get("/path-params/knotx/5").
+    then().assertThat().
+        statusCode(HttpResponseStatus.OK.code());
   }
 
   @Disabled
   @Test
   @DisplayName("Expect BAD REQUEST when path parameters validation fails.")
   void automaticPathParamsValidationFailure(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // see example here: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore-expanded.yaml
-  }
-
-  @Disabled
-  @Test
-  @DisplayName("Expect OK when response schema is valid.")
-  void automaticResponseSchemaValidationSuccess(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // see example here: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore-expanded.yaml
-  }
-
-  @Disabled
-  @Test
-  @DisplayName("Expect SERVER ERROR when response schema is invalid.")
-  void automaticResponseSchemaValidationFailure(Vertx vertx, @RandomPort Integer globalServerPort) {
-    // see example here: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore-expanded.yaml
+    given().
+        port(globalServerPort).
+    when().
+        get("/path-params/knotx/five").
+    then().assertThat().
+        statusCode(HttpResponseStatus.BAD_REQUEST.code());
   }
 
 }

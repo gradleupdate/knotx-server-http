@@ -48,7 +48,6 @@ class KnotxServerRoutingTest {
   }
 
   @Test
-  @Disabled
   @DisplayName("Expect NOT FOUND when requested URL is not defined in Open API spec.")
   void notConfiguredURLNotFound(Vertx vertx, @RandomPort Integer globalServerPort) {
     given().
@@ -60,7 +59,6 @@ class KnotxServerRoutingTest {
   }
 
   @Test
-  @Disabled
   @DisplayName("Expect NOT IMPLEMENTED when defined in Open API spec but no routing handlers defined.")
   void notImplementedRoutingLogic(Vertx vertx, @RandomPort Integer globalServerPort) {
     given().
@@ -72,7 +70,7 @@ class KnotxServerRoutingTest {
   }
 
   @Test
-  @Disabled
+  @Disabled("ToDo - should be implemented")
   @DisplayName("Expect INTERNAL SERVER ERROR no handler on the route ends the response.")
   void noHandlerEndsResponse(Vertx vertx, @RandomPort Integer globalServerPort) {
     given().

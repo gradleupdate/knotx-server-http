@@ -13,3 +13,4 @@
 #  limitations under the License.
 
 io.knotx.server.global.TestContentTypeCookieFactory
+io.knotx.server.handler.http.response.SearchTestHandlerFactory

@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.knotx.server.common.placeholders;
 
-rootProject.name = "knotx-server-http"
-include("knotx-server-http-api")
-include("knotx-server-http-common-placeholders")
-include("knotx-server-http-core")
-include("knotx-splitter-html")
-include("knotx-assembler")
-include("it-test")
+import io.knotx.server.api.context.ClientRequest;
 
-project(":knotx-server-http-api").projectDir = file("api")
-project(":knotx-server-http-common-placeholders").projectDir = file("common/placeholders")
-project(":knotx-server-http-core").projectDir = file("core")
-project(":knotx-splitter-html").projectDir = file("splitter-html")
-project(":knotx-assembler").projectDir = file("assembler")
+@FunctionalInterface
+public interface PlaceholderSubstitutor {
+
+  /**
+   * Get the replacement value from the supplied clientRequest and placeholder name
+   *
+   * @param request the supplied clientRequest
+   * @param placeholder the placeholder name
+   * @return the replacement value, or null if no replacement can be get
+   */
+  String getValue(ClientRequest request, String placeholder);
+
+}

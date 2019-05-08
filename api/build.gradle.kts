@@ -28,6 +28,7 @@ plugins {
 // -----------------------------------------------------------------------------
 dependencies {
     api("io.knotx:knotx-fragment-api")
+    implementation("io.knotx:knotx-commons")
     implementation(group = "io.vertx", name = "vertx-web")
     implementation(group = "com.google.guava", name = "guava")
 }

@@ -17,7 +17,7 @@ package io.knotx.server.api.handler;
 
 import io.knotx.server.api.context.ClientResponse;
 import io.knotx.server.api.context.RequestEvent;
-import io.knotx.server.util.DataObjectsUtil;
+import io.knotx.commons.http.request.DataObjectsUtil;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.reactivex.core.MultiMap;
 import java.util.Optional;

@@ -23,7 +23,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class UriTransformerReplaceTest {
+public class PlaceholdersResolverReplaceTest {
 
   /**
    * Data source for following test
@@ -103,7 +103,7 @@ public class UriTransformerReplaceTest {
     ClientRequest httpRequest = new ClientRequest().setHeaders(getHeadersMultiMap())
         .setParams(getParamsMultiMap()).setPath(requestedUri);
 
-    String finalUri = UriTransformer.resolveServicePath(servicePath, httpRequest);
+    String finalUri = PlaceholdersResolver.resolve(servicePath, httpRequest);
 
     Assertions.assertEquals(expectedUri, finalUri);
   }

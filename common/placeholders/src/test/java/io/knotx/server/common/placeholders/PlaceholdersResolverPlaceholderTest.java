@@ -19,12 +19,12 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class UriTransformerPlaceholderTest {
+public class PlaceholdersResolverPlaceholderTest {
 
   @Test
   public void getPlaceholders_whenGivenUrlWithPlaceholders_expectPlaceholdersExtractedInArray() {
     List<String> placeholders =
-        UriTransformer.getPlaceholders("/dssds/{first.aa}/dsu/{second}");
+        PlaceholdersResolver.getPlaceholders("/dssds/{first.aa}/dsu/{second}");
     Assertions.assertArrayEquals(placeholders.toArray(), new String[]{"first.aa", "second"});
   }
 }

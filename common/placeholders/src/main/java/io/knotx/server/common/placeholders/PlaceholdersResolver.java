@@ -27,31 +27,31 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
-public final class UriTransformer {
+public final class PlaceholdersResolver {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(UriTransformer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PlaceholdersResolver.class);
 
   private static List<PlaceholderSubstitutor> placeholderSubstitutors =
       Arrays.asList(new RequestPlaceholderSubstitutor(), new UriPlaceholderSubstitutor());
 
-  private UriTransformer() {
+  private PlaceholdersResolver() {
     // util
   }
 
-  public static String resolveServicePath(String servicePath, ClientRequest request) {
-    String serviceUri = servicePath;
-    List<String> placeholders = getPlaceholders(servicePath);
+  public static String resolve(String stringWithPlaceholders, ClientRequest request) {
+    String resolved = stringWithPlaceholders;
+    List<String> placeholders = getPlaceholders(stringWithPlaceholders);
 
     for (String placeholder : placeholders) {
-      serviceUri = serviceUri.replace("{" + placeholder + "}",
+      resolved = resolved.replace("{" + placeholder + "}",
           encodeValue(getPlaceholderValue(request, placeholder)));
     }
 
-    return serviceUri;
+    return resolved;
   }
 
   protected static List<String> getPlaceholders(String serviceUri) {
-    return Arrays.asList(serviceUri.split("\\{")).stream()
+    return Arrays.stream(serviceUri.split("\\{"))
         .filter(str -> str.contains("}"))
         .map(str -> StringUtils.substringBefore(str, "}"))
         .collect(Collectors.toList());

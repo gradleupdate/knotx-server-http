@@ -29,7 +29,7 @@ public class DropRequestOptions {
   /**
    * Default flag whether a request dropping on heavy load (backpressure) is enabled or not = false
    */
-  private static final boolean DEFAULT_DROP_REQUESTS = true;
+  private static final boolean DEFAULT_DROP_REQUESTS = false;
 
   /**
    * Default response status code send for dropped requests = 429 (Too Many Requests)

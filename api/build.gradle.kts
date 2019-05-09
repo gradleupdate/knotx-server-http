@@ -31,6 +31,9 @@ dependencies {
     implementation("io.knotx:knotx-commons")
     implementation(group = "io.vertx", name = "vertx-web")
     implementation(group = "com.google.guava", name = "guava")
+
+    testImplementation(group = "org.mockito", name = "mockito-core")
+    testImplementation(group = "org.mockito", name = "mockito-junit-jupiter")
 }
 
 // -----------------------------------------------------------------------------

@@ -15,17 +15,19 @@
  */
 package io.knotx.splitter.html;
 
-import com.google.common.collect.Lists;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import io.knotx.fragment.Fragment;
 import io.knotx.junit5.util.FileReader;
 import io.vertx.core.json.JsonObject;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class HtmlFragmentSplitterTest {
+class HtmlFragmentSplitterTest {
 
   private HtmlFragmentSplitter tested;
 
@@ -35,25 +37,25 @@ public class HtmlFragmentSplitterTest {
   }
 
   @Test
-  public void split_whenNull_expectNoFragments() {
+  void split_whenNull_expectNoFragments() {
     // when
     List<Fragment> fragments = tested.split(null);
 
     // then
-    Assert.assertTrue(fragments.isEmpty());
+    assertTrue(fragments.isEmpty());
   }
 
   @Test
-  public void split_whenEmptyHtml_expectNoFragments() {
+  void split_whenEmptyHtml_expectNoFragments() {
     // when
     List<Fragment> fragments = tested.split("");
 
     // then
-    Assert.assertTrue(fragments.isEmpty());
+    assertTrue(fragments.isEmpty());
   }
 
   @Test
-  public void split_whenOneStaticFragment_expectStaticFragment() throws IOException {
+  void split_whenOneStaticFragment_expectStaticFragment() throws IOException {
     // given
     String html = from("static-fragment.html");
 
@@ -61,13 +63,13 @@ public class HtmlFragmentSplitterTest {
     List<Fragment> fragments = tested.split(html);
 
     // then
-    Assert.assertEquals(1, fragments.size());
-    Assert.assertEquals("_STATIC", fragments.get(0).getType());
-    Assert.assertEquals(html, fragments.get(0).getBody());
+    assertEquals(1, fragments.size());
+    assertEquals("_STATIC", fragments.get(0).getType());
+    assertEquals(html, fragments.get(0).getBody());
   }
 
   @Test
-  public void split_whenOneNonStaticFragment_expectNonStaticFragment() throws IOException {
+  void split_whenOneNonStaticFragment_expectNonStaticFragment() throws IOException {
     // given
     String html = from("dynamic-fragment.html");
 
@@ -75,17 +77,17 @@ public class HtmlFragmentSplitterTest {
     List<Fragment> fragments = tested.split(html);
 
     // then
-    Assert.assertEquals(1, fragments.size());
+    assertEquals(1, fragments.size());
     Fragment fragment = fragments.get(0);
-    Assert.assertEquals("fragmentType", fragment.getType());
-    Assert.assertEquals("valueOne", fragment.getConfiguration().getString("attributeOne"));
-    Assert.assertEquals("valueTwo", fragment.getConfiguration().getString("attributeTwo"));
-    Assert.assertEquals("", fragment.getConfiguration().getString("attributeEmpty"));
-    Assert.assertEquals(from("dynamic-fragment-result.txt"), fragment.getBody());
+    assertEquals("fragmentType", fragment.getType());
+    assertEquals("valueOne", fragment.getConfiguration().getString("attributeOne"));
+    assertEquals("valueTwo", fragment.getConfiguration().getString("attributeTwo"));
+    assertEquals("", fragment.getConfiguration().getString("attributeEmpty"));
+    assertEquals(from("dynamic-fragment-result.txt"), fragment.getBody());
   }
 
   @Test
-  public void split_whenManyFragments_expectManyFragments() throws IOException {
+  void split_whenManyFragments_expectManyFragments() throws IOException {
     // given
     String html = from("many-fragments.html");
 
@@ -93,7 +95,7 @@ public class HtmlFragmentSplitterTest {
     List<Fragment> actualFragments = tested.split(html);
 
     // then
-    List<Fragment> expectedFragments = Lists.newArrayList(
+    List<Fragment> expectedFragments = Arrays.asList(
         new Fragment("_STATIC", new JsonObject(), from("many-fragments-1.txt")),
         new Fragment("auth", new JsonObject().put("secret-key", "pass"),
             from("many-fragments-2.txt")),
@@ -108,14 +110,14 @@ public class HtmlFragmentSplitterTest {
             from("many-fragments-7.txt")),
         new Fragment("_STATIC", new JsonObject(), from("many-fragments-8.txt"))
     );
-    Assert.assertEquals(expectedFragments.size(), actualFragments.size());
+    assertEquals(expectedFragments.size(), actualFragments.size());
 
     for (int i = 0; i < expectedFragments.size(); i++) {
       Fragment expected = expectedFragments.get(i);
       Fragment actual = actualFragments.get(i);
-      Assert.assertEquals(expected.getType(), actual.getType());
-      Assert.assertEquals(expected.getConfiguration(), actual.getConfiguration());
-      Assert.assertEquals(expected.getBody().trim(), actual.getBody().trim());
+      assertEquals(expected.getType(), actual.getType());
+      assertEquals(expected.getConfiguration(), actual.getConfiguration());
+      assertEquals(expected.getBody().trim(), actual.getBody().trim());
     }
   }
 

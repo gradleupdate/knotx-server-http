@@ -18,7 +18,6 @@ package io.knotx.assembler;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.common.collect.Lists;
 import io.knotx.fragment.Fragment;
 import io.knotx.server.api.context.ClientRequest;
 import io.knotx.server.api.context.RequestEvent;
@@ -27,6 +26,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.json.JsonObject;
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -60,7 +60,7 @@ public class FragmentAssemblerHandlerTest {
     FragmentAssemblerHandler assemblerHandler = new FragmentAssemblerHandler();
 
     RequestEvent requestEvent = new RequestEvent(clientRequest,
-        Lists.newArrayList(new Fragment("_STATIC", new JsonObject(), expectedBody)),
+        Collections.singletonList(new Fragment("_STATIC", new JsonObject(), expectedBody)),
         new JsonObject());
 
     // when

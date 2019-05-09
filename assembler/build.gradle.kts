@@ -30,6 +30,8 @@ dependencies {
     implementation(project(":knotx-server-http-api"))
 
     implementation(group = "org.apache.commons", name = "commons-lang3")
+    testImplementation(group = "org.mockito", name = "mockito-core")
+    testImplementation(group = "org.mockito", name = "mockito-junit-jupiter")
 }
 
 // -----------------------------------------------------------------------------

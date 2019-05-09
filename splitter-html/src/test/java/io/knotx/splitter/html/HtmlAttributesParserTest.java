@@ -15,13 +15,15 @@
  */
 package io.knotx.splitter.html;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class HtmlAttributesParserTest {
+class HtmlAttributesParserTest {
 
   private HtmlAttributesParser tested;
 
@@ -31,47 +33,47 @@ public class HtmlAttributesParserTest {
   }
 
   @Test
-  public void split_whenNull_expectNoAttributes() {
+  void split_whenNull_expectNoAttributes() {
     // when
     List<Pair<String, String>> pairs = tested.get(null);
 
     // then
-    Assert.assertTrue(pairs.isEmpty());
+    assertTrue(pairs.isEmpty());
   }
 
   @Test
-  public void split_whenEmptyString_expectNoAttributes() {
+  void split_whenEmptyString_expectNoAttributes() {
     // when
     List<Pair<String, String>> pairs = tested.get("");
 
     // then
-    Assert.assertTrue(pairs.isEmpty());
+    assertTrue(pairs.isEmpty());
   }
 
   @Test
-  public void split_whenOneAttributeDoubleMarks_expectOneAttribute() {
+  void split_whenOneAttributeDoubleMarks_expectOneAttribute() {
     // when
     List<Pair<String, String>> pairs = tested.get("attribute=\"value\"");
 
     // then
-    Assert.assertEquals(1, pairs.size());
-    Assert.assertEquals("attribute", pairs.get(0).getKey());
-    Assert.assertEquals("value", pairs.get(0).getValue());
+    assertEquals(1, pairs.size());
+    assertEquals("attribute", pairs.get(0).getKey());
+    assertEquals("value", pairs.get(0).getValue());
   }
 
   @Test
-  public void split_whenOneAttributeSingleMarks_expectOneAttribute() {
+  void split_whenOneAttributeSingleMarks_expectOneAttribute() {
     // when
     List<Pair<String, String>> pairs = tested.get("attribute='value'");
 
     // then
-    Assert.assertEquals(1, pairs.size());
-    Assert.assertEquals("attribute", pairs.get(0).getKey());
-    Assert.assertEquals("value", pairs.get(0).getValue());
+    assertEquals(1, pairs.size());
+    assertEquals("attribute", pairs.get(0).getKey());
+    assertEquals("value", pairs.get(0).getValue());
   }
 
   @Test
-  public void split_whenOneEmptyAttributeDoubleMarks_expectOneAttribute() {
+  void split_whenOneEmptyAttributeDoubleMarks_expectOneAttribute() {
     // when
     List<Pair<String, String>> pairs = tested.get("attribute=\"\"");
 
@@ -80,7 +82,7 @@ public class HtmlAttributesParserTest {
   }
 
   @Test
-  public void split_whenOneEmptyAttributeSingleMarks_expectOneAttribute() {
+  void split_whenOneEmptyAttributeSingleMarks_expectOneAttribute() {
     // when
     List<Pair<String, String>> pairs = tested.get("attribute=''");
 
@@ -89,69 +91,69 @@ public class HtmlAttributesParserTest {
   }
 
   @Test
-  public void split_whenOneAttributeWithDash_expectOneAttribute() {
+  void split_whenOneAttributeWithDash_expectOneAttribute() {
     // when
     List<Pair<String, String>> pairs = tested.get("a-t-t-r-i-b-u-t-e=\"value\"");
 
     // then
-    Assert.assertEquals(1, pairs.size());
-    Assert.assertEquals("a-t-t-r-i-b-u-t-e", pairs.get(0).getKey());
-    Assert.assertEquals("value", pairs.get(0).getValue());
+    assertEquals(1, pairs.size());
+    assertEquals("a-t-t-r-i-b-u-t-e", pairs.get(0).getKey());
+    assertEquals("value", pairs.get(0).getValue());
   }
 
   @Test
-  public void split_whenOneAttributeWithWhitespaces_expectOneAttribute() {
+  void split_whenOneAttributeWithWhitespaces_expectOneAttribute() {
     // when
     List<Pair<String, String>> pairs = tested.get("attribute=\"value with space\"");
 
     // then
-    Assert.assertEquals(1, pairs.size());
-    Assert.assertEquals("attribute", pairs.get(0).getKey());
-    Assert.assertEquals("value with space", pairs.get(0).getValue());
+    assertEquals(1, pairs.size());
+    assertEquals("attribute", pairs.get(0).getKey());
+    assertEquals("value with space", pairs.get(0).getValue());
   }
 
   @Test
-  public void split_whenOneJsonAttributeDoubleMarks_expectOneAttribute() {
+  void split_whenOneJsonAttributeDoubleMarks_expectOneAttribute() {
     // when
     List<Pair<String, String>> pairs = tested.get("attribute=\"{\\\"key\\\"=\\\"value\\\"}\"");
 
     // then
-    Assert.assertEquals(1, pairs.size());
-    Assert.assertEquals("attribute", pairs.get(0).getKey());
-    Assert.assertEquals("{\\\"key\\\"=\\\"value\\\"}", pairs.get(0).getValue());
+    assertEquals(1, pairs.size());
+    assertEquals("attribute", pairs.get(0).getKey());
+    assertEquals("{\\\"key\\\"=\\\"value\\\"}", pairs.get(0).getValue());
   }
 
   @Test
-  public void split_whenOneJsonAttributeSingleMarks_expectOneAttribute() {
+  void split_whenOneJsonAttributeSingleMarks_expectOneAttribute() {
     // when
     List<Pair<String, String>> pairs = tested.get("attribute='{\"key\"=\"value\"}'");
 
     // then
-    Assert.assertEquals(1, pairs.size());
-    Assert.assertEquals("attribute", pairs.get(0).getKey());
-    Assert.assertEquals("{\"key\"=\"value\"}", pairs.get(0).getValue());
+    assertEquals(1, pairs.size());
+    assertEquals("attribute", pairs.get(0).getKey());
+    assertEquals("{\"key\"=\"value\"}", pairs.get(0).getValue());
   }
 
   @Test
-  public void split_whenManyAttribute_expectManyAttributes() {
+  void split_whenManyAttribute_expectManyAttributes() {
     // when
     List<Pair<String, String>> pairs = tested.get(
         "attributeOne=\"{\\\"key\\\"=\\\"value\\\"}\" attributeTwo=\"valueTwo\" attributeThree=''");
 
     // then
-    Assert.assertEquals(3, pairs.size());
-    Assert.assertEquals("attributeOne", pairs.get(0).getKey());
-    Assert.assertEquals("{\\\"key\\\"=\\\"value\\\"}", pairs.get(0).getValue());
-    Assert.assertEquals("attributeTwo", pairs.get(1).getKey());
-    Assert.assertEquals("valueTwo", pairs.get(1).getValue());
-    Assert.assertEquals("attributeThree", pairs.get(2).getKey());
-    Assert.assertEquals("", pairs.get(2).getValue());
+    assertEquals(3, pairs.size());
+    assertEquals("attributeOne", pairs.get(0).getKey());
+    assertEquals("{\\\"key\\\"=\\\"value\\\"}", pairs.get(0).getValue());
+    assertEquals("attributeTwo", pairs.get(1).getKey());
+    assertEquals("valueTwo", pairs.get(1).getValue());
+    assertEquals("attributeThree", pairs.get(2).getKey());
+    assertEquals("", pairs.get(2).getValue());
   }
 
   private void assertEmptyAttribute(List<Pair<String, String>> pairs) {
-    Assert.assertEquals(1, pairs.size());
-    Assert.assertEquals("attribute", pairs.get(0).getKey());
-    Assert.assertTrue(pairs.get(0).getValue().isEmpty());
+    assertEquals(1, pairs.size());
+    assertEquals("attribute", pairs.get(0).getKey());
+    assertTrue(pairs.get(0).getValue().isEmpty());
   }
 
 }

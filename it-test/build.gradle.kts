@@ -30,7 +30,6 @@ dependencies {
     implementation(group = "io.vertx", name = "vertx-web-api-service")
     
     testImplementation("io.knotx:knotx-launcher")
-    testImplementation(group = "io.knotx", name = "knotx-launcher", classifier = "tests")
     testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")
 }
 

@@ -29,6 +29,8 @@ plugins {
 dependencies {
     api(project(":knotx-server-http-api"))
     implementation(group = "org.apache.commons", name = "commons-lang3")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
 }
 
 // -----------------------------------------------------------------------------

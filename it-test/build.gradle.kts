@@ -29,7 +29,7 @@ dependencies {
     implementation(project(":knotx-splitter-html"))
     implementation(group = "io.vertx", name = "vertx-web-api-service")
     
-    testImplementation("io.knotx:knotx-launcher")
+    testImplementation("io.knotx:knotx-launcher:${project.version}")
     testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")
 }
 

@@ -36,7 +36,7 @@ dependencies {
     testImplementation(group = "io.vertx", name = "vertx-auth-jwt")
     testImplementation(group = "io.vertx", name = "vertx-auth-shiro")
 
-    testImplementation("io.knotx:knotx-launcher")
+    testImplementation("io.knotx:knotx-launcher:${project.version}")
     testImplementation(group = "org.mockito", name = "mockito-core")
     testImplementation(group = "org.mockito", name = "mockito-junit-jupiter")
     testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")

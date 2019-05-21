@@ -34,6 +34,7 @@ handlers and HTTP Server implementation.
 responsible for extracting [`Fragments`](https://github.com/Knotx/knotx-fragment-api) from the template
 - [Assembler](https://github.com/Knotx/knotx-server-http/tree/master/assembler) handler that combines all
 processed [`Fragments`](https://github.com/Knotx/knotx-fragment-api) into the response body.
+- [Common](https://github.com/Knotx/knotx-server-http/tree/master/common) contains reusable helper methods grouped into modules (e.g. [Knot.x Server Common Placeholders](https://github.com/Knotx/knotx-server-http/tree/master/common/placeholders)).
 
 ## How does it work
 Knot.x HTTP Server is a [verticle](http://vertx.io/docs/apidocs/io/vertx/core/Verticle.html)

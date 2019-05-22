@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import org.gradle.api.Task
-import org.gradle.api.tasks.TaskProvider
-import org.gradle.kotlin.dsl.invoke
 
 val publishTask: TaskProvider<Task> = tasks.named("publish")
 val publishLocalTask: TaskProvider<Task> = tasks.named("publishToMavenLocal")

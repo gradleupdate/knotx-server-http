@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import org.gradle.api.Task
+import org.gradle.api.tasks.TaskProvider
+import org.gradle.kotlin.dsl.invoke
 
-plugins {
-    id("jacoco")
-    id("maven-publish")
-}
+val publishTask: TaskProvider<Task> = tasks.named("publish")
+val publishLocalTask: TaskProvider<Task> = tasks.named("publishToMavenLocal")
 
 subprojects {
-    group = "io.knotx"
-
-    repositories {
-        jcenter()
-        mavenLocal()
-        maven { url = uri("https://plugins.gradle.org/m2/") }
-        maven { url = uri("https://oss.sonatype.org/content/groups/staging/") }
-        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+    plugins.withId("maven-publish") {
+        publishTask {
+            dependsOn("${this@subprojects.path}:publish")
+        }
+        publishLocalTask {
+            dependsOn("${this@subprojects.path}:publishToMavenLocal")
+        }
     }
 }
-
-apply(from = "gradle/javaAndUnitTests.gradle.kts")
-apply(from = "gradle/jacoco.gradle.kts")
-apply(from = "gradle/compositeParentPublish.gradle.kts")

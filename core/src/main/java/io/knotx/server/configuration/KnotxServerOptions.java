@@ -35,8 +35,10 @@ public class KnotxServerOptions {
    * Default flag if to show the exceptions on error pages = false
    */
   private static final boolean DEFAULT_DISPLAY_EXCEPTIONS = false;
+  private static final boolean DEFAULT_HYSTRIX_METRICS = false;
 
   private boolean displayExceptionDetails;
+  private boolean enableHystrixMetrics;
   private HttpServerOptions serverOptions;
   private String routingSpecificationLocation;
   private List<RoutingHandlerOptions> globalHandlers;
@@ -58,6 +60,7 @@ public class KnotxServerOptions {
    */
   public KnotxServerOptions(KnotxServerOptions other) {
     this.displayExceptionDetails = other.displayExceptionDetails;
+    this.enableHystrixMetrics = other.enableHystrixMetrics;
     this.serverOptions = new HttpServerOptions(other.serverOptions);
     this.routingSpecificationLocation = other.routingSpecificationLocation;
     this.globalHandlers = new ArrayList<>(other.globalHandlers);
@@ -92,6 +95,7 @@ public class KnotxServerOptions {
 
   private void init() {
     displayExceptionDetails = DEFAULT_DISPLAY_EXCEPTIONS;
+    enableHystrixMetrics = DEFAULT_HYSTRIX_METRICS;
     globalHandlers = new ArrayList<>();
     securityHandlers = new ArrayList<>();
     serverOptions = new HttpServerOptions();
@@ -113,6 +117,24 @@ public class KnotxServerOptions {
    */
   public KnotxServerOptions setDisplayExceptionDetails(boolean displayExceptionDetails) {
     this.displayExceptionDetails = displayExceptionDetails;
+    return this;
+  }
+
+  /**
+   * @return whether to setup or not hystrix metrics
+   */
+  public boolean isEnableHystrixMetrics() {
+    return enableHystrixMetrics;
+  }
+
+  /**
+   * Set whether to setup or not hystrix metrics
+   *
+   * @param enableHystrixMetrics expose hystrics metrics if true
+   * @return reference to this, so the API can be used fluently
+   */
+  public KnotxServerOptions setEnableHystrixMetrics(boolean enableHystrixMetrics) {
+    this.enableHystrixMetrics = enableHystrixMetrics;
     return this;
   }
 

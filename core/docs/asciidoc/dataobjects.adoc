@@ -170,6 +170,9 @@ Set whether to display or not the exception on error pages
 |[[dropRequestOptions]]`@dropRequestOptions`|`link:dataobjects.html#DropRequestOptions[DropRequestOptions]`|+++
 Set the drop request options
 +++
+|[[enableHystrixMetrics]]`@enableHystrixMetrics`|`Boolean`|+++
+Set whether to setup or not hystrix metrics
++++
 |[[globalHandlers]]`@globalHandlers`|`Array of link:dataobjects.html#RoutingHandlerOptions[RoutingHandlerOptions]`|+++
 List of <code>RoutingHandlerOptions</code> containing handlers configurations which are initiated
  (loaded from classpath via <code>java.util.ServiceLoader</code>) during server setup and applied to

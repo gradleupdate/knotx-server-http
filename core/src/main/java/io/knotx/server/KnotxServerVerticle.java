@@ -60,7 +60,7 @@ public class KnotxServerVerticle extends AbstractVerticle {
         .doOnSuccess(routesProvider::configureRouting)
         .doOnSuccess(OpenAPI3RouterFactory::mountServicesFromExtensions)
         .map(OpenAPI3RouterFactory::getRouter)
-        .map(this::metrics)
+        .doOnSuccess(this::addHystrixMetrics)
         .doOnSuccess(this::logRouterRoutes)
         .flatMap(httpServerProvider::configureHttpServer)
         .subscribe(
@@ -76,12 +76,11 @@ public class KnotxServerVerticle extends AbstractVerticle {
         );
   }
 
-  private Router metrics(Router router) {
+  private void addHystrixMetrics(Router router) {
     HystrixMetricsOptions hystrixMetricsOptions = options.getHystrixMetricsOptions();
     if (hystrixMetricsOptions.isEnabled()) {
       router.get(hystrixMetricsOptions.getEndpoint()).handler(HystrixMetricHandler.create(vertx));
     }
-    return router;
   }
 
   private void logRouterRoutes(Router router) {

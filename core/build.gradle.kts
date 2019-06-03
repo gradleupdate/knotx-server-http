@@ -32,6 +32,7 @@ dependencies {
     implementation(group = "io.vertx", name = "vertx-web-api-service")
     implementation(group = "io.vertx", name = "vertx-web")
     implementation(group = "io.vertx", name = "vertx-web-client")
+    implementation(group = "io.vertx", name = "vertx-circuit-breaker")
 
     testImplementation(group = "io.vertx", name = "vertx-auth-jwt")
     testImplementation(group = "io.vertx", name = "vertx-auth-shiro")

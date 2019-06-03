@@ -15,6 +15,7 @@
  */
 package io.knotx.server;
 
+import io.knotx.server.configuration.HystrixMetricsOptions;
 import io.knotx.server.configuration.KnotxServerOptions;
 import io.vertx.core.Context;
 import io.vertx.core.Future;
@@ -76,7 +77,10 @@ public class KnotxServerVerticle extends AbstractVerticle {
   }
 
   private Router metrics(Router router) {
-    router.get("/hystrix-metrics").handler(HystrixMetricHandler.create(vertx));
+    HystrixMetricsOptions hystrixMetricsOptions = options.getHystrixMetricsOptions();
+    if (hystrixMetricsOptions.isEnabled()) {
+      router.get(hystrixMetricsOptions.getEndpoint()).handler(HystrixMetricHandler.create(vertx));
+    }
     return router;
   }
 

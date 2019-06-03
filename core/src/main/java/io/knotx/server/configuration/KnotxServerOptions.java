@@ -35,16 +35,15 @@ public class KnotxServerOptions {
    * Default flag if to show the exceptions on error pages = false
    */
   private static final boolean DEFAULT_DISPLAY_EXCEPTIONS = false;
-  private static final boolean DEFAULT_HYSTRIX_METRICS = false;
 
   private boolean displayExceptionDetails;
-  private boolean enableHystrixMetrics;
   private HttpServerOptions serverOptions;
   private String routingSpecificationLocation;
   private List<RoutingHandlerOptions> globalHandlers;
   private List<AuthHandlerOptions> securityHandlers;
   private List<RoutingOperationOptions> routingOperations;
   private DropRequestOptions dropRequestOptions;
+  private HystrixMetricsOptions hystrixMetricsOptions;
 
   /**
    * Default constructor
@@ -60,13 +59,13 @@ public class KnotxServerOptions {
    */
   public KnotxServerOptions(KnotxServerOptions other) {
     this.displayExceptionDetails = other.displayExceptionDetails;
-    this.enableHystrixMetrics = other.enableHystrixMetrics;
     this.serverOptions = new HttpServerOptions(other.serverOptions);
     this.routingSpecificationLocation = other.routingSpecificationLocation;
     this.globalHandlers = new ArrayList<>(other.globalHandlers);
     this.securityHandlers = new ArrayList<>(other.securityHandlers);
     this.routingOperations = new ArrayList<>(other.routingOperations);
     this.dropRequestOptions = other.dropRequestOptions;
+    this.hystrixMetricsOptions = other.hystrixMetricsOptions;
   }
 
   /**
@@ -95,11 +94,11 @@ public class KnotxServerOptions {
 
   private void init() {
     displayExceptionDetails = DEFAULT_DISPLAY_EXCEPTIONS;
-    enableHystrixMetrics = DEFAULT_HYSTRIX_METRICS;
     globalHandlers = new ArrayList<>();
     securityHandlers = new ArrayList<>();
     serverOptions = new HttpServerOptions();
     dropRequestOptions = new DropRequestOptions();
+    hystrixMetricsOptions = new HystrixMetricsOptions();
   }
 
   /**
@@ -117,24 +116,6 @@ public class KnotxServerOptions {
    */
   public KnotxServerOptions setDisplayExceptionDetails(boolean displayExceptionDetails) {
     this.displayExceptionDetails = displayExceptionDetails;
-    return this;
-  }
-
-  /**
-   * @return whether to setup or not hystrix metrics
-   */
-  public boolean isEnableHystrixMetrics() {
-    return enableHystrixMetrics;
-  }
-
-  /**
-   * Set whether to setup or not hystrix metrics
-   *
-   * @param enableHystrixMetrics expose hystrics metrics if true
-   * @return reference to this, so the API can be used fluently
-   */
-  public KnotxServerOptions setEnableHystrixMetrics(boolean enableHystrixMetrics) {
-    this.enableHystrixMetrics = enableHystrixMetrics;
     return this;
   }
 
@@ -251,7 +232,7 @@ public class KnotxServerOptions {
   }
 
   /**
-   * Set the drop request options
+   * Set the drop request options (see {@code DropRequestOptions})
    *
    * @param dropRequestOptions a {@code DropRequestOptions} configuration
    * @return reference to this, so the API can be used fluently
@@ -261,4 +242,32 @@ public class KnotxServerOptions {
     return this;
   }
 
+  public HystrixMetricsOptions getHystrixMetricsOptions() {
+    return hystrixMetricsOptions;
+  }
+
+  /**
+   * Set the Hystrix Metrics options (see {@code HystrixMetricsOptions}).
+   *
+   * @param hystrixMetricsOptions a {@code HystrixMetricsOptions} configuration
+   * @return to this, so the API can be used fluently
+   */
+  public KnotxServerOptions setHystrixMetricsOptions(HystrixMetricsOptions hystrixMetricsOptions) {
+    this.hystrixMetricsOptions = hystrixMetricsOptions;
+    return this;
+  }
+
+  @Override
+  public String toString() {
+    return "KnotxServerOptions{" +
+        "displayExceptionDetails=" + displayExceptionDetails +
+        ", serverOptions=" + serverOptions +
+        ", routingSpecificationLocation='" + routingSpecificationLocation + '\'' +
+        ", globalHandlers=" + globalHandlers +
+        ", securityHandlers=" + securityHandlers +
+        ", routingOperations=" + routingOperations +
+        ", dropRequestOptions=" + dropRequestOptions +
+        ", hystrixMetricsOptions=" + hystrixMetricsOptions +
+        '}';
+  }
 }

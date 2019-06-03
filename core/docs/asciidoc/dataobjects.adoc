@@ -152,6 +152,26 @@ Enabled/disables request dropping (backpressure) on heavy load. Default is true 
 +++
 |===
 
+[[HystrixMetricsOptions]]
+== HystrixMetricsOptions
+
+++++
+ Describes Knot.x Hystrix metrics options
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[enabled]]`@enabled`|`Boolean`|+++
+Enabled/disables Hystrix metrics exposed by Knot.x Server, by default - disabled.
++++
+|[[endpoint]]`@endpoint`|`String`|+++
+Sets Hystrix metrics endpoint under which it will expose the metrics. By default <code>/hystrix-metrics</code>
++++
+|===
+
 [[KnotxServerOptions]]
 == KnotxServerOptions
 
@@ -168,15 +188,15 @@ Enabled/disables request dropping (backpressure) on heavy load. Default is true 
 Set whether to display or not the exception on error pages
 +++
 |[[dropRequestOptions]]`@dropRequestOptions`|`link:dataobjects.html#DropRequestOptions[DropRequestOptions]`|+++
-Set the drop request options
-+++
-|[[enableHystrixMetrics]]`@enableHystrixMetrics`|`Boolean`|+++
-Set whether to setup or not hystrix metrics
+Set the drop request options (see <code>DropRequestOptions</code>)
 +++
 |[[globalHandlers]]`@globalHandlers`|`Array of link:dataobjects.html#RoutingHandlerOptions[RoutingHandlerOptions]`|+++
 List of <code>RoutingHandlerOptions</code> containing handlers configurations which are initiated
  (loaded from classpath via <code>java.util.ServiceLoader</code>) during server setup and applied to
  each route.
++++
+|[[hystrixMetricsOptions]]`@hystrixMetricsOptions`|`link:dataobjects.html#HystrixMetricsOptions[HystrixMetricsOptions]`|+++
+Set the Hystrix Metrics options (see <code>HystrixMetricsOptions</code>).
 +++
 |[[routingOperations]]`@routingOperations`|`Array of link:dataobjects.html#RoutingOperationOptions[RoutingOperationOptions]`|+++
 Set list of <code>RoutingOperationOptions</code>.

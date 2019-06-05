@@ -15,12 +15,14 @@
  */
 package io.knotx.server;
 
+import io.knotx.server.configuration.HystrixMetricsOptions;
 import io.knotx.server.configuration.KnotxServerOptions;
 import io.vertx.core.Context;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.reactivex.circuitbreaker.HystrixMetricHandler;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.api.contract.openapi3.OpenAPI3RouterFactory;
@@ -58,6 +60,7 @@ public class KnotxServerVerticle extends AbstractVerticle {
         .doOnSuccess(routesProvider::configureRouting)
         .doOnSuccess(OpenAPI3RouterFactory::mountServicesFromExtensions)
         .map(OpenAPI3RouterFactory::getRouter)
+        .doOnSuccess(this::addHystrixMetrics)
         .doOnSuccess(this::logRouterRoutes)
         .flatMap(httpServerProvider::configureHttpServer)
         .subscribe(
@@ -71,6 +74,13 @@ public class KnotxServerVerticle extends AbstractVerticle {
               fut.fail(error);
             }
         );
+  }
+
+  private void addHystrixMetrics(Router router) {
+    HystrixMetricsOptions hystrixMetricsOptions = options.getHystrixMetricsOptions();
+    if (hystrixMetricsOptions.isEnabled()) {
+      router.get(hystrixMetricsOptions.getEndpoint()).handler(HystrixMetricHandler.create(vertx));
+    }
   }
 
   private void logRouterRoutes(Router router) {

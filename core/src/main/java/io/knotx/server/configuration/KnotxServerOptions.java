@@ -43,6 +43,7 @@ public class KnotxServerOptions {
   private List<AuthHandlerOptions> securityHandlers;
   private List<RoutingOperationOptions> routingOperations;
   private DropRequestOptions dropRequestOptions;
+  private HystrixMetricsOptions hystrixMetricsOptions;
 
   /**
    * Default constructor
@@ -64,6 +65,7 @@ public class KnotxServerOptions {
     this.securityHandlers = new ArrayList<>(other.securityHandlers);
     this.routingOperations = new ArrayList<>(other.routingOperations);
     this.dropRequestOptions = other.dropRequestOptions;
+    this.hystrixMetricsOptions = other.hystrixMetricsOptions;
   }
 
   /**
@@ -96,6 +98,7 @@ public class KnotxServerOptions {
     securityHandlers = new ArrayList<>();
     serverOptions = new HttpServerOptions();
     dropRequestOptions = new DropRequestOptions();
+    hystrixMetricsOptions = new HystrixMetricsOptions();
   }
 
   /**
@@ -229,7 +232,7 @@ public class KnotxServerOptions {
   }
 
   /**
-   * Set the drop request options
+   * Set the drop request options (see {@code DropRequestOptions})
    *
    * @param dropRequestOptions a {@code DropRequestOptions} configuration
    * @return reference to this, so the API can be used fluently
@@ -239,4 +242,32 @@ public class KnotxServerOptions {
     return this;
   }
 
+  public HystrixMetricsOptions getHystrixMetricsOptions() {
+    return hystrixMetricsOptions;
+  }
+
+  /**
+   * Set the Hystrix Metrics options (see {@code HystrixMetricsOptions}).
+   *
+   * @param hystrixMetricsOptions a {@code HystrixMetricsOptions} configuration
+   * @return to this, so the API can be used fluently
+   */
+  public KnotxServerOptions setHystrixMetricsOptions(HystrixMetricsOptions hystrixMetricsOptions) {
+    this.hystrixMetricsOptions = hystrixMetricsOptions;
+    return this;
+  }
+
+  @Override
+  public String toString() {
+    return "KnotxServerOptions{" +
+        "displayExceptionDetails=" + displayExceptionDetails +
+        ", serverOptions=" + serverOptions +
+        ", routingSpecificationLocation='" + routingSpecificationLocation + '\'' +
+        ", globalHandlers=" + globalHandlers +
+        ", securityHandlers=" + securityHandlers +
+        ", routingOperations=" + routingOperations +
+        ", dropRequestOptions=" + dropRequestOptions +
+        ", hystrixMetricsOptions=" + hystrixMetricsOptions +
+        '}';
+  }
 }

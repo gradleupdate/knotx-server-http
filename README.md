@@ -209,8 +209,8 @@ config.server.options.config.globalHandlers = [
 Each `handler` is specified with [Routing Handler Options](/core/docs/asciidoc/dataobjects.adoc#routinghandleroptions).
 
 #### Access Logs
-To log every request incoming to the Knot.x HTTP Server setup [`LoggerHandler`]()
-as a [`globalHandler`](#global-handlers). Use `loggerHandler` factory and [`Access Log Options`]()
+To log every request incoming to the Knot.x HTTP Server setup [`LoggerHandler`](https://vertx.io/docs/apidocs/io/vertx/reactivex/ext/web/handler/LoggerHandler.html)
+as a [`globalHandler`](#global-handlers). Use `loggerHandler` factory and [`Access Log Options`](core/docs/asciidoc/dataobjects.adoc#accesslogoptions)
 structure in order to configure it to your needs.
 
 ```hocon
@@ -224,6 +224,9 @@ config.server.options.config.globalHandlers = [
   }
 ]
 ```
+
+By default, access logs are logged to the `knotx-access.log` in the logs directory. To find more about
+default logger configuration, please see [Knot.x Launcher logback settings](https://github.com/Knotx/knotx-launcher#logback-settings).
 
 Of course you may also use `loggerHandler` factory to log access to only specific routes via 
 [`routing operation`](core/docs/asciidoc/dataobjects.adoc#routingoperationoptions).

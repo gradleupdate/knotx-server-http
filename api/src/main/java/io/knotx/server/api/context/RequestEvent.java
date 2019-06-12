@@ -15,13 +15,8 @@
  */
 package io.knotx.server.api.context;
 
-import io.knotx.fragment.Fragment;
 import io.vertx.codegen.annotations.DataObject;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Contains information about currently processed request event.
@@ -30,31 +25,23 @@ import java.util.stream.Collectors;
 public class RequestEvent {
 
   private static final String CLIENT_REQUEST_KEY = "clientRequest";
-  private static final String FRAGMENTS_KEY = "fragments";
   private static final String PAYLOAD_KEY = "payload";
 
   private final ClientRequest clientRequest;
-  private final List<Fragment> fragments;
   private final JsonObject payload;
 
-  public RequestEvent(ClientRequest clientRequest, List<Fragment> fragments, JsonObject payload) {
+  public RequestEvent(ClientRequest clientRequest, JsonObject payload) {
     this.clientRequest = clientRequest;
-    this.fragments = fragments;
     this.payload = payload;
   }
 
   public RequestEvent(ClientRequest clientRequest) {
     this.clientRequest = clientRequest;
-    this.fragments = new ArrayList<>();
     this.payload = new JsonObject();
   }
 
   public RequestEvent(JsonObject json) {
     this.clientRequest = new ClientRequest(json.getJsonObject(CLIENT_REQUEST_KEY));
-    this.fragments = json.getJsonArray(FRAGMENTS_KEY).stream()
-        .map(JsonObject.class::cast)
-        .map(Fragment::new)
-        .collect(Collectors.toList());
     this.payload = json.getJsonObject(PAYLOAD_KEY);
   }
 
@@ -64,15 +51,6 @@ public class RequestEvent {
    */
   public ClientRequest getClientRequest() {
     return clientRequest;
-  }
-
-  /**
-   * List of {@code io.knotx.fragment.Fragment} that are processed in the scope of the current request.
-   *
-   * @return list of {@link Fragment} that are processed in the scope of the current request.
-   */
-  public List<Fragment> getFragments() {
-    return fragments;
   }
 
   /**
@@ -91,11 +69,8 @@ public class RequestEvent {
   }
 
   public JsonObject toJson() {
-    final JsonArray fragmentsArray = new JsonArray();
-    fragments.forEach(entry -> fragmentsArray.add(entry.toJson()));
     return new JsonObject()
         .put(CLIENT_REQUEST_KEY, clientRequest.toJson())
-        .put(FRAGMENTS_KEY, fragmentsArray)
         .put(PAYLOAD_KEY, payload);
   }
 
@@ -103,7 +78,6 @@ public class RequestEvent {
   public String toString() {
     return "RequestEvent{" +
         "clientRequest=" + clientRequest +
-        ", fragments=" + fragments +
         ", payload=" + payload +
         '}';
   }

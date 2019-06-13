@@ -27,7 +27,8 @@ plugins {
 // Dependencies
 // -----------------------------------------------------------------------------
 dependencies {
-    implementation(project(":knotx-server-http-api"))
+    api(project(":knotx-server-http-api"))
+    api("io.knotx:knotx-fragment-api:${project.version}")
 
     implementation(group = "org.apache.commons", name = "commons-lang3")
     testImplementation(group = "org.mockito", name = "mockito-core")

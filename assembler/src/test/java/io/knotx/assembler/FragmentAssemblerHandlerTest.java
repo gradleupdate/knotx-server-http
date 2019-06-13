@@ -17,6 +17,7 @@ package io.knotx.assembler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import io.knotx.fragment.Fragment;
 import io.knotx.server.api.context.ClientRequest;
@@ -26,7 +27,10 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.json.JsonObject;
+import io.vertx.reactivex.ext.web.RoutingContext;
 import java.util.Collections;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -38,14 +42,18 @@ public class FragmentAssemblerHandlerTest {
   @Mock
   private ClientRequest clientRequest;
 
+  @Mock
+  private RoutingContext routingContext;
+
   @Test
+  @DisplayName("Expect NO_CONTENT and empty body when no fragments in the routing context")
   public void callAssemblerWithNoFragments_expectNoContentStatus() {
     // given
     FragmentAssemblerHandler assemblerHandler = new FragmentAssemblerHandler();
     RequestEvent requestEvent = new RequestEvent(clientRequest);
 
     // when
-    final RequestEventHandlerResult result = assemblerHandler.handle(requestEvent);
+    RequestEventHandlerResult result = assemblerHandler.joinFragmentsBodies(routingContext, requestEvent);
 
     // then
     assertTrue(result.getRequestEvent().isPresent());
@@ -53,18 +61,20 @@ public class FragmentAssemblerHandlerTest {
   }
 
   @Test
+  @DisplayName("Expect OK and fragments body merged to client response body when fragments present in the routing context")
   public void callAssemblerWithFragment_expectAssemblerResultWithBodyAndOkStatus() {
     // given
-    String expectedBody = "<h1>Some text</h1>\n"
-        + "<p>Some text</p>";
+    String expectedBody = "<h1>Some text</h1>\n" + "<p>Some text</p>";
     FragmentAssemblerHandler assemblerHandler = new FragmentAssemblerHandler();
 
-    RequestEvent requestEvent = new RequestEvent(clientRequest,
-        Collections.singletonList(new Fragment("_STATIC", new JsonObject(), expectedBody)),
-        new JsonObject());
+    List<Fragment> fragments = Collections
+        .singletonList(new Fragment("_STATIC", new JsonObject(), expectedBody));
+    when(routingContext.get("fragments")).thenReturn(fragments);
+
+    RequestEvent requestEvent = new RequestEvent(clientRequest, new JsonObject());
 
     // when
-    final RequestEventHandlerResult result = assemblerHandler.handle(requestEvent);
+    RequestEventHandlerResult result = assemblerHandler.joinFragmentsBodies(routingContext, requestEvent);
 
     // then
     assertTrue(result.getRequestEvent().isPresent());

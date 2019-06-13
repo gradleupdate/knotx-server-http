@@ -28,6 +28,7 @@ import io.knotx.server.api.context.RequestEvent;
 import io.knotx.server.api.handler.RequestEventHandlerResult;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
+import io.vertx.reactivex.ext.web.RoutingContext;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +40,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class ClientResponseBodyExtractorTest {
+class SplitterHandlerTest {
 
   @Mock
   private RequestEvent requestEvent;
@@ -50,11 +51,14 @@ class ClientResponseBodyExtractorTest {
   @Mock
   private HtmlFragmentSplitter splitter;
 
-  private ClientResponseBodyExtractor tested;
+  @Mock
+  private RoutingContext routingContext;
+
+  private SplitterHandler tested;
 
   @BeforeEach
   void setUp() {
-    tested = new ClientResponseBodyExtractor(splitter);
+    tested = new SplitterHandler(splitter);
   }
 
   @Test
@@ -64,7 +68,8 @@ class ClientResponseBodyExtractorTest {
     when(clientResponse.getBody()).thenReturn(null);
 
     // when
-    final RequestEventHandlerResult result = tested.splitAndClearBody(requestEvent, clientResponse);
+    final RequestEventHandlerResult result = tested
+        .provideFragmentsAndClearBody(routingContext, requestEvent, clientResponse);
 
     // then
     assertEquals("Template body is missing!", result.getErrorMessage());
@@ -77,7 +82,8 @@ class ClientResponseBodyExtractorTest {
     when(clientResponse.getBody()).thenReturn(Buffer.buffer());
 
     // when
-    final RequestEventHandlerResult result = tested.splitAndClearBody(requestEvent, clientResponse);
+    final RequestEventHandlerResult result = tested
+        .provideFragmentsAndClearBody(routingContext, requestEvent, clientResponse);
 
     // then
     assertEquals("Template body is missing!", result.getErrorMessage());
@@ -101,12 +107,13 @@ class ClientResponseBodyExtractorTest {
     when(splitter.split("body content")).thenReturn(fragments);
 
     // when
-    final RequestEventHandlerResult result = tested.splitAndClearBody(requestEvent, clientResponse);
+    final RequestEventHandlerResult result = tested
+        .provideFragmentsAndClearBody(routingContext, requestEvent, clientResponse);
 
     // then
     assertTrue(result.getRequestEvent().isPresent());
     final RequestEvent requestEvent = result.getRequestEvent().get();
-    assertSame(fragments, requestEvent.getFragments());
+    verify(routingContext).put("fragments", fragments);
     assertSame(clientRequest, requestEvent.getClientRequest());
     assertEquals(payload, requestEvent.getPayload());
   }
@@ -120,7 +127,7 @@ class ClientResponseBodyExtractorTest {
     when(clientResponse.getBody()).thenReturn(buffer);
 
     // when
-    tested.splitAndClearBody(requestEvent, clientResponse);
+    tested.provideFragmentsAndClearBody(routingContext, requestEvent, clientResponse);
 
     // then
     verify(clientResponse).setBody(null);

@@ -16,23 +16,58 @@
 package io.knotx.assembler;
 
 import io.knotx.fragment.Fragment;
+import io.knotx.server.api.context.RequestContext;
 import io.knotx.server.api.context.RequestEvent;
-import io.knotx.server.api.handler.RequestEventHandler;
+import io.knotx.server.api.handler.DefaultRequestContextEngine;
+import io.knotx.server.api.handler.RequestContextEngine;
 import io.knotx.server.api.handler.RequestEventHandlerResult;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpHeaders;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.reactivex.core.MultiMap;
+import io.vertx.reactivex.ext.web.RoutingContext;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
-class FragmentAssemblerHandler extends RequestEventHandler {
+class FragmentAssemblerHandler implements Handler<RoutingContext> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(FragmentAssemblerHandler.class);
+  private static final String MISSING_FRAGMENTS_PAYLOAD = "Expected 'fragments' in the routing context are missing!";
+
+  private final RequestContextEngine engine;
+
+  FragmentAssemblerHandler() {
+    engine = new DefaultRequestContextEngine(getClass().getSimpleName());
+  }
 
   @Override
-  protected RequestEventHandlerResult handle(RequestEvent requestEvent) {
-    final String responseBody = requestEvent.getFragments().stream()
-        .map(Fragment::getBody)
-        .collect(Collectors.joining());
+  public void handle(RoutingContext context) {
+    RequestContext requestContext = context.get(RequestContext.KEY);
+    try {
+      RequestEventHandlerResult result = joinFragmentsBodies(context, requestContext.getRequestEvent());
+      engine.processAndSaveResult(result, context, requestContext);
+    } catch (Exception e) {
+      engine.handleFatal(context, requestContext, e);
+    }
+  }
+
+  RequestEventHandlerResult joinFragmentsBodies(RoutingContext context,
+      RequestEvent requestEvent) {
+    final List<Fragment> fragments = context.get("fragments");
+    final String responseBody;
+
+    if (fragments != null) {
+      responseBody = fragments.stream()
+          .map(Fragment::getBody)
+          .collect(Collectors.joining());
+    } else {
+      responseBody = "";
+      LOGGER.warn(MISSING_FRAGMENTS_PAYLOAD);
+    }
     return createSuccessResponse(requestEvent, responseBody);
   }
 

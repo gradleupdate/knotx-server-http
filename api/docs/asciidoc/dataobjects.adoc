@@ -87,9 +87,6 @@ Final <code>ClientResponse</code> object for this request context.
 |[[clientRequest]]`@clientRequest`|`link:dataobjects.html#ClientRequest[ClientRequest]`|+++
 Currently processed <code>ClientRequest</code> details.
 +++
-|[[fragments]]`@fragments`|`Array of link:dataobjects.html#Fragment[Fragment]`|+++
-List of <code>io.knotx.fragment.Fragment</code> that are processed in the scope of the current request.
-+++
 |[[payload]]`@payload`|`Json object`|+++
 A <code>JsonObject</code> that contains payload of currently processed request. It may contain any
  additional data that is added during processing of the Request.

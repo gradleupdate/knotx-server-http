@@ -16,26 +16,26 @@
 import org.nosphere.apache.rat.RatTask
 
 plugins {
-    id("java-library")
+    id("io.knotx.java-library")
+    id("io.knotx.codegen")
+    id("io.knotx.unit-test")
     id("org.nosphere.apache.rat") version "0.4.0"
 }
 
-// -----------------------------------------------------------------------------
-// Dependencies
-// -----------------------------------------------------------------------------
 dependencies {
+    implementation(platform("io.knotx:knotx-dependencies:${project.version}"))
+
     implementation(project(":knotx-server-http-core"))
     implementation(project(":knotx-assembler"))
     implementation(project(":knotx-splitter-html"))
+    implementation(group = "io.vertx", name = "vertx-core")
+    implementation(group = "io.vertx", name = "vertx-rx-java2")
     implementation(group = "io.vertx", name = "vertx-web-api-service")
     
     testImplementation("io.knotx:knotx-launcher:${project.version}")
     testImplementation(group = "io.rest-assured", name = "rest-assured", version = "3.3.0")
 }
 
-// -----------------------------------------------------------------------------
-// Tasks
-// -----------------------------------------------------------------------------
 tasks {
     named<RatTask>("rat") {
         excludes.addAll("**/build/*", "**/out/*", ".vertx/*")
@@ -43,12 +43,6 @@ tasks {
     getByName("build").dependsOn("rat")
 }
 
-sourceSets.named("main") {
-    java.srcDir("src/main/generated")
-}
 sourceSets.named("test") {
     resources.srcDir("../conf")
 }
-
-apply(from = "../gradle/common.deps.gradle.kts")
-apply(from = "../gradle/codegen.deps.gradle.kts")

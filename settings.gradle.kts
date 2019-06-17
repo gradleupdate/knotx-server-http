@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+pluginManagement {
+    repositories {
+        maven { url = uri("https://plugins.gradle.org/m2/") }
+        mavenLocal()
+    }
+}
+
 rootProject.name = "knotx-server-http"
 include("knotx-server-http-api")
 include("knotx-server-http-common-placeholders")

@@ -18,12 +18,7 @@ rootProject.name = "knotx-server-http"
 include("knotx-server-http-api")
 include("knotx-server-http-common-placeholders")
 include("knotx-server-http-core")
-include("knotx-splitter-html")
-include("knotx-assembler")
-include("it-test")
 
 project(":knotx-server-http-api").projectDir = file("api")
 project(":knotx-server-http-common-placeholders").projectDir = file("common/placeholders")
 project(":knotx-server-http-core").projectDir = file("core")
-project(":knotx-splitter-html").projectDir = file("splitter-html")
-project(":knotx-assembler").projectDir = file("assembler")

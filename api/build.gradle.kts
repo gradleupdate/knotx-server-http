@@ -26,8 +26,6 @@ plugins {
 
 dependencies {
     implementation(platform("io.knotx:knotx-dependencies:${project.version}"))
-    
-    api("io.knotx:knotx-fragment-api:${project.version}")
     implementation("io.knotx:knotx-commons:${project.version}")
     implementation(group = "io.vertx", name = "vertx-core")
     implementation(group = "io.vertx", name = "vertx-service-proxy")

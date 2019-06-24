@@ -21,11 +21,11 @@ import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-public class UriPlaceholderSubstitutor implements PlaceholderSubstitutor {
+public class UriPlaceholderSubstitutor implements PlaceholderSubstitutor<ClientRequest> {
 
-  private static final String URI_PREFIX = "uri.";
+  static final String URI_PREFIX = "uri.";
 
-  private static final String SLING_URI_PREFIX = "slingUri.";
+  static final String SLING_URI_PREFIX = "slingUri.";
 
   @Override
   public String getValue(ClientRequest request, String placeholder) {

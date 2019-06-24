@@ -23,6 +23,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.google.common.collect.Lists;
+
 public class PlaceholdersResolverReplaceTest {
 
   /**
@@ -103,7 +105,7 @@ public class PlaceholdersResolverReplaceTest {
     ClientRequest httpRequest = new ClientRequest().setHeaders(getHeadersMultiMap())
         .setParams(getParamsMultiMap()).setPath(requestedUri);
 
-    String finalUri = PlaceholdersResolver.resolve(servicePath, httpRequest);
+    String finalUri = PlaceholdersResolver.resolve(servicePath, Lists.newArrayList(httpRequest));
 
     Assertions.assertEquals(expectedUri, finalUri);
   }

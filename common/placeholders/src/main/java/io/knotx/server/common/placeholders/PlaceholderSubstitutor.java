@@ -15,18 +15,18 @@
  */
 package io.knotx.server.common.placeholders;
 
-import io.knotx.server.api.context.ClientRequest;
+import java.util.List;
 
 @FunctionalInterface
-public interface PlaceholderSubstitutor {
+public interface PlaceholderSubstitutor<T> {
 
   /**
-   * Get the replacement value from the supplied clientRequest and placeholder name
+   * Get the replacement value from the source and placeholder name
    *
-   * @param request the supplied clientRequest
+   * @param source the  source
    * @param placeholder the placeholder name
    * @return the replacement value, or null if no replacement can be get
    */
-  String getValue(ClientRequest request, String placeholder);
+  String getValue(T source, String placeholder);
 
 }

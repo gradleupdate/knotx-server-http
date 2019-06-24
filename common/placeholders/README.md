@@ -15,6 +15,15 @@ This module contains client request placeholders substitutors.
 - `{slingUri.selector[x]}` - is the client requests xth sling selector. For `x = 1` from `/a/b/c.sel.it.html/suffix.html?query` it will produce `it`
 - `{slingUri.extension}` - is the client requests sling extension. From `/a/b/c.sel.it.html/suffix.xml?query` it will produce `html`
 - `{slingUri.suffix}` - is the client requests sling suffix. From `/a/b/c.sel.it.html/suffix.html?query` it will produce `/suffix.html`
+- `{payload.thumbnail.extension}` - is the payload json value.
+
+    ```javascript
+    {
+      "thumbnail" : {
+        "extension" : "png"
+      }
+    }
+    ```
 
 All placeholders are always substituted with encoded values according to the RFC standard. However, there are two exceptions:
 - Space character is substituted by `%20` instead of `+`.

@@ -31,7 +31,9 @@ plugins {
 dependencies {
     implementation(platform("io.knotx:knotx-dependencies:${project.version}"))
     api(project(":knotx-server-http-api"))
+    implementation("io.knotx:knotx-commons:${project.version}")
     implementation(group = "org.apache.commons", name = "commons-lang3")
+    implementation(group = "com.google.guava", name = "guava")
 
     implementation(group = "io.vertx", name = "vertx-core")
     implementation(group = "io.vertx", name = "vertx-rx-java2")

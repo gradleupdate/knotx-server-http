@@ -15,18 +15,18 @@
  */
 package io.knotx.server.common.placeholders;
 
-import java.util.List;
+import static io.knotx.commons.json.JsonObjectUtil.getString;
 
-@FunctionalInterface
-public interface PlaceholderSubstitutor<T> {
+import org.apache.commons.lang3.StringUtils;
 
-  /**
-   * Get the replacement value from the source and placeholder name
-   *
-   * @param source the  source
-   * @param placeholder the placeholder name
-   * @return the replacement value, or null if no replacement can be get
-   */
-  String getValue(T source, String placeholder);
+import io.vertx.core.json.JsonObject;
 
+public class JsonPlaceholderSubstitutor implements PlaceholderSubstitutor<JsonObject> {
+
+  static final String PREFIX_PAYLOAD = "payload";
+
+  @Override
+  public String getValue(JsonObject source, String placeholder) {
+    return getString(StringUtils.substringAfter(placeholder, "."), source);
+  }
 }

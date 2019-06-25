@@ -16,21 +16,20 @@
 package io.knotx.server.common.placeholders;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 class PlaceholdersResolverConfigurationItem {
 
   private final List<PlaceholderSubstitutor> placeholderSubstitutor;
-  private final List<String> prefixes;
+  private final Set<String> prefixes;
 
   PlaceholdersResolverConfigurationItem(
-      List<PlaceholderSubstitutor> placeholderSubstitutor, List<String> prefixes) {
+      List<PlaceholderSubstitutor> placeholderSubstitutor, Set<String> prefixes) {
     this.placeholderSubstitutor = placeholderSubstitutor;
     this.prefixes = prefixes;
-  }
-
-  List<String> getPrefixes() {
-    return prefixes;
   }
 
   List<PlaceholderSubstitutor> getPlaceholderSubstitutors() {
@@ -44,7 +43,6 @@ class PlaceholdersResolverConfigurationItem {
   }
 
   private boolean startsWith(String placeholder) {
-    return prefixes.stream()
-        .anyMatch(placeholder::startsWith);
+    return prefixes.contains(StringUtils.substringBefore(placeholder, "."));
   }
 }

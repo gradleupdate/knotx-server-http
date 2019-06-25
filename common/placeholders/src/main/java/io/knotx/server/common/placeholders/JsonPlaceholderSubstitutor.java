@@ -23,7 +23,7 @@ import io.vertx.core.json.JsonObject;
 
 public class JsonPlaceholderSubstitutor implements PlaceholderSubstitutor<JsonObject> {
 
-  static final String PREFIX_PAYLOAD = "payload.";
+  static final String PREFIX_PAYLOAD = "payload";
 
   @Override
   public String getValue(JsonObject source, String placeholder) {

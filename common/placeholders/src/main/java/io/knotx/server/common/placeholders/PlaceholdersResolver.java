@@ -59,21 +59,21 @@ public final class PlaceholdersResolver {
     return resolved;
   }
 
-  private static String clearUnresolved(String resolved) {
-    List<String> unresolved = getPlaceholders(resolved);
-
-    for (String unreslvedPlaceholder : unresolved) {
-      resolved = replace(resolved, unreslvedPlaceholder, "");
-    }
-    return resolved;
-  }
-
   private static String resolve(String resolved, List<String> allPlaceholders, Object source,
       PlaceholdersResolverConfigurationItem configurationItem) {
     List<String> placeholders = configurationItem.getPlaceholdersForSource(allPlaceholders);
     for (String placeholder : placeholders) {
       resolved = replace(resolved, placeholder,
           getPlaceholderValue(source, configurationItem, placeholder));
+    }
+    return resolved;
+  }
+
+  private static String clearUnresolved(String resolved) {
+    List<String> unresolved = getPlaceholders(resolved);
+
+    for (String unreslvedPlaceholder : unresolved) {
+      resolved = replace(resolved, unreslvedPlaceholder, "");
     }
     return resolved;
   }

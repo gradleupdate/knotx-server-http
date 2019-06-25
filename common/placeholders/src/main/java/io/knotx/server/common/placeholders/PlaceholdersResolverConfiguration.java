@@ -15,9 +15,12 @@
  */
 package io.knotx.server.common.placeholders;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
+
 import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
 
 import io.knotx.server.api.context.ClientRequest;
 import io.vertx.core.json.JsonObject;
@@ -31,23 +34,22 @@ class PlaceholdersResolverConfiguration {
   }
 
   private Map<Class, PlaceholdersResolverConfigurationItem> init() {
-    Map map = new HashMap();
-    map.put(ClientRequest.class, initClientRequetSource());
-    map.put(JsonObject.class, initJsonObjectSource());
-
-    return map;
+    return ImmutableMap.<Class, PlaceholdersResolverConfigurationItem>builder()
+        .put(ClientRequest.class, initClientRequestSource())
+        .put(JsonObject.class, initJsonObjectSource())
+        .build();
   }
 
   private PlaceholdersResolverConfigurationItem initJsonObjectSource() {
     return new PlaceholdersResolverConfigurationItem(
-        Arrays.asList(new JsonPlaceholderSubstitutor()),
-        Arrays.asList(JsonPlaceholderSubstitutor.PREFIX_PAYLOAD));
+        newArrayList(new JsonPlaceholderSubstitutor()),
+        newHashSet((JsonPlaceholderSubstitutor.PREFIX_PAYLOAD)));
   }
 
-  private PlaceholdersResolverConfigurationItem initClientRequetSource() {
+  private PlaceholdersResolverConfigurationItem initClientRequestSource() {
     return new PlaceholdersResolverConfigurationItem(
-        Arrays.asList(new RequestPlaceholderSubstitutor(), new UriPlaceholderSubstitutor()),
-        Arrays.asList(UriPlaceholderSubstitutor.SLING_URI_PREFIX,
+        newArrayList(new RequestPlaceholderSubstitutor(), new UriPlaceholderSubstitutor()),
+        newHashSet(UriPlaceholderSubstitutor.SLING_URI_PREFIX,
             UriPlaceholderSubstitutor.URI_PREFIX, RequestPlaceholderSubstitutor.PREFIX_HEADER,
             RequestPlaceholderSubstitutor.PREFIX_PARAM));
   }

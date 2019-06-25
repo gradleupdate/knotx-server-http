@@ -15,14 +15,16 @@
  */
 package io.knotx.server.common.placeholders;
 
-import io.knotx.server.api.context.ClientRequest;
 import java.util.Arrays;
+
 import org.apache.commons.lang3.StringUtils;
+
+import io.knotx.server.api.context.ClientRequest;
 
 public class RequestPlaceholderSubstitutor implements PlaceholderSubstitutor<ClientRequest> {
 
-  static final String PREFIX_HEADER = "header.";
-  public static final String PREFIX_PARAM = "param.";
+  static final String PREFIX_HEADER = "header";
+  public static final String PREFIX_PARAM = "param";
 
   @Override
   public String getValue(final ClientRequest request, final String placeholder) {

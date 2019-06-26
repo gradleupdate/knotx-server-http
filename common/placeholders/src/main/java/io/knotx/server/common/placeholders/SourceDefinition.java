@@ -21,19 +21,25 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
-class PlaceholdersResolverConfigurationItem {
+class SourceDefinition<T> {
 
-  private final List<PlaceholderSubstitutor> placeholderSubstitutor;
+  private final T source;
   private final Set<String> prefixes;
+  private final Set<PlaceholderSubstitutor<T>> substitutors;
 
-  PlaceholdersResolverConfigurationItem(
-      List<PlaceholderSubstitutor> placeholderSubstitutor, Set<String> prefixes) {
-    this.placeholderSubstitutor = placeholderSubstitutor;
+  SourceDefinition(T source, Set<String> prefixes,
+      Set<PlaceholderSubstitutor<T>> substitutors) {
+    this.source = source;
     this.prefixes = prefixes;
+    this.substitutors = substitutors;
   }
 
-  List<PlaceholderSubstitutor> getPlaceholderSubstitutors() {
-    return placeholderSubstitutor;
+  T getSource() {
+    return source;
+  }
+
+  Set<PlaceholderSubstitutor<T>> getSubstitutors() {
+    return substitutors;
   }
 
   List<String> getPlaceholdersForSource(List<String> allPlaceholders) {

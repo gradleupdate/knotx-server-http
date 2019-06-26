@@ -32,26 +32,17 @@ public final class PlaceholdersResolver {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PlaceholdersResolver.class);
 
-  private static PlaceholdersResolverConfiguration configuration = new PlaceholdersResolverConfiguration();
-
   private PlaceholdersResolver() {
     // util
   }
 
-  public static String resolve(String stringWithPlaceholders, List<Object> sources) {
+  public static String resolve(String stringWithPlaceholders, SourceDefinitions sources) {
+
     String resolved = stringWithPlaceholders;
     List<String> allPlaceholders = getPlaceholders(stringWithPlaceholders);
 
-    for (Object source : sources) {
-      PlaceholdersResolverConfigurationItem configurationItem = configuration.getItem(
-          source.getClass());
-
-      if (configurationItem == null) {
-        continue;
-      }
-
-      resolved = resolve(resolved, allPlaceholders, source, configurationItem);
-
+    for (SourceDefinition sourceDefinition : sources.getSourceDefinitions()) {
+      resolved = resolve(resolved, allPlaceholders, sourceDefinition);
     }
 
     resolved = clearUnresolved(resolved);
@@ -59,12 +50,12 @@ public final class PlaceholdersResolver {
     return resolved;
   }
 
-  private static String resolve(String resolved, List<String> allPlaceholders, Object source,
-      PlaceholdersResolverConfigurationItem configurationItem) {
-    List<String> placeholders = configurationItem.getPlaceholdersForSource(allPlaceholders);
+  private static <T> String resolve(String resolved, List<String> allPlaceholders,
+      SourceDefinition<T> sourceDefinition) {
+    List<String> placeholders = sourceDefinition.getPlaceholdersForSource(allPlaceholders);
     for (String placeholder : placeholders) {
       resolved = replace(resolved, placeholder,
-          getPlaceholderValue(source, configurationItem, placeholder));
+          getPlaceholderValue(sourceDefinition, placeholder));
     }
     return resolved;
   }
@@ -91,11 +82,11 @@ public final class PlaceholdersResolver {
         .collect(Collectors.toList());
   }
 
-  private static <T> String getPlaceholderValue(T source,
-      PlaceholdersResolverConfigurationItem configurationItem, String placeholder) {
-    return configurationItem.getPlaceholderSubstitutors()
+  private static <T> String getPlaceholderValue(SourceDefinition<T> sourceDefinition,
+      String placeholder) {
+    return sourceDefinition.getSubstitutors()
         .stream()
-        .map(substitutor -> substitutor.getValue(source, placeholder))
+        .map(substitutor -> substitutor.getValue(sourceDefinition.getSource(), placeholder))
         .filter(Objects::nonNull)
         .findFirst()
         .orElse("");

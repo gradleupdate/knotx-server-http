@@ -15,7 +15,7 @@
  */
 package io.knotx.server.common.placeholders;
 
-public class SlingUriInfo {
+class SlingUriInfo {
 
   private String path;
 

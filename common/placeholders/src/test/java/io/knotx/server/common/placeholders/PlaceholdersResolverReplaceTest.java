@@ -15,15 +15,15 @@
  */
 package io.knotx.server.common.placeholders;
 
-import io.knotx.server.api.context.ClientRequest;
-import io.vertx.reactivex.core.MultiMap;
 import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.google.common.collect.Lists;
+import io.knotx.server.api.context.ClientRequest;
+import io.vertx.reactivex.core.MultiMap;
 
 public class PlaceholdersResolverReplaceTest {
 
@@ -103,9 +103,13 @@ public class PlaceholdersResolverReplaceTest {
   public void getServiceUri_whenGivenUriWithPlaceholdersAndMockedRequest_expectPlaceholdersSubstitutedWithValues(
       String servicePath, String requestedUri, String expectedUri) {
     ClientRequest httpRequest = new ClientRequest().setHeaders(getHeadersMultiMap())
-        .setParams(getParamsMultiMap()).setPath(requestedUri);
+        .setParams(getParamsMultiMap())
+        .setPath(requestedUri);
 
-    String finalUri = PlaceholdersResolver.resolve(servicePath, Lists.newArrayList(httpRequest));
+    SourceDefinitions sourceDefinitions = SourceDefinitions.builder()
+        .addClientRequestSource(httpRequest)
+        .build();
+    String finalUri = PlaceholdersResolver.resolve(servicePath, sourceDefinitions);
 
     Assertions.assertEquals(expectedUri, finalUri);
   }

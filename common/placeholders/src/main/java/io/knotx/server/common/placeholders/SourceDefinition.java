@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.knotx.server.common.placeholders.configuration;
+package io.knotx.server.common.placeholders;
 
 import java.util.List;
 import java.util.Set;
@@ -21,24 +21,28 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
-import io.knotx.server.common.placeholders.PlaceholderSubstitutor;
+class SourceDefinition<T> {
 
-public class PlaceholdersResolverConfigurationItem {
-
-  private final List<PlaceholderSubstitutor> placeholderSubstitutor;
+  private final T source;
   private final Set<String> prefixes;
+  private final Set<PlaceholderSubstitutor<T>> substitutors;
 
-  PlaceholdersResolverConfigurationItem(
-      List<PlaceholderSubstitutor> placeholderSubstitutor, Set<String> prefixes) {
-    this.placeholderSubstitutor = placeholderSubstitutor;
+  SourceDefinition(T source, Set<String> prefixes,
+      Set<PlaceholderSubstitutor<T>> substitutors) {
+    this.source = source;
     this.prefixes = prefixes;
+    this.substitutors = substitutors;
   }
 
-  public List<PlaceholderSubstitutor> getPlaceholderSubstitutors() {
-    return placeholderSubstitutor;
+  T getSource() {
+    return source;
   }
 
-  public List<String> getPlaceholdersForSource(List<String> allPlaceholders) {
+  Set<PlaceholderSubstitutor<T>> getSubstitutors() {
+    return substitutors;
+  }
+
+  List<String> getPlaceholdersForSource(List<String> allPlaceholders) {
     return allPlaceholders.stream()
         .filter(this::startsWith)
         .collect(Collectors.toList());

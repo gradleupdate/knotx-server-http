@@ -25,10 +25,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
-import io.knotx.server.common.placeholders.configuration.PlaceholdersResolverConfiguration;
-import io.knotx.server.common.placeholders.configuration.PlaceholdersResolverConfigurationItem;
-import io.knotx.server.common.placeholders.configuration.SourceDefinition;
-import io.knotx.server.common.placeholders.configuration.SourceDefinitions;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
@@ -41,23 +37,12 @@ public final class PlaceholdersResolver {
   }
 
   public static String resolve(String stringWithPlaceholders, SourceDefinitions sources) {
-    PlaceholdersResolverConfiguration configuration = PlaceholdersResolverConfiguration.fromSourceDefinitions(
-        sources);
 
     String resolved = stringWithPlaceholders;
     List<String> allPlaceholders = getPlaceholders(stringWithPlaceholders);
 
     for (SourceDefinition sourceDefinition : sources.getSourceDefinitions()) {
-      PlaceholdersResolverConfigurationItem configurationItem = configuration.getItem(
-          sourceDefinition.getSourceClass());
-
-      if (configurationItem == null) {
-        continue;
-      }
-
-      resolved = resolve(resolved, allPlaceholders, sourceDefinition.getSource(),
-          configurationItem);
-
+      resolved = resolve(resolved, allPlaceholders, sourceDefinition);
     }
 
     resolved = clearUnresolved(resolved);
@@ -65,12 +50,12 @@ public final class PlaceholdersResolver {
     return resolved;
   }
 
-  private static String resolve(String resolved, List<String> allPlaceholders, Object source,
-      PlaceholdersResolverConfigurationItem configurationItem) {
-    List<String> placeholders = configurationItem.getPlaceholdersForSource(allPlaceholders);
+  private static <T> String resolve(String resolved, List<String> allPlaceholders,
+      SourceDefinition<T> sourceDefinition) {
+    List<String> placeholders = sourceDefinition.getPlaceholdersForSource(allPlaceholders);
     for (String placeholder : placeholders) {
       resolved = replace(resolved, placeholder,
-          getPlaceholderValue(source, configurationItem, placeholder));
+          getPlaceholderValue(sourceDefinition, placeholder));
     }
     return resolved;
   }
@@ -97,11 +82,11 @@ public final class PlaceholdersResolver {
         .collect(Collectors.toList());
   }
 
-  private static <T> String getPlaceholderValue(T source,
-      PlaceholdersResolverConfigurationItem configurationItem, String placeholder) {
-    return configurationItem.getPlaceholderSubstitutors()
+  private static <T> String getPlaceholderValue(SourceDefinition<T> sourceDefinition,
+      String placeholder) {
+    return sourceDefinition.getSubstitutors()
         .stream()
-        .map(substitutor -> substitutor.getValue(source, placeholder))
+        .map(substitutor -> substitutor.getValue(sourceDefinition.getSource(), placeholder))
         .filter(Objects::nonNull)
         .findFirst()
         .orElse("");

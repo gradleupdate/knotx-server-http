@@ -15,8 +15,8 @@
  */
 package io.knotx.server.common.placeholders;
 
-import static io.knotx.server.common.placeholders.configuration.SourceDefinitions.PREFIX_REQUEST_HEADER;
-import static io.knotx.server.common.placeholders.configuration.SourceDefinitions.PREFIX_REQUEST_PARAM;
+import static io.knotx.server.common.placeholders.SourceDefinitions.PREFIX_REQUEST_HEADER;
+import static io.knotx.server.common.placeholders.SourceDefinitions.PREFIX_REQUEST_PARAM;
 
 import java.util.Arrays;
 
@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import io.knotx.server.api.context.ClientRequest;
 
-public class RequestPlaceholderSubstitutor implements PlaceholderSubstitutor<ClientRequest> {
+class RequestPlaceholderSubstitutor implements PlaceholderSubstitutor<ClientRequest> {
 
   @Override
   public String getValue(final ClientRequest request, final String placeholder) {

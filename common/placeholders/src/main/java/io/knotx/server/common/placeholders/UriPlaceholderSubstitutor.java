@@ -15,8 +15,8 @@
  */
 package io.knotx.server.common.placeholders;
 
-import static io.knotx.server.common.placeholders.configuration.SourceDefinitions.SLING_URI_PREFIX;
-import static io.knotx.server.common.placeholders.configuration.SourceDefinitions.URI_PREFIX;
+import static io.knotx.server.common.placeholders.SourceDefinitions.SLING_URI_PREFIX;
+import static io.knotx.server.common.placeholders.SourceDefinitions.URI_PREFIX;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -26,7 +26,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import io.knotx.server.api.context.ClientRequest;
 
-public class UriPlaceholderSubstitutor implements PlaceholderSubstitutor<ClientRequest> {
+class UriPlaceholderSubstitutor implements PlaceholderSubstitutor<ClientRequest> {
   @Override
   public String getValue(ClientRequest request, String placeholder) {
     return Arrays.stream(Strategy.values())

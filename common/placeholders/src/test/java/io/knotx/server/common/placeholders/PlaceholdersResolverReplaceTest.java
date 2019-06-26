@@ -23,7 +23,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import io.knotx.server.api.context.ClientRequest;
-import io.knotx.server.common.placeholders.configuration.SourceDefinitions;
 import io.vertx.reactivex.core.MultiMap;
 
 public class PlaceholdersResolverReplaceTest {

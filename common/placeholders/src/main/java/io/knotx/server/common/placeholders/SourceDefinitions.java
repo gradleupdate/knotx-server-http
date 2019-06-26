@@ -13,46 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.knotx.server.common.placeholders.configuration;
+package io.knotx.server.common.placeholders;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static java.util.stream.Collectors.toList;
 
-import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 import io.knotx.server.api.context.ClientRequest;
 import io.vertx.core.json.JsonObject;
 
 public class SourceDefinitions {
 
-  public static final String PREFIX_REQUEST_HEADER = "header";
-  public static final String PREFIX_REQUEST_PARAM = "param";
+  static final String PREFIX_REQUEST_HEADER = "header";
+  static final String PREFIX_REQUEST_PARAM = "param";
 
-  public static final String URI_PREFIX = "uri";
-  public static final String SLING_URI_PREFIX = "slingUri";
+  static final String URI_PREFIX = "uri";
+  static final String SLING_URI_PREFIX = "slingUri";
 
-  private final Set<SourceDefinition> sourceDefinitions;
+  private final Set<SourceDefinition> definitions;
 
   private SourceDefinitions(
-      Set<SourceDefinition> sourceDefinitions) {
-    this.sourceDefinitions = ImmutableSet.copyOf(sourceDefinitions);
+      Set<SourceDefinition> definitions) {
+    this.definitions = ImmutableSet.copyOf(definitions);
   }
 
-  public Set<SourceDefinition> getSourceDefinitions() {
-    return sourceDefinitions;
-  }
-
-  <T> List<SourceDefinition> getSourceDefinitionsByClass(Class<T> clazz) {
-    return sourceDefinitions.stream()
-        .filter(sourceDefinition -> sourceDefinition.getSourceClass()
-            .equals(clazz))
-        .collect(
-            toList());
-
+  Set<SourceDefinition> getSourceDefinitions() {
+    return definitions;
   }
 
   public static Builder builder() {
@@ -63,21 +51,21 @@ public class SourceDefinitions {
 
     private Set<SourceDefinition> sourceDefinitions;
 
-    public Builder() {
-      this.sourceDefinitions = Sets.newHashSet();
+    Builder() {
+      this.sourceDefinitions = newHashSet();
     }
 
     public Builder addClientRequestSource(ClientRequest source) {
-      SourceDefinition<ClientRequest> sourceDefinition = new SourceDefinition<>(ClientRequest.class,
+      SourceDefinition<ClientRequest> sourceDefinition = new SourceDefinition<>(
           source,
-          getClientRequestPrefixes());
+          getClientRequestPrefixes(), getClientRequestPlaceholderSubstitutor());
       sourceDefinitions.add(sourceDefinition);
       return this;
     }
 
     public Builder addJsonObjectSource(JsonObject source, String prefix) {
-      SourceDefinition<JsonObject> sourceDefinition = new SourceDefinition<>(JsonObject.class,
-          source, Sets.newHashSet(prefix));
+      SourceDefinition<JsonObject> sourceDefinition = new SourceDefinition<>(source,
+          newHashSet(prefix), newHashSet(new JsonPlaceholderSubstitutor()));
       sourceDefinitions.add(sourceDefinition);
       return this;
     }
@@ -88,6 +76,10 @@ public class SourceDefinitions {
 
     private Set<String> getClientRequestPrefixes() {
       return newHashSet(SLING_URI_PREFIX, URI_PREFIX, PREFIX_REQUEST_HEADER, PREFIX_REQUEST_PARAM);
+    }
+
+    private Set<PlaceholderSubstitutor<ClientRequest>> getClientRequestPlaceholderSubstitutor() {
+      return newHashSet(new RequestPlaceholderSubstitutor(), new UriPlaceholderSubstitutor());
     }
   }
 }

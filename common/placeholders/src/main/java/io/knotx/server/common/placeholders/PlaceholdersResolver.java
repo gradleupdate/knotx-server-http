@@ -25,6 +25,10 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
+import io.knotx.server.common.placeholders.configuration.PlaceholdersResolverConfiguration;
+import io.knotx.server.common.placeholders.configuration.PlaceholdersResolverConfigurationItem;
+import io.knotx.server.common.placeholders.configuration.SourceDefinition;
+import io.knotx.server.common.placeholders.configuration.SourceDefinitions;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
@@ -32,25 +36,27 @@ public final class PlaceholdersResolver {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PlaceholdersResolver.class);
 
-  private static PlaceholdersResolverConfiguration configuration = new PlaceholdersResolverConfiguration();
-
   private PlaceholdersResolver() {
     // util
   }
 
-  public static String resolve(String stringWithPlaceholders, List<Object> sources) {
+  public static String resolve(String stringWithPlaceholders, SourceDefinitions sources) {
+    PlaceholdersResolverConfiguration configuration = PlaceholdersResolverConfiguration.fromSourceDefinitions(
+        sources);
+
     String resolved = stringWithPlaceholders;
     List<String> allPlaceholders = getPlaceholders(stringWithPlaceholders);
 
-    for (Object source : sources) {
+    for (SourceDefinition sourceDefinition : sources.getSourceDefinitions()) {
       PlaceholdersResolverConfigurationItem configurationItem = configuration.getItem(
-          source.getClass());
+          sourceDefinition.getSourceClass());
 
       if (configurationItem == null) {
         continue;
       }
 
-      resolved = resolve(resolved, allPlaceholders, source, configurationItem);
+      resolved = resolve(resolved, allPlaceholders, sourceDefinition.getSource(),
+          configurationItem);
 
     }
 

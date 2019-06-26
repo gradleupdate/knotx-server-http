@@ -32,6 +32,14 @@ public class SourceDefinitions {
   static final String URI_PREFIX = "uri";
   static final String SLING_URI_PREFIX = "slingUri";
 
+  private static final Set<String> CLIENT_REQUEST_PREFIXES = ImmutableSet.<String>builder()
+      .add(SLING_URI_PREFIX, URI_PREFIX, PREFIX_REQUEST_HEADER, PREFIX_REQUEST_PARAM)
+      .build();
+
+  private static final Set<PlaceholderSubstitutor<ClientRequest>> CLIENT_REQUEST_SUBSTITUTOR = ImmutableSet.<PlaceholderSubstitutor<ClientRequest>>builder().add(
+      new RequestPlaceholderSubstitutor(), new UriPlaceholderSubstitutor())
+      .build();
+
   private final Set<SourceDefinition> definitions;
 
   private SourceDefinitions(
@@ -57,8 +65,7 @@ public class SourceDefinitions {
 
     public Builder addClientRequestSource(ClientRequest source) {
       SourceDefinition<ClientRequest> sourceDefinition = new SourceDefinition<>(
-          source,
-          getClientRequestPrefixes(), getClientRequestPlaceholderSubstitutor());
+          source, CLIENT_REQUEST_PREFIXES, CLIENT_REQUEST_SUBSTITUTOR);
       sourceDefinitions.add(sourceDefinition);
       return this;
     }
@@ -72,14 +79,6 @@ public class SourceDefinitions {
 
     public SourceDefinitions build() {
       return new SourceDefinitions(sourceDefinitions);
-    }
-
-    private Set<String> getClientRequestPrefixes() {
-      return newHashSet(SLING_URI_PREFIX, URI_PREFIX, PREFIX_REQUEST_HEADER, PREFIX_REQUEST_PARAM);
-    }
-
-    private Set<PlaceholderSubstitutor<ClientRequest>> getClientRequestPlaceholderSubstitutor() {
-      return newHashSet(new RequestPlaceholderSubstitutor(), new UriPlaceholderSubstitutor());
     }
   }
 }

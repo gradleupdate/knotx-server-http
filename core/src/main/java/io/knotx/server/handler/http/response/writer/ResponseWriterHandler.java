@@ -40,11 +40,11 @@ class ResponseWriterHandler implements Handler<RoutingContext> {
     RequestContext requestContext = context.get(RequestContext.KEY);
     traceRequest(requestContext);
     try {
+      HttpServerResponse httpResponse = context.response();
       final ServerResponse serverResponse = new ServerResponse(requestContext);
+      serverResponse.end(httpResponse, allowedResponseHeaders);
 
-      if (serverResponse.isNotEmptyBody()) {
-        serverResponse.end(context.response(), allowedResponseHeaders);
-      } else {
+      if (httpResponse.bytesWritten() == 0) {
         handleEmpty(context);
       }
 
@@ -59,19 +59,17 @@ class ResponseWriterHandler implements Handler<RoutingContext> {
     }
   }
 
-  private void handleWithStatusCode(RoutingContext context, int statusCode) {
-    HttpServerResponse httpResponse = context.response();
-    httpResponse.setStatusCode(statusCode);
-    httpResponse.end();
-  }
 
   private void handleEmpty(RoutingContext context) {
-    handleWithStatusCode(context, HttpResponseStatus.NO_CONTENT.code());
+    HttpServerResponse httpResponse = context.response();
+    httpResponse.setStatusCode(HttpResponseStatus.NO_CONTENT.code());
   }
 
   private void handleFatal(RoutingContext context, Exception e) {
     LOGGER.error("Fatal error", e);
-    handleWithStatusCode(context, HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+    HttpServerResponse httpResponse = context.response();
+    httpResponse.setStatusCode(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+    httpResponse.end();
   }
 
 }

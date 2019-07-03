@@ -53,11 +53,6 @@ class ServerResponse {
     }
   }
 
-  boolean isNotEmptyBody() {
-    return getBody().map(buffer -> buffer.length() > 0)
-        .orElse(false);
-  }
-
   /*
    * Removes content-length from the final response after writing headers from the client response.
    * The length that was in client response might come from the repository and is almost always

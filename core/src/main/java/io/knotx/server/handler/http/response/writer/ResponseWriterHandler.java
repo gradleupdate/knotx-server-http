@@ -15,6 +15,8 @@
  */
 package io.knotx.server.handler.http.response.writer;
 
+import java.util.Set;
+
 import io.knotx.server.api.context.RequestContext;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
@@ -22,7 +24,6 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.reactivex.core.http.HttpServerResponse;
 import io.vertx.reactivex.ext.web.RoutingContext;
-import java.util.Set;
 
 class ResponseWriterHandler implements Handler<RoutingContext> {
 
@@ -40,7 +41,13 @@ class ResponseWriterHandler implements Handler<RoutingContext> {
     traceRequest(requestContext);
     try {
       final ServerResponse serverResponse = new ServerResponse(requestContext);
-      serverResponse.end(context.response(), allowedResponseHeaders);
+
+      if (serverResponse.isNotEmptyBody()) {
+        serverResponse.end(context.response(), allowedResponseHeaders);
+      } else {
+        handleEmpty(context);
+      }
+
     } catch (Exception e) {
       handleFatal(context, e);
     }
@@ -52,11 +59,19 @@ class ResponseWriterHandler implements Handler<RoutingContext> {
     }
   }
 
+  private void handleWithStatusCode(RoutingContext context, int statusCode) {
+    HttpServerResponse httpResponse = context.response();
+    httpResponse.setStatusCode(statusCode);
+    httpResponse.end();
+  }
+
+  private void handleEmpty(RoutingContext context) {
+    handleWithStatusCode(context, HttpResponseStatus.NO_CONTENT.code());
+  }
+
   private void handleFatal(RoutingContext context, Exception e) {
     LOGGER.error("Fatal error", e);
-    HttpServerResponse httpResponse = context.response();
-    httpResponse.setStatusCode(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
-    httpResponse.end();
+    handleWithStatusCode(context, HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
   }
 
 }

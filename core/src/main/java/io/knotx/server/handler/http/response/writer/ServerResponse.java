@@ -15,6 +15,9 @@
  */
 package io.knotx.server.handler.http.response.writer;
 
+import java.util.Optional;
+import java.util.Set;
+
 import io.knotx.server.api.context.ClientResponse;
 import io.knotx.server.api.context.RequestContext;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -23,8 +26,6 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.reactivex.core.MultiMap;
 import io.vertx.reactivex.core.http.HttpServerResponse;
-import java.util.Optional;
-import java.util.Set;
 
 class ServerResponse {
 
@@ -39,7 +40,8 @@ class ServerResponse {
   void end(HttpServerResponse httpResponse, Set<String> allowedResponseHeaders) {
     httpResponse.setStatusCode(getStatusCode());
     if (ok) {
-      httpResponse.headers().addAll(getHeaders(allowedResponseHeaders));
+      httpResponse.headers()
+          .addAll(getHeaders(allowedResponseHeaders));
       clearContentLengthHeader(httpResponse);
       if (getBody().isPresent()) {
         httpResponse.end(getBody().get());
@@ -58,7 +60,8 @@ class ServerResponse {
    * be automatically calculated by the httpResponse.
    */
   private void clearContentLengthHeader(HttpServerResponse httpResponse) {
-    httpResponse.headers().remove(HttpHeaders.CONTENT_LENGTH.toString());
+    httpResponse.headers()
+        .remove(HttpHeaders.CONTENT_LENGTH.toString());
   }
 
   private int getStatusCode() {
@@ -75,7 +78,9 @@ class ServerResponse {
   private MultiMap getHeaders(Set<String> allowedResponseHeaders) {
     MultiMap headers = MultiMap.caseInsensitiveMultiMap();
     if (clientResponse.getHeaders() != null) {
-      clientResponse.getHeaders().names().stream()
+      clientResponse.getHeaders()
+          .names()
+          .stream()
           .filter(header -> headerFilter(allowedResponseHeaders, header))
           .forEach(
               name ->
@@ -97,7 +102,8 @@ class ServerResponse {
   }
 
   private static boolean isOk(RequestContext requestContext) {
-    return !requestContext.getStatus().isFailed();
+    return !requestContext.getStatus()
+        .isFailed();
   }
 
   private Boolean headerFilter(Set<String> allowedResponseHeaders, String name) {

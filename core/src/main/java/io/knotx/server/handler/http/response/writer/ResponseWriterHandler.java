@@ -15,6 +15,8 @@
  */
 package io.knotx.server.handler.http.response.writer;
 
+import java.util.Set;
+
 import io.knotx.server.api.context.RequestContext;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
@@ -22,7 +24,6 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.reactivex.core.http.HttpServerResponse;
 import io.vertx.reactivex.ext.web.RoutingContext;
-import java.util.Set;
 
 class ResponseWriterHandler implements Handler<RoutingContext> {
 
@@ -39,8 +40,14 @@ class ResponseWriterHandler implements Handler<RoutingContext> {
     RequestContext requestContext = context.get(RequestContext.KEY);
     traceRequest(requestContext);
     try {
+      HttpServerResponse httpResponse = context.response();
       final ServerResponse serverResponse = new ServerResponse(requestContext);
-      serverResponse.end(context.response(), allowedResponseHeaders);
+      serverResponse.end(httpResponse, allowedResponseHeaders);
+
+      if (httpResponse.bytesWritten() == 0) {
+        handleEmpty(context);
+      }
+
     } catch (Exception e) {
       handleFatal(context, e);
     }
@@ -50,6 +57,12 @@ class ResponseWriterHandler implements Handler<RoutingContext> {
     if (LOGGER.isTraceEnabled()) {
       LOGGER.trace("Request history: {}", requestContext.toJson().encodePrettily());
     }
+  }
+
+
+  private void handleEmpty(RoutingContext context) {
+    HttpServerResponse httpResponse = context.response();
+    httpResponse.setStatusCode(HttpResponseStatus.NO_CONTENT.code());
   }
 
   private void handleFatal(RoutingContext context, Exception e) {

@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/knotx/Knotx/_apis/build/status/Knotx.knotx-server-http?branchName=master)](https://dev.azure.com/knotx/Knotx/_build/latest?definitionId=8&branchName=master)
+
 # Knot.x HTTP Server
 Server is essentially a "heart" of Knot.x. It's scalable (vertically and horizontally), 
 plugable (easy to extend), fault-tolerant 

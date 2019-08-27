@@ -182,7 +182,7 @@ config.server.options.config.securityHandlers = [
 ]
 ```
 
-Also, you need to implement [`AuthHandlerFactory`](api#creating-auth-handler).
+Also, you need to implement and **register** [`AuthHandlerFactory`](api#creating-auth-handler).
 For the example above:
  - `name` would be `myBasicAuthHandlerFactory`
 

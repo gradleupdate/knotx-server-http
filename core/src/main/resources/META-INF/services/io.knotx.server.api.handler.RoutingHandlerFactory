@@ -16,7 +16,6 @@
 io.knotx.server.handler.csrf.CSRFHandlerFactory
 io.knotx.server.handler.logger.AccessLogRoutingHandlerFactory
 io.knotx.server.handler.http.request.body.BodyRoutingHandlerFactory
-io.knotx.server.handler.http.response.cookie.CookieRoutingHandlerFactory
 io.knotx.server.handler.failure.ErrorRoutingHandlerFactory
 
 # Knot.x handlers

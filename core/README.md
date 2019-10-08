@@ -12,7 +12,6 @@ This module contains also some basic handlers implementations with factories:
 - `RequestContextRoutingHandler` - creates [`RequestContext`](https://github.com/Knotx/knotx-server-http/blob/master/api/docs/asciidoc/dataobjects.adoc#requestcontext) 
 instance and saves it into the [`RoutingContext`](https://vertx.io/docs/apidocs/io/vertx/ext/web/RoutingContext.html) 
 under `requestContext` key.
-- `CookieRoutingHandler` - instance of [CookieHandler](https://vertx.io/docs/apidocs/io/vertx/ext/web/handler/CookieHandler.html)
 - `CustomHeaderRoutingHanlder` - adds custom header to each response Knot.x produces, configured via 
 [`Custom Header Options`](https://github.com/Knotx/knotx-server-http/blob/master/core/docs/asciidoc/dataobjects.adoc#customhttpheaderoptions)
 - `ResponseWriterHandler` - uses [Request Context](https://github.com/Knotx/knotx-server-http/blob/master/api/docs/asciidoc/dataobjects.adoc#requestcontext)

@@ -145,6 +145,9 @@ config.server.options.config.routingOperations = ${routingOperations} [
 
 Each `handler` is specified with [Routing Handler Options](/core/docs/asciidoc/dataobjects.adoc#routinghandleroptions).
 
+#### Routing Handler
+// TODO add documentation here.
+
 ### Routing Security
 Security for each operation defined in the [Open API specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#security-requirement-object)
 is implemented in a form of [`AuthHandlers`](https://vertx.io/docs/apidocs/io/vertx/ext/web/handler/AuthHandler.html).

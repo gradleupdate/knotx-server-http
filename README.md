@@ -144,11 +144,10 @@ config.server.options.config.routingOperations = ${routingOperations} [
 ]
 ```
 
-Each `handler` is specified with [Routing Handler Options](/core/docs/asciidoc/dataobjects.adoc#routinghandleroptions).
-
 #### Routing Handler
 Routing Handler is nothing else than a basic Vert.x [Handler](https://vertx.io/docs/apidocs/io/vertx/core/Handler.html) that operate on the [`RoutingContext`](https://vertx.io/docs/apidocs/io/vertx/ext/web/RoutingContext.html).
 You may find more information about it in the [API docs](https://github.com/Knotx/knotx-server-http/tree/master/api#routing-handlers).
+Each `handler` is configured with [Routing Handler Options](/core/docs/asciidoc/dataobjects.adoc#routinghandleroptions).
 
 #### Routing Order
 Knot.x server makes use of the [`OpenAPI3RouterFactory`](https://vertx.io/docs/apidocs/io/vertx/ext/web/api/contract/openapi3/OpenAPI3RouterFactory.html) in order to combine OpenAPI routes specification with configured handlers. According to `OpenAPI3RouterFactory` docs, handlers are loaded in this order:

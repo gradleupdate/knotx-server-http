@@ -43,8 +43,6 @@ that listens for HTTP requests. It is responsible for handling the whole HTTP tr
 the Knot.x instance.
 
 Once the HTTP request comes to the Server following actions are happening:
-- Server checks if there are not too many concurrent requests. If the system is overloaded, 
-the [incoming request is dropped](#dropping-the-requests).
 - Server checks if there is a [routing path](#routing-specification) defined for the incoming request path
 and method. If no path supports this request, `404 Not Found` is returned in the response.
 - Server checks whether a [routing operation](#routing-operations) has been defined for the incoming request.
@@ -146,10 +144,22 @@ config.server.options.config.routingOperations = ${routingOperations} [
 ]
 ```
 
-Each `handler` is specified with [Routing Handler Options](/core/docs/asciidoc/dataobjects.adoc#routinghandleroptions).
-
 #### Routing Handler
-// TODO add documentation here.
+Routing Handler is nothing else than a basic Vert.x [Handler](https://vertx.io/docs/apidocs/io/vertx/core/Handler.html) that operate on the [`RoutingContext`](https://vertx.io/docs/apidocs/io/vertx/ext/web/RoutingContext.html).
+You may find more information about it in the [API docs](https://github.com/Knotx/knotx-server-http/tree/master/api#routing-handlers).
+Each `handler` is configured with [Routing Handler Options](/core/docs/asciidoc/dataobjects.adoc#routinghandleroptions).
+
+#### Routing Order
+Knot.x server makes use of the [`OpenAPI3RouterFactory`](https://vertx.io/docs/apidocs/io/vertx/ext/web/api/contract/openapi3/OpenAPI3RouterFactory.html) in order to combine OpenAPI routes specification with configured handlers. According to `OpenAPI3RouterFactory` docs, handlers are loaded in this order:
+
+> 1. Body handler (Customizable with this#setBodyHandler(BodyHandler)
+> 2. Custom global handlers configurable with this#addGlobalHandler(Handler)
+> 3. Global security handlers defined in upper spec level
+> 4. Operation specific security handlers
+> 5. Generated validation handler
+> 6. User handlers or "Not implemented" handler
+
+Also, `operations` in the server are mounted in the definition order inside yaml specification.
 
 ### Routing Security
 Security for each operation defined in the [Open API specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#security-requirement-object)

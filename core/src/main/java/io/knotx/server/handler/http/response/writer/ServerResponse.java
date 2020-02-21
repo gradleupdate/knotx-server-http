@@ -18,6 +18,7 @@ package io.knotx.server.handler.http.response.writer;
 import java.util.Optional;
 import java.util.Set;
 
+import io.knotx.commons.http.request.AllowedHeadersFilter;
 import io.knotx.server.api.context.ClientResponse;
 import io.knotx.server.api.context.RequestContext;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -81,7 +82,7 @@ class ServerResponse {
       clientResponse.getHeaders()
           .names()
           .stream()
-          .filter(header -> headerFilter(allowedResponseHeaders, header))
+          .filter(AllowedHeadersFilter.CaseInsensitive.create(allowedResponseHeaders))
           .forEach(
               name ->
                   clientResponse.getHeaders()
@@ -104,10 +105,6 @@ class ServerResponse {
   private static boolean isOk(RequestContext requestContext) {
     return !requestContext.getStatus()
         .isFailed();
-  }
-
-  private Boolean headerFilter(Set<String> allowedResponseHeaders, String name) {
-    return allowedResponseHeaders.contains(name.toLowerCase());
   }
 
 }

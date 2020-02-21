@@ -41,6 +41,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class ServerResponseTest {
 
   private static final Set<String> DEFAULT_ALLOWED_HEADERS = Collections.singleton("test");
+  private static final Set<String> WILDCARD_ALLOWED_HEADERS = Collections.singleton(".*");
+  private static final Set<String> WILDCARDED_ALLOWED_HEADERS = Collections.singleton("te.*");
 
   @Mock
   private HttpServerResponse httpResponse;
@@ -175,4 +177,48 @@ class ServerResponseTest {
     assertEquals(1, headersMultiMap.size());
     assertEquals(headersMultiMap.get("test"), "testValue");
   }
+
+  @Test
+  @DisplayName("Expect headers filtered by wildcarded allowed headers out context ok")
+  void checkWildcardedAllowedHeaders() {
+    //given
+    when(status.isFailed()).thenReturn(false);
+    when(httpResponse.headers()).thenReturn(headersMultiMap);
+    when(clientResponse.getStatusCode()).thenReturn(HttpResponseStatus.OK.code());
+    final MultiMap headers = MultiMap.caseInsensitiveMultiMap()
+        .add("test", "testValue")
+        .add("notAllowed", "value")
+        .add("shouldBeFilteredOut", "value");
+    when(clientResponse.getHeaders()).thenReturn(headers);
+
+    //when
+    new ServerResponse(requestContext).end(httpResponse, WILDCARDED_ALLOWED_HEADERS);
+
+    //then
+    assertEquals(1, headersMultiMap.size());
+    assertEquals(headersMultiMap.get("test"), "testValue");
+  }
+
+  @Test
+  @DisplayName("Expect headers filtered by wildcard sign out context ok")
+  void checkWildcardSignHeadersFiltered() {
+    //given
+    when(status.isFailed()).thenReturn(false);
+    when(httpResponse.headers()).thenReturn(headersMultiMap);
+    when(clientResponse.getStatusCode()).thenReturn(HttpResponseStatus.OK.code());
+    final MultiMap headers = MultiMap.caseInsensitiveMultiMap()
+        .add("test", "testValue")
+        .add("notAllowed", "value")
+        .add("shouldBeFilteredOut", "value");
+    when(clientResponse.getHeaders()).thenReturn(headers);
+
+    //when
+    new ServerResponse(requestContext).end(httpResponse, WILDCARD_ALLOWED_HEADERS);
+
+    //then
+    assertEquals(3, headersMultiMap.size());
+    assertEquals(headersMultiMap.get("test"), "testValue");
+  }
+
+
 }

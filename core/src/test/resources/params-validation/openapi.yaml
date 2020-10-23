@@ -61,14 +61,14 @@ paths:
         - name: q
           in: path
           description: query pharse
-          required: false
+          required: true
           style: form
           schema:
             type: string
         - name: limit
           in: path
           description: maximum number of results to return
-          required: false
+          required: true
           schema:
             type: integer
             format: int32

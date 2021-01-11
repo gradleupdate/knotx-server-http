@@ -15,82 +15,78 @@
  */
 package io.knotx.server.common.placeholders;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.UnsupportedCharsetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
+public class PlaceholdersResolver {
 
-public final class PlaceholdersResolver {
+  private final SourceDefinitions sources;
+  private final UnaryOperator<String> valueEncoding;
+  private final boolean clearUnmatched;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(PlaceholdersResolver.class);
-
-  private PlaceholdersResolver() {
-    // util
+  public PlaceholdersResolver(SourceDefinitions sources,
+      UnaryOperator<String> valueEncoding, boolean clearUnmatched) {
+    this.sources = sources;
+    this.valueEncoding = valueEncoding;
+    this.clearUnmatched = clearUnmatched;
   }
 
-  public static String resolve(String stringWithPlaceholders, SourceDefinitions sources) {
-    return resolveAndEncode(stringWithPlaceholders, sources, UnaryOperator.identity());
+  public static Builder builder() {
+    return new Builder();
   }
 
-  public static String resolveAndEncode(String stringWithPlaceholders, SourceDefinitions sources) {
-    return resolveAndEncode(stringWithPlaceholders, sources, PlaceholdersResolver::encodeValue);
+  public static PlaceholdersResolver create(SourceDefinitions sources) {
+    return builder()
+        .withSources(sources)
+        .build();
   }
 
-  private static String resolveAndEncode(String stringWithPlaceholders, SourceDefinitions sources, UnaryOperator<String> encoding) {
-    String resolved = stringWithPlaceholders;
-    List<String> allPlaceholders = getPlaceholders(stringWithPlaceholders);
+  public static PlaceholdersResolver createEncoding(SourceDefinitions sources) {
+    return builder()
+        .withSources(sources)
+        .encodeValues()
+        .build();
+  }
+
+  public String resolve(String stringWithPlaceholders) {
+    Set<String> currentPlaceholders = getPlaceholders(stringWithPlaceholders);
+
+    List<String> searchList = new ArrayList<>();
+    List<String> replaceList = new ArrayList<>();
 
     for (SourceDefinition sourceDefinition : sources.getSourceDefinitions()) {
-      resolved = resolveAndEncode(resolved, allPlaceholders, sourceDefinition, encoding);
+      Set<String> placeholders = sourceDefinition.getPlaceholdersForSource(currentPlaceholders);
+      for (String placeholder : placeholders) {
+        searchList.add(placeholder);
+        replaceList.add(getPlaceholderValue(sourceDefinition, placeholder));
+      }
+      currentPlaceholders.removeAll(placeholders);
     }
 
-    resolved = clearUnresolved(resolved);
-
-    return resolved;
-  }
-
-  private static <T> String resolveAndEncode(String resolved, List<String> allPlaceholders,
-      SourceDefinition<T> sourceDefinition, UnaryOperator<String> encoding) {
-    List<String> placeholders = sourceDefinition.getPlaceholdersForSource(allPlaceholders);
-    for (String placeholder : placeholders) {
-      resolved = replace(resolved, placeholder,
-          getPlaceholderValue(sourceDefinition, placeholder), encoding);
+    if (clearUnmatched) {
+      for (String placeholderLeft : currentPlaceholders) {
+        searchList.add(placeholderLeft);
+        replaceList.add("");
+      }
     }
-    return resolved;
+
+    String[] searchArray = searchList.stream().map(x -> "{" + x + "}").toArray(String[]::new);
+    String[] replaceArray = replaceList.stream().map(valueEncoding).toArray(String[]::new);
+
+    return StringUtils.replaceEach(stringWithPlaceholders, searchArray, replaceArray);
   }
 
-  private static String clearUnresolved(String resolved) {
-    List<String> unresolved = getPlaceholders(resolved);
-
-    for (String unresolvedPlaceholder : unresolved) {
-      resolved = replace(resolved, unresolvedPlaceholder, "");
-    }
-    return resolved;
-  }
-
-  private static String replace(String resolved, String placeholder, String value,
-      UnaryOperator<String> encoding) {
-    return replace(resolved, placeholder, encoding.apply(value));
-  }
-
-  private static String replace(String resolved, String placeholder, String value) {
-    return resolved.replace("{" + placeholder + "}", value);
-  }
-
-  protected static List<String> getPlaceholders(String serviceUri) {
+  protected static Set<String> getPlaceholders(String serviceUri) {
     return Arrays.stream(serviceUri.split("\\{"))
         .filter(str -> str.contains("}"))
         .map(str -> StringUtils.substringBefore(str, "}"))
-        .collect(Collectors.toList());
+        .collect(Collectors.toSet());
   }
 
   private static <T> String getPlaceholderValue(SourceDefinition<T> sourceDefinition,
@@ -103,14 +99,35 @@ public final class PlaceholdersResolver {
         .orElse("");
   }
 
-  private static String encodeValue(String value) {
-    try {
-      return URLEncoder.encode(value, "UTF-8")
-          .replace("+", "%20")
-          .replace("%2F", "/");
-    } catch (UnsupportedEncodingException ex) {
-      LOGGER.fatal("Unexpected Exception - Unsupported encoding UTF-8", ex);
-      throw new UnsupportedCharsetException("UTF-8");
+  public static final class Builder {
+
+    private SourceDefinitions sources;
+    private UnaryOperator<String> valueEncoding = UnaryOperator.identity();
+    private boolean clearUnmatched = true;
+
+    public Builder withSources(SourceDefinitions sources) {
+      this.sources = sources;
+      return this;
     }
+
+    public Builder encodeValues() {
+      valueEncoding = Encoder::encode;
+      return this;
+    }
+
+    public Builder leaveUnmatched() {
+      clearUnmatched = false;
+      return this;
+    }
+
+    public PlaceholdersResolver build() {
+      if (sources == null) {
+        throw new IllegalStateException(
+            "Attempted to build PlaceholderResolver without setting sources");
+      }
+      return new PlaceholdersResolver(sources, valueEncoding, clearUnmatched);
+    }
+
   }
+
 }
